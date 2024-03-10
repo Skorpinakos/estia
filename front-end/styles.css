@@ -91,12 +91,18 @@ body, html {
 }
 
 .chart-container {
-    position: relative;
-    margin: auto;
-    height: 40vh;
-    width: 100%;
+    display: flex; /* or display: grid; based on your layout preference */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px; /* Adjust based on your minimum height preference */
+    height: auto;
 }
 
+.canvas {
+    width: 100%; /* Adjust canvas width responsively */
+    height: auto; /* Let the height be determined by the chart content */
+}
 .menu-image img.responsive-img {
     max-width: 100%;
     height: auto;
