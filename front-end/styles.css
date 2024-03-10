@@ -15,7 +15,7 @@ body, html {
 }
 
 .container {
-    max-width: 1100px;
+    max-width: 950px;
     margin: auto;
     padding: 0 20px;
     display: flex; /* Added */
@@ -39,6 +39,7 @@ body, html {
 .logo {
     font-size: 24px;
     font-weight: bold;
+    padding-bottom: 10px;
 }
 
 .navbar {
@@ -96,12 +97,17 @@ body, html {
     justify-content: center;
     align-items: center;
     min-height: 200px; /* Adjust based on your minimum height preference */
+    max-height: 270px;
     height: auto;
 }
 
 .canvas {
     width: 100%; /* Adjust canvas width responsively */
     height: auto; /* Let the height be determined by the chart content */
+}
+
+.Menu-Title {
+    margin-bottom: 15px;
 }
 .menu-image img.responsive-img {
     max-width: 100%;
@@ -131,9 +137,7 @@ body, html {
 }
 
 @media screen and (max-width: 768px) {
-    .nav-links {
-        display: none; /* Hide navbar items on smaller screens */
-    }
+
     .nav-links li {
         margin: 20px 0;
     }
@@ -156,9 +160,15 @@ body, html {
 }
 
 .menu-image {
-    width: 150px; /* Set fixed width */
-    height: 350px; /* Set fixed height */
+    width: auto; 
+    height: 300px; /* Set fixed height */
     object-fit: cover; /* This ensures the image covers the area without losing its aspect ratio, might crop */
+    border-radius: 8px; /* Optional: Adds rounded corners to your images */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional: Adds shadow for depth */
+}
+
+.menu-image-breakfast {
+    width: 180px; /* Set fixed width */
     border-radius: 8px; /* Optional: Adds rounded corners to your images */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional: Adds shadow for depth */
 }
