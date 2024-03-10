@@ -1,21 +1,23 @@
 document.addEventListener('DOMContentLoaded', function() {
     const waitTimesData = {
         labels: ['10 AM', '11 AM', '12 PM', '1 PM', '2 PM'],
-        datasets: [{
-            label: 'Wait Time (mins)',
-            data: [5, 10, 15, 20, 25],
-            fill: true,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
-            borderColor: 'rgb(75, 192, 192)',
-            pointBackgroundColor: 'rgb(75, 192, 192)',
-            tension: 0.4,
-            borderWidth: 2,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: 'rgb(255, 99, 132)',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 3
-        }]
+        datasets: [
+            {
+                // Segment before 12 PM
+                label: 'Recorded',
+                data: [5, 20, 30, null, null], // Use null to create breaks in the line
+                borderColor: 'rgb(75, 192, 192)', // Original color
+                // other properties remain the same
+            },
+            {
+                // Segment between 12 PM and 2 PM you wish to change
+                label: 'Estimate',
+                data: [null, null, 30, 45, 70], // Highlighted segment
+                borderColor: 'rgba(255, 99, 132, 0.5)', // Changed color and transparency
+                // other properties adapted for this segment
+            },
+
+        ]
     };
 
     const lineSizesData = {
@@ -100,7 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 display: true,
                 title: {
                     display: true,
-                    text: 'Size'
+                    text: 'Wait Time'
                 }
             }
         },
@@ -113,13 +115,13 @@ document.addEventListener('DOMContentLoaded', function() {
     new Chart(waitTimeCtx, {
         type: 'line',
         data: waitTimesData,
-        options: chartOptionsLine
+        options: chartOptionsTime
     });
 
     const lineSizeCtx = document.getElementById('lineSizeChart').getContext('2d');
     new Chart(lineSizeCtx, {
         type: 'line',
         data: lineSizesData,
-        options: chartOptionsTime
+        options: chartOptionsLine
     });
 });
