@@ -150,6 +150,8 @@ body, html {
     gap: 20px; /* Adjust based on preference */
 }
 
+
+
 .menu-item {
     flex-basis: calc(33.333% - 20px); /* Adjust size minus gap for three items per row */
     text-align: center;
