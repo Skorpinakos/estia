@@ -10,18 +10,30 @@ body, html {
     line-height: 1.6;
     color: #444;
     background: #f5e9dc; /* Light brown background */
+    padding-top: 50px; /* Add padding to avoid content being hidden behind the navbar */
+
 }
 
 .container {
     max-width: 1100px;
     margin: auto;
     padding: 0 20px;
+    display: flex; /* Added */
+    flex-direction: column; /* Added */
+    align-items: center; /* Added */
 }
 
 .header {
-    background-color: #fcb685cc;
-    color: #ffffff;
-    padding: 20px 0;
+    width: 100%; /* Full width */
+    background-color: #fca980ee; /* Or your existing navbar background color */
+    color: white;
+    padding: 10px 0;
+    position: fixed; /* Changed from 'static' to 'fixed' */
+    top: 0; /* Stick to the top of the page */
+    left: 0; /* Align to the left of the page */
+    z-index: 1000; /* Ensure navbar is above other content */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Optional: adds shadow for depth */
+
 }
 
 .logo {
@@ -35,8 +47,14 @@ body, html {
     align-items: center;
 }
 
-.nav-links {
-    list-style: none;
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px; /* Adjust padding to control the size of the buttons */
+    border-radius: 5px; /* Adds rounded corners to your buttons */
+    background-color: #ec5814d4; /* Background color for your buttons */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for hover effects */
+    margin: 0 5px; /* Optional: Adds space between buttons */
 }
 
 .nav-links li {
@@ -53,8 +71,8 @@ body, html {
 }
 
 .nav-links a:hover {
-    background-color: #e1effe;
-    color: #fcb685cc;
+    background-color: #cf4015; /* Darker shade for hover effect */
+    color: #ffffff; /* Change text color on hover if needed */
 }
 
 .main-content {
@@ -67,6 +85,9 @@ body, html {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
+
 }
 
 .chart-container {
@@ -84,12 +105,23 @@ body, html {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+.menu-item:hover .menu-image {
+    transform: scale(1.2); /* Zoom effect */
+    box-shadow: 0 10px 20px rgba(0,0,0,0.4); /* Enhanced shadow for pop out effect */
+}
+
 .footer {
     background-color: #333333;
     color: #ffffff;
-    text-align: center;
     padding: 20px 0;
     margin-top: 40px;
+}
+
+.header, .footer {
+    width: 100%; /* Ensure full width */
+    display: flex; /* Added */
+    justify-content: center; /* Center horizontally */
+    text-align: center; /* Center text */
 }
 
 @media screen and (max-width: 768px) {
@@ -99,4 +131,28 @@ body, html {
     .nav-links li {
         margin: 20px 0;
     }
+}
+
+.menu-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust based on preference */
+}
+
+.menu-item {
+    flex-basis: calc(33.333% - 20px); /* Adjust size minus gap for three items per row */
+    text-align: center;
+}
+
+.menu-item h3 {
+    margin-top: 10px; /* Adjust based on preference */
+}
+
+.menu-image {
+    width: 150px; /* Set fixed width */
+    height: 350px; /* Set fixed height */
+    object-fit: cover; /* This ensures the image covers the area without losing its aspect ratio, might crop */
+    border-radius: 8px; /* Optional: Adds rounded corners to your images */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional: Adds shadow for depth */
 }
