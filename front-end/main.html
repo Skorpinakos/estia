@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Restaurant Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo">University Restaurant</div>
+            <nav class="navbar">
+                <ul class="nav-links">
+                    <li><a href="#wait-times">Wait Times</a></li>
+                    <li><a href="#line-sizes">Line Sizes</a></li>
+                    <li><a href="#todays-menu">Today's Menu</a></li>
+                    <li><a href="#contact-info">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="main-content container">
+        <section id="wait-times" class="chart-section">
+            <h2>Current Wait Times</h2>
+            <div class="chart-container">
+                <canvas id="waitTimeChart"></canvas>
+            </div>
+        </section>
+        
+        <section id="line-sizes" class="chart-section">
+            <h2>Current Line Sizes</h2>
+            <div class="chart-container">
+                <canvas id="lineSizeChart"></canvas>
+            </div>
+        </section>
+
+        <section id="todays-menu" class="menu-section">
+            <h2>Today's Menu</h2>
+            <div class="menu-image">
+                <img src="current_menu.JPG" alt="Today's Menu" class="responsive-img">
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 University Restaurant. All rights reserved.</p>
+            <p id="contact-info">Contact us: info@universityrestaurant.com</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
