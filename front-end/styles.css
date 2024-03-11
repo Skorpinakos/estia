@@ -77,13 +77,12 @@ body, html {
 }
 
 .main-content {
-    padding: 40px 0;
+    padding: 20px 0;
 }
 
 .chart-section, .menu-section {
     background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
     margin-bottom: 40px;
-    padding: 20px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width: 100%;
@@ -115,6 +114,22 @@ body, html {
     float: right;
 }
 
+.count {
+    float: right;
+}
+
+.main-content {
+    width: 100%; /* This ensures the main-content spans the full width of its parent */
+}
+
+.chart-section {
+    width: 100%; /* This ensures the chart-section spans the full width of main-content */
+}
+
+.chart-container {
+    width: 100%; /* This ensures the chart-container spans the full width of chart-section */
+    /* Add any additional styling you want for the chart-container */
+}
 
 .canvas {
     width: 100%; /* Adjust canvas width responsively */
