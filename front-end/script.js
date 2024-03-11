@@ -184,6 +184,7 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
                     borderColor: 'rgb(236, 88, 20)', // Original color
                     backgroundColor: 'rgb(236, 88, 20)',
                     pointRadius:4,
+                    hoverRadius:10
                 },
                 {
                     label: 'Recorded',
@@ -191,7 +192,8 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
                     borderColor: 'rgba(236, 88, 20, 0.9)', // Original color
                     fill: true,
                     backgroundColor: "rgba(236, 88, 20,0.3)",
-                    pointRadius: 0
+                    pointRadius: 0,
+                    
                 },
                 {
                     label: 'Projected',
@@ -199,7 +201,8 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
                     borderColor: 'rgba(128, 128,128, 0.2)',
                     fill: true,
                     backgroundColor: "rgba(128, 128, 128,0.05)",
-                    pointRadius: 0
+                    pointRadius: 0,
+                    
                 }
 
                 
@@ -257,15 +260,20 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
     });
 }
 
-let data;
-let recorded,projected
-data=fake_data()
-recorded=data[0]
-projected=data[1]
-plotTimeSeriesData('waitTimeChart',1000,'Wait Time (Seconds)',recorded,projected);
-
+let data_line,data_time;
+let recorded,projected;
 let recorded_people,projected_people
-data=fake_data()
-recorded=data[0]
-projected=data[1]
-plotTimeSeriesData('lineSizeChart',2500,'Line Size (People)',recorded,projected);
+
+data_time=fake_data()
+recorded_waittimes=data_time[0]
+projected_waittimes=data_time[1]
+
+data_line=fake_data()
+recorded_linesizes=data_line[0]
+projected_linesizes=data_line[1]
+
+plotTimeSeriesData('waitTimeChart',1000,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
+plotTimeSeriesData('lineSizeChart',2500,'Line Size (People)',recorded_linesizes,projected_linesizes);
+
+document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y;
+document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y;
