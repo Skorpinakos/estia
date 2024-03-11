@@ -243,7 +243,7 @@ let recorded,projected
 data=fake_data()
 recorded=data[0]
 projected=data[1]
-plotTimeSeriesData('waitTimeChart',1500,'Wait Time (Seconds)',recorded,projected);
+plotTimeSeriesData('waitTimeChart',1000,'Wait Time (Seconds)',recorded,projected);
 
 let recorded_people,projected_people
 data=fake_data()
