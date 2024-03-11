@@ -179,22 +179,35 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
         data: {
             datasets: [
                 {
+                    label: "Current",
+                    data: [current_measurement,],
+                    borderColor: 'rgb(75, 192, 0)', // Original color
+                    backgroundColor: 'rgb(75, 192, 0)',
+                    pointRadius:4,
+                },
+                {
                     label: 'Recorded',
                     data: dataArray1,
-                    borderColor: 'rgb(75, 192, 192)', // Original color
+                    borderColor: 'rgb(75, 192, 0)', // Original color
                     fill: true,
-                    backgroundColor: 'rgb(75, 192, 192,0.2)',
+                    backgroundColor: 'rgba(75, 192, 0,0.2)',
                     pointRadius: 0
                 },
                 {
                     label: 'Projected',
                     data: dataArray2,
-                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    borderColor: 'rgba(236, 88, 20, 0.9)',
+                    fill: true,
+                    backgroundColor: "rgba(236, 88, 20,0.3)",
                     pointRadius: 0
                 }
             ]
         },
         options: {
+            plugins: {
+                legend: {
+                    display: false
+                }},
             scales: {
                 x: {
                     type: 'time',
@@ -232,9 +245,12 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
             },
             animation: {
                 duration: animation_duration, // general animation time
-            }
-
+            },
+            
+            
         }
+
+        
     });
 }
 
