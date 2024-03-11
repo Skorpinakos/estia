@@ -101,6 +101,21 @@ body, html {
     height: auto;
 }
 
+.chart-title {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the middle */
+    justify-content: space-between; /* Puts space between the text and the image */
+}
+
+.chart-title h2 {
+    margin-right: auto; /* This ensures the h2 stays on the left */
+}
+
+.svg {
+    float: right;
+}
+
+
 .canvas {
     width: 100%; /* Adjust canvas width responsively */
     height: auto; /* Let the height be determined by the chart content */

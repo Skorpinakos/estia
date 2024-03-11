@@ -29,15 +29,20 @@
     
     <main class="main-content container">
         <section id="wait-times" class="chart-section">
-            <h2>Current Wait Time <img src="clock.svg" alt="Clock Icon" style="width: 30px; height: 30px; vertical-align: middle; padding-bottom: 4px;"></h2>
+            <div class="chart-title"></div>
+                <h2 style="display: inline-block; vertical-align: middle;">Current Wait Time</h2>
+                <img class="svg" src="clock.svg" alt="Clock Icon" style="display: inline-block; width: 32px; height: 32px; vertical-align: middle; padding-bottom: 4px;">
+            </div>
             <div class="chart-container">
                 <canvas id="waitTimeChart"></canvas>
             </div>
         </section>
         
         <section id="line-sizes" class="chart-section">
-            <h2>Current Line Size <img src="users.svg" alt="Crowd Icon" style="width: 40px; height: 40px; vertical-align: middle; padding-bottom: 8px;"></h2>
-
+            <div class="chart-title"></div>
+                <h2 style="display: inline-block; vertical-align: middle;">Current Line Size</h2>
+                <img class="svg" src="users.svg" alt="Crowd Icon" style="display: inline-block; width: 45px; height: 45px; vertical-align: middle; padding-bottom: 8px;">
+            </div>
             <div class="chart-container">
                 <canvas id="lineSizeChart"></canvas>
             </div>
