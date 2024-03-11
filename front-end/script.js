@@ -183,7 +183,7 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
                     data: [current_measurement,],
                     borderColor: 'rgb(236, 88, 20)', // Original color
                     backgroundColor: 'rgb(236, 88, 20)',
-                    pointRadius:4,
+                    pointRadius:5,
                     hoverRadius:10
                 },
                 {
