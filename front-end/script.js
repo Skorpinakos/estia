@@ -181,26 +181,29 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
                 {
                     label: "Current",
                     data: [current_measurement,],
-                    borderColor: 'rgb(75, 192, 0)', // Original color
-                    backgroundColor: 'rgb(75, 192, 0)',
+                    borderColor: 'rgb(236, 88, 20)', // Original color
+                    backgroundColor: 'rgb(236, 88, 20)',
                     pointRadius:4,
                 },
                 {
                     label: 'Recorded',
                     data: dataArray1,
-                    borderColor: 'rgb(75, 192, 0)', // Original color
+                    borderColor: 'rgba(236, 88, 20, 0.9)', // Original color
                     fill: true,
-                    backgroundColor: 'rgba(75, 192, 0,0.2)',
+                    backgroundColor: "rgba(236, 88, 20,0.3)",
                     pointRadius: 0
                 },
                 {
                     label: 'Projected',
                     data: dataArray2,
-                    borderColor: 'rgba(236, 88, 20, 0.9)',
+                    borderColor: 'rgba(128, 128,128, 0.2)',
                     fill: true,
-                    backgroundColor: "rgba(236, 88, 20,0.3)",
+                    backgroundColor: "rgba(128, 128, 128,0.05)",
                     pointRadius: 0
                 }
+
+                
+
             ]
         },
         options: {
