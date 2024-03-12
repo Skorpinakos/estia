@@ -5,7 +5,7 @@ app = Flask(__name__)
 # Serve the main page
 @app.route('/')
 def index():
-    return send_from_directory('.', 'front-end/main.html')
+    return send_from_directory('.', 'front-end/index.html')
 
 # Serve CSS files
 @app.route('/styles.css')
