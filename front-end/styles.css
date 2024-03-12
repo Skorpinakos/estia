@@ -32,20 +32,40 @@ body, html {
     top: 0; /* Stick to the top of the page */
     left: 0; /* Align to the left of the page */
     z-index: 1000; /* Ensure navbar is above other content */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3); /* Optional: adds shadow for depth */
+    box-shadow: 0 3px 5px rgba(0,0,0,0.3); /* Optional: adds shadow for depth */
 
 }
 
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .logo {
-    font-size: 24px;
+    font-size: 34px;
     font-weight: bold;
-    padding-bottom: 10px;
+   
+    flex-grow: 1;
+    text-align: center;
+}
+.logo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.university-seal {
+    width: 50px; /* Adjust based on actual size needed */
+    height: 50px; /* Adjust based on actual size needed */
+    margin-right: 10px; /* Adjust spacing to your liking */
 }
 
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-grow: 0;
 }
 
 .nav-links a {
@@ -69,6 +89,7 @@ body, html {
     padding: 5px 10px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    
 }
 
 .nav-links a:hover {
@@ -77,7 +98,7 @@ body, html {
 }
 
 .main-content {
-    padding: 20px 0;
+    padding: 0px 0;
 }
 
 .chart-section, .menu-section {
@@ -152,25 +173,39 @@ body, html {
     box-shadow: 0 10px 20px rgba(0,0,0,0.4); /* Enhanced shadow for pop out effect */
 }
 
-.footer {
-    background-color: #333333;
-    color: #ffffff;
-    padding: 20px 0;
-    margin-top: 40px;
-}
 
-.header, .footer {
+
+.header {
     width: 100%; /* Ensure full width */
     display: flex; /* Added */
     justify-content: center; /* Center horizontally */
     text-align: center; /* Center text */
 }
 
+.footer {
+    width: 100%; /* Ensure full width */
+    display: flex; /* Use flex layout */
+    justify-content: center; /* Center horizontally */
+    align-items: flex-start; /* Align items to the start of the container, making them float to the top */
+    text-align: center; /* Center text */
+    background-color: #333333;
+    color: #ffffff;
+    padding: 10px 0;
+    margin-top: 10px;
+    margin-bottom: 65px;
+}
+
+.footer .contact-info {
+    align-self: flex-start; /* Align this item to the start of the container, making it float to the top */
+    text-align: center; /* Center text if necessary */
+}
+
+
 @media screen and (max-width: 768px) {
 
-    .nav-links li {
-        margin: 20px 0;
-    }
+    
+
+
 }
 
 .menu-container {
@@ -204,3 +239,38 @@ body, html {
     border-radius: 8px; /* Optional: Adds rounded corners to your images */
     box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Optional: Adds shadow for depth */
 }
+
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fca980;
+    box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    z-index: 1000;
+  }
+  
+  .nav-item {
+    text-decoration: none;
+    color: #fff; /* Contrast color for readability */
+    font-weight: bold;
+    display: block;
+    text-align: center;
+    transition: color 0.3s ease;
+    padding: 10px 15px;
+    border-radius: 5px; /* Adds a slight curve to the buttons */
+  }
+  
+  .nav-item:hover {
+    color: #fd8353; /* Lighter shade for hover effect */
+    background-color: rgba(255, 255, 255, 0.2); /* Slight highlight effect on hover */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Raised effect on hover */
+  }
+  
+  .nav-item.active {
+    color: #fd8353;
+    background-color: rgba(255, 255, 255, 0.3);
+  }

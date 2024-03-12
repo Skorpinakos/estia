@@ -27,5 +27,10 @@ def serve_image(filename):
 def serve_svg(filename):
     return send_from_directory('.', f'front-end/{filename}.svg')
 
+# Serve images dynamically
+@app.route('/<filename>.png')
+def serve_png(filename):
+    return send_from_directory('.', f'front-end/{filename}.png')
+
 if __name__ == '__main__':
     app.run(debug=True, port=1100, host='0.0.0.0')

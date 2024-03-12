@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>University Restaurant Dashboard</title>
+    <title>University Restaurant Dashboard Patras</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/moment"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,16 +16,14 @@
 <body>
     <header class="header">
         <div class="container">
-            <div class="logo">University Restaurant</div>
-            <nav class="navbar">
-                <ul class="nav-links">
-                    <li><a href="#Home">Home</a></li>
-                    <li><a href="#Menus">Menus</a></li>
-                    <li><a href="#History">History</a></li>
-                </ul>
-            </nav>
+            <div class="logo-container">
+                <img src="seal.png" alt="University Seal" class="university-seal">
+                <div class="logo">Line Spotter</div>
+            </div>
+
         </div>
     </header>
+    
     
     <main class="main-content container">
         <div class="main-content"></div>
@@ -76,11 +74,18 @@
     </main>
 
     <footer class="footer">
+ 
         <div class="container">
-            <p>&copy; 2024 University Restaurant. All rights reserved.</p>
-            <p id="contact-info">Contact us: info@universityrestaurant.com</p>
+            <p class="contact-info">&copy; 2024 University Restaurant. All rights reserved.</p>
+            <p class="contact-info" id="contact-info">Contact us: info@universityrestaurant.com</p>
         </div>
     </footer>
+    <nav class="bottom-nav">
+        <a href="#home" class="nav-item active">Home</a>
+        <a href="#menu" class="nav-item">Menu</a>
+        <a href="#history" class="nav-item">History</a>
+    </nav>
+      
 
     <script src="script.js"></script>
 </body>
