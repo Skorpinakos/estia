@@ -109,10 +109,10 @@ if all_tables:
         for j,row in enumerate(table_filtered):
             days[j]=days[j]+row
         
-        save_2d_list_to_csv(table_filtered, "menu_processing/table_"+str(i)+".csv")
+        #save_2d_list_to_csv(table_filtered, "menu_processing/table_"+str(i)+".csv")
 
     i+=1
-    save_2d_list_to_csv(merged_tables[-1], "menu_processing/table_"+str(i)+".csv") #save breakfast too
+    #save_2d_list_to_csv(merged_tables[-1], "menu_processing/table_"+str(i)+".csv") #save breakfast too
 
 
     #fix half empty columns and shifts 
