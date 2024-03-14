@@ -21,7 +21,7 @@ def read_csv_to_2d_list(filepath):
 #init 
 import requests
 broker_address="150.140.186.118:1026"
-owner="Estia_Rio_1"
+facility="Estia_Rio_1"
 
 def make_request_to_wlc():
     data=[]
@@ -32,9 +32,9 @@ def make_request_to_wlc():
     return data
 
 
-import requests  # Ensure requests is imported to use it for HTTP requests
 
-def get_access_points_by_owner(owner, broker_address):
+
+def get_ids_access_points_by_facility(facility, broker_address):
     # Define the base URL of the Context Broker and the endpoint
     base_url = "http://" + broker_address
     endpoint = "/entities"
@@ -47,8 +47,8 @@ def get_access_points_by_owner(owner, broker_address):
     # Include a limit in the query parameters
     params = {
         "type": "AccessPoint",
-        "q": f"owner=={owner}",  # Query filter for entities of type AccessPoint with a specified owner
-        "limit": 999  # Limit the number of entities to be returned
+        "q": f"facility=={facility}",  # Query filter for entities of type AccessPoint with a specified facility
+        "limit": 999  # Limit the number of entities to be returned, 999 is the max, default is 20.
     }
 
     response = requests.get(f"{base_url}{endpoint}", headers=headers, params=params)
@@ -84,15 +84,22 @@ def update_access_point(entity_id, broker_address,measurement):
     else:
         return f"Failed to update AccessPoint: {response.status_code} - {response.text}"
 
-def create_access_point(entity_id, broker_address, measurement,owner):
+def create_access_point(broker_address, measurement,facility, entity_id="default",name="default",loc="0,0"):
+    if entity_id=="default":
+        #ID FORMAT = AP:FACILITY:SN SN->serial number generated here
+        entity_id=max(max(get_ids_access_points_by_facility),0)
     base_url = "http://"+broker_address
     endpoint = f"/entities"
     headers = {"Content-Type": "application/json"}
     data = {
             "id": entity_id,
             "type": "AccessPoint",
-            "owner": {
-                "value": owner,
+            "facility": {
+                "value": facility,
+                "type": "Text"
+            },
+            "name": {
+                "value": name,
                 "type": "Text"
             },
             "measurement": {
@@ -105,3 +112,6 @@ def create_access_point(entity_id, broker_address, measurement,owner):
         return "AccessPoint created successfully."
     else:
         return f"Failed to create AccessPoint: {response.status_code} - {response.text}"
+    
+
+create_access_point()
