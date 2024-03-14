@@ -32,10 +32,11 @@ def make_request_to_wlc():
     return data
 
 
-def get_access_points_by_owner(owner,broker_address):
-    
+import requests  # Ensure requests is imported to use it for HTTP requests
+
+def get_access_points_by_owner(owner, broker_address):
     # Define the base URL of the Context Broker and the endpoint
-    base_url = "http://"+broker_address
+    base_url = "http://" + broker_address
     endpoint = "/entities"
 
     headers = {
@@ -43,20 +44,25 @@ def get_access_points_by_owner(owner,broker_address):
         "Content-Type": "application/json",
     }
 
+    # Include a limit in the query parameters
     params = {
         "type": "AccessPoint",
-        "q": f"owner=={owner}"  # Query filter for entities of type AccessPoint with a specified owner
+        "q": f"owner=={owner}",  # Query filter for entities of type AccessPoint with a specified owner
+        "limit": 999  # Limit the number of entities to be returned
     }
 
     response = requests.get(f"{base_url}{endpoint}", headers=headers, params=params)
 
     # Check if the request was successful
-    if response.status_code == 200:
-        # Parse the JSON response into a Python structure and return it
-        return response.json()
+    if 200 <= response.status_code < 300:
+        # Parse the JSON response into a Python structure
+        data = response.json()
+        # Extract and return the list of IDs
+        return [entity['id'] for entity in data]
     else:
         # Handle potential errors (e.g., connection problems, authentication issues)
-        return f"Failed to retrieve entities: {response.__dict__}"
+        return f"Failed to retrieve entities: {response.status_code}, {response.text}"
+
 
 
 
@@ -73,12 +79,12 @@ def update_access_point(entity_id, broker_address,measurement):
         }
     }
     response = requests.patch(f"{base_url}{endpoint}", json=updates, headers=headers)
-    if response.status_code in [204, 200]:
+    if 200 <= response.status_code < 300:
         return "AccessPoint updated successfully."
     else:
         return f"Failed to update AccessPoint: {response.status_code} - {response.text}"
 
-def create_access_point(entity_id, broker_address, measurement,owner ):
+def create_access_point(entity_id, broker_address, measurement,owner):
     base_url = "http://"+broker_address
     endpoint = f"/entities"
     headers = {"Content-Type": "application/json"}
@@ -95,7 +101,7 @@ def create_access_point(entity_id, broker_address, measurement,owner ):
             }
         }
     response = requests.post(f"{base_url}{endpoint}", json=data, headers=headers)
-    if response.status_code == 201:
+    if 200 <= response.status_code < 300:
         return "AccessPoint created successfully."
     else:
         return f"Failed to create AccessPoint: {response.status_code} - {response.text}"
