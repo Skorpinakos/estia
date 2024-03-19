@@ -23,6 +23,7 @@ function fake_data(){
 
 
 function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,projected) {
+    let parameter_max_height_percentage = 1.25;
 
     
 
@@ -31,6 +32,14 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
     //create between point
     let current_measurement=dataArray1[dataArray1.length-1]
     dataArray2=[current_measurement,].concat(dataArray2);//place current measurement in the start of projection array to connect the two lines
+    
+    //create fake invisible datapoint to increase y-lim seamelessly
+    let all_data=dataArray1.concat(dataArray2);
+    // Extracting all 'y' values from the array
+    const yValues = all_data.map(item => item.y);
+    // Finding the maximum value among all 'y' values
+    const max = Math.max(...yValues);
+    let y_lim = parameter_max_height_percentage*max;
 
 
 
@@ -40,6 +49,13 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
         type: 'line',
         data: {
             datasets: [
+                {
+                    label:"Invisible",
+                    data: [{x:current_measurement.x,y:y_lim},],
+                    pointRadius:0,
+                
+
+                },
                 {
                     label: "Current",
                     data: [current_measurement,],
