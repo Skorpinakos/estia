@@ -122,12 +122,88 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
     });
 }
 
+
+
+//menus 
+
+let menus_text=['Γάλα, καφές, τσάι,χυμός, βούτυρο, άρτος, μαρμελάδα,ντόνατς', 'Πρώτο Πιάτο: Κοτόσουπα\nΚυρίως Πιάτο: Χοιρινό εξοχικό με ριζότο ή Κοτόπουλο με σως μουστάρδας – φιογκάκια\nΜπουφές Σαλάτα: Μαρούλι, ρόκα, λόλα, κρουτόν, λάχανο άσπρο- κόκκινο,πολίτικη, καλαμπόκι, μουστάρδα\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Ρώσικη', 'Πρώτο Πιάτο: Σούπα του Σεφ\nΚυρίως Πιάτο: Ομελέτα με ή χωρίς αλλαντικά και τυριά-\nπατάτες τηγανιτές ή Σπετσοφάι Βολιώτικο ριζότο\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα-λόλα λάχανο, άσπρο-κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, '];
+
+//function to parse menus
+function parseMenus(menus){
+
+    let menus_structured={};
+
+    let breakfast=menus_text[0].toLowerCase();
+    let lunch=menus_text[1].toLowerCase();
+    let dinner=menus_text[2].toLowerCase();
+
+
+    let breakfast_items=breakfast.split(',').map(item => item.trim());
+    let breakfast_drinks=breakfast_items.slice(0,4);
+    let breakfast_main=breakfast_items[breakfast_items.length - 1];
+    let breakfast_slices=breakfast_items.slice(4,breakfast_items.length-1);
+    let breakfast_parts=[breakfast_main,breakfast_slices.join(', '),breakfast_drinks.join(', ')]
+    //console.log(breakfast_drinks);
+    //console.log(breakfast_slices);
+    //console.log(breakfast_main);
+
+    let lunch_parts=lunch.replaceAll("-\n"," ").split('\n').map(item => item.trim());
+    //console.log(lunch_parts);
+
+    let dinner_parts=dinner.replaceAll("-\n"," ").split('\n').map(item => item.trim());
+    //console.log(dinner_parts);
+
+    menus_structured={"breakfast":breakfast_parts,"lunch":lunch_parts,"dinner":dinner_parts};
+    return menus_structured;
+
+
+
+};
+
+function capitalizeFirstLetter(string) {
+    return string.trim().charAt(0).toUpperCase() + string.trim().slice(1);
+  }
+
+function capitalizeAfterBr(htmlString) {
+    return htmlString.replace(/(<br><br>)(.)/g, function(match, p1, p2) {
+        return p1 + p2.trim().toUpperCase();
+    });
+}
+  
+
+// Function to add menu options to the HTML
+function addMenuItems(menus) {
+    // For each meal type (breakfast, lunch, dinner)
+    Object.entries(menus).forEach(([mealType, menuItems]) => {
+        const menuContainer = document.getElementById(`${mealType}-menu`);
+        menuItems.forEach(item => {
+            let item_processed=item.replaceAll(" ή "," ή<br><br>").replaceAll("με ή<br><br>","με ή ").replaceAll("πρώτο πιάτο:","").replaceAll("κυρίως πιάτο:","").replaceAll("μπουφές σαλάτα:","").replaceAll("επιδόρπιο:","").replaceAll(" ή<br><br>","<br><br>")
+            item_processed=capitalizeFirstLetter(item_processed);
+            item_processed=capitalizeAfterBr(item_processed);
+            const blob = document.createElement('div');
+            blob.className = 'menu-blob';
+            blob.innerHTML = `<p>${item_processed}</p>`;
+            menuContainer.appendChild(blob);
+        });
+    });
+}
+
+// parse menu text
+let menus=parseMenus(menus_text);
+
+// Call the function to add the menu items
+addMenuItems(menus);
+
+
+
+
+
+// graphs
+
+
 let data_line,data_time;
 let recorded,projected;
 let recorded_people,projected_people;
-let menus=['Γάλα, καφές, τσάι,χυμός, βούτυρο, άρτος, μαρμελάδα,ντόνατς', 'Πρώτο Πιάτο: Κοτόσουπα\nΚυρίως Πιάτο: Χοιρινό εξοχικό με ριζότο ή Κοτόπουλο με σως μουστάρδας – φιογκάκια\nΜπουφές Σαλάτα: Μαρούλι, ρόκα, λόλα, κρουτόν, λάχανο άσπρο- κόκκινο,πολίτικη, καλαμπόκι, μουστάρδα\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Ρώσικη', 'Πρώτο Πιάτο: Σούπα του Σεφ\nΚυρίως Πιάτο: Ομελέτα με ή χωρίς αλλαντικά και τυριά-\nπατάτες τηγανιτές ή Σπετσοφάι Βολιώτικο ριζότο\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα-λόλα λάχανο, άσπρο-κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, '];
-
-
 data_time=fake_data()
 recorded_waittimes=data_time[0]
 projected_waittimes=data_time[1]

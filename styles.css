@@ -274,3 +274,38 @@ body, html {
     color: #fd8353;
     background-color: rgba(255, 255, 255, 0.3);
   }
+
+  .menu-item {
+    margin-bottom: 40px; /* Space between each menu type */
+}
+
+.menu-item h3 {
+    background-color: #fd8353; /* Change this to your desired color */
+    color: white; /* White text color */
+    text-align: center;
+    padding: 10px; /* Spacing around the text */
+    border-radius: 20px; /* Rounded corners */
+    margin: 20px 0; /* Space above and below the title */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Add shadow for depth */
+}
+
+.menu-blob {
+    background-color: #fff; /* White background */
+    border: 2px solid #f0f0f0; /* Light grey border */
+    border-radius: 15px; /* Rounded corners */
+    padding: 15px; /* Space inside the blob */
+    margin: 10px 0; /* Space between blobs */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow around each blob */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+.menu-blob p {
+    margin: 0; /* Remove default margin */
+    color: #333; /* Dark text for visibility */
+    text-align: center; /* Center the text */
+}
+
+.menu-blob:hover {
+    transform: translateY(-5px); /* Move up slightly on hover */
+}
+
