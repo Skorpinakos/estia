@@ -21,6 +21,7 @@ function fake_data(){
 }
 
 
+
 function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,projected) {
 
     
@@ -123,7 +124,9 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
 
 let data_line,data_time;
 let recorded,projected;
-let recorded_people,projected_people
+let recorded_people,projected_people;
+let menus=['Γάλα, καφές, τσάι,χυμός, βούτυρο, άρτος, μαρμελάδα,ντόνατς', 'Πρώτο Πιάτο: Κοτόσουπα\nΚυρίως Πιάτο: Χοιρινό εξοχικό με ριζότο ή Κοτόπουλο με σως μουστάρδας – φιογκάκια\nΜπουφές Σαλάτα: Μαρούλι, ρόκα, λόλα, κρουτόν, λάχανο άσπρο- κόκκινο,πολίτικη, καλαμπόκι, μουστάρδα\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Ρώσικη', 'Πρώτο Πιάτο: Σούπα του Σεφ\nΚυρίως Πιάτο: Ομελέτα με ή χωρίς αλλαντικά και τυριά-\nπατάτες τηγανιτές ή Σπετσοφάι Βολιώτικο ριζότο\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα-λόλα λάχανο, άσπρο-κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, '];
+
 
 data_time=fake_data()
 recorded_waittimes=data_time[0]
