@@ -101,7 +101,7 @@ body, html {
     padding: 0px 0;
 }
 
-.chart-section, .menu-section {
+.chart-section{
     background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
     margin-bottom: 40px;
     border-radius: 8px;
@@ -201,18 +201,21 @@ body, html {
 }
 
 
-@media screen and (max-width: 768px) {
-
-    
-
-
-}
 
 .menu-container {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 20px; /* Adjust based on preference */
+}
+
+.menu-section{
+    background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
+    margin-bottom: 40px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 600px;
 }
 
 
@@ -223,7 +226,7 @@ body, html {
 }
 
 .menu-item h3 {
-    margin-top: 10px; /* Adjust based on preference */
+    margin-top: 1px; /* Adjust based on preference */
 }
 
 .menu-image {
@@ -309,3 +312,15 @@ body, html {
     transform: translateY(-5px); /* Move up slightly on hover */
 }
 
+@media (max-width: 1080px) { /* Adjust this value based on your needs */
+    .menu-section {
+        padding: 1px; /* Reduce padding */
+    }
+    .menu-item h3 {
+        font-size: 14px; /* Reduce font size */
+    }
+    .menu-blob p {
+        font-size: 10px; /* Reduce font size for menu items */
+    }
+    /* Add any other necessary style adjustments */
+}

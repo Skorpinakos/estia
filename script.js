@@ -153,7 +153,7 @@ function parseMenus(menus){
     let dinner_parts=dinner.replaceAll("-\n"," ").split('\n').map(item => item.trim());
     //console.log(dinner_parts);
 
-    menus_structured={"breakfast":breakfast_parts,"lunch":lunch_parts,"dinner":dinner_parts};
+    menus_structured={"lunch":lunch_parts,"dinner":dinner_parts,"breakfast":breakfast_parts};
     return menus_structured;
 
 
