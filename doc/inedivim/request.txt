@@ -1,0 +1,66 @@
+Προς: Διεύθυνση Φοιτητικής Μέριμνας Πανεπιστήμιο Πατρών & Ι.ΝΕΔΙ.ΒΙ.Μ.
+
+Από: Ιωάννη Τσάμπρα , Μεταπτυχιακό Φοιτητή και Ερευνητή στο Πανεπιστήμιο Πατρών
+
+Αφορά : Αδειοδότηση Αξιοποίησης Δεδομένων Χρήσης Ασύρματου Δικτύου της Φοιτητικής Εστίας του Πανεπιστημίου Πατρών στο Ρίο Αχαΐας για την Μελέτη του Συνωστισμού στους Χώρους Αναμονής του Φοιτητικού Εστιατορίου
+
+Τεχνικά Στοιχεία:
+
+Το ασύρματο δίκτυο, τεχνολογίας Wi-Fi, "eduroam" στο Πανεπιστήμιο Πατρών εξυπηρετεί φοιτητές και προσωπικό παρέχοντας ασύρματη σύνδεση στο
+Πανεπιστημιακό Δίκτυο και το Internet σε όλους τους χώρους του Πανεπιστημίου.
+
+Το τμήμα του ασύρματου δικτύου που εξυπηρετεί τους χώρους του εστιατορίου και των φοιτητικών εστιών αποτελεί ανεξάρτητη υποδιαίρεση του συνολικού
+δικτύου και ανήκει στο έργο "Ήφαιστος" με ονομασία "Ασύρματη Δικτύωση Φοιτητικών Εστιών και Διασύνδεσή τους με το Ακαδημαϊκό Δίκτυο ΕΔΕΤ".
+
+Η συνδεσιμότητα επιτυγχάνεται με πολλαπλές συσκευές "Access Point" τοποθετημένες ανά τακτά χωρικά διαστήματα προσφέροντας κάλυψη σε όλους τους
+χώρους των φοιτητικών εστιών.
+
+Η διαχείριση, συντήρηση και επίβλεψη των συσκευών πραγματοποιείται μέσω μονάδας "WLC" (Wireless LAN Controler) η
+οποία συγκεντρώνει δεδομένα σύνδεσης και υγείας ανά Access Point ( ισχύς σήματος, πλήθος συνδεδεμένων συσκευών, anonymised MAC Addresses κ.α. ).
+Τα δεδομένα αυτά αφορούν την ασύρματη σύνδεση αυτή καθαυτή και όχι την χρήση του δικτύου ή δεδομένα πλοήγησης των χρηστών.
+
+Την λειτουργία της μονάδας "WLC", κατασκευής HUAWEI, έχει αναλάβει το ΕΔΥΤΕ και η μονάδα βρίσκεται σε κλειστό υποδίκτυο.
+Πρόσβαση στην ανθρώπινη διεπαφή ελέγχου και επίβλεψης έχει ο ΟΤΕ που έχει αναλάβει την συντήρηση του έργου.
+Η μονάδα έχει επιπλέον δυνατότητα σύστασης αναφορών κατάστασης μέσω πρωτοκόλλου SNMP με την οποία μπορεί μια τρίτη υπηρεσία , με πρόσβαση στην μονάδα,
+να λαμβάνει τα προαναφερόμενα δεδομένα κατάστασης και υγείας των συσκευών "Access Point". 
+
+Σκοπός:
+
+Ο σκοπός της αίτησης αυτής αποτελεί η αδειοδότηση χρήσης των δεδομένων κατάστασης του ασύρματου δικτύου στους χώρους της φοιτητικής εστίας Ρίου καθώς 
+μπορούν να αξιοποιηθούν ως εκτιμητές για τον συνωστισμό των φοιτητών στον χώρο αναμονής του εστιατορίου. Οι χρόνοι αναμονής και το πλήθος των ασύρματων συσκευών 
+στο χώρο δύνανται να παρέχουν χρήσιμες πληροφορίες στην διεύθυνση της φοιτητικής μέριμνας, την διεύθυνση του εστιατορίου και στο φοιτητικό κοινό σχετικά με
+την πρόληψη συνωστισμού, βελτιστοποίηση & πρόβλεψη επισκεψιμότητας από το κοινό κ.α.
+
+Τεχνικές Προδιαγραφές:
+
+Έπειτα από επικοινωνία με το ΕΔΥΤΕ και σχετική έρευνα τους, η άντληση των πληροφοριών κατάστασης του ασύρματου δικτύου μπορεί να πραγματοποιηθεί μέσω SNMP requests 
+ανά τακτά χρονικά διαστήματα στην μονάδα ελέγχου "WLC". Τα αιτήματα αυτά, σύμφωνα με το ΕΔΥΤΕ, μπορούν να πραγματοποιούνται ανα δύο (2) λεπτά και επιστρέφουν ταμπλό
+με πληροφορίες για την κατάσταση σύνδεσης του συνόλου των ασύρματα συνδεδεμένων συσκευών στους χώρους των φοιτητικών εστιών και μόνο (η σχετική μονάδα WLC εξυπηρετεί αποκλειστικά
+τα Access Points στους χώρους της φοιτητικής εστίας). 
+
+Για την πραγματοποίηση των προαναφερόμενων requests απαιτείται πρόσβαση στο σχετικό υποδίκτυο και στην ίδια την μονάδα, το ΕΔΥΤΕ έχει ενημερώσει πως μπορεί να παρέχει 
+την σχετική πρόσβαση χωρίς τεχνική δυσκολία.
+
+Τα δεδομένα σύνδεσης ύστερα θα προωθούνται ανωνυμοποιημένα σε πλατφόρμα διαλειτουργικότητας μέσω του τοπικά ελεγχόμενου περιβάλλοντος FIWARE για την χρήση τους σε
+μελέτη για τον συνωστισμό στους χώρους αναμονής του εστιατορίου της φοιτητικής εστίας (τα αποτελέσματα της οποίας θα μπορεί να αξιοποιήσει η διεύθυνση φοιτητικής μέριμνας 
+για την καλύτερη λειτουργία των υποδομών) και για την τροφοδοσία , μέσω NGSI API, εφαρμογών ενημέρωσης του φοιτητικού κοινού για τους χρόνους αναμονής εισόδου στο 
+εστιατόριο της φοιτητικής εστίας. 
+
+Δεδομένα:
+
+Η σχετική αδειοδότηση απαιτείται πριν την παροχή πρόσβασης στην μονάδα από το ΕΔΥΤΕ, καθώς παρόλο που η κατάσταση του ασύρματου δικτύου δεν περιέχει δεδομένα
+πλοήγησης ή άλλες ευαίσθητες πληροφορίες των χρηστών, τα δεδομένα της "WLC" μονάδας αποτελούν δεδομένα υπό τον έλεγχο του Ι.ΝΕΔΙ.ΒΙ.Μ. καθώς αφορούν την παροχή
+συνδεσιμότητας σε φοιτητές.
+
+Τα δεδομένα του σχετικού ταμπλό περιέχουν για κάθε σύνδεση τα εξής πεδία:
+"hwWlanStaMac hwWlanStaUsername hwWlanStaApMac hwWlanStaApName hwWlanStaApGroup hwWlanStaRadioId hwWlanStaAssocBand hwWlanStaSupportBand hwWlanStaAccessChannel hwWlanStaRfMode hwWlanStaHtMode hwWlanStaMcsVal hwWlanStaShortGIStatus hwWlanStaConnectRxRate hwWlanStaConnectTxRate hwWlanStaEssName hwWlanStaBSSID hwWlanStaSsid hwWlanStaStatus hwWlanStaAuthenMethod hwWlanStaEncryptMethod hwWlanStaQosMode hwWlanStaRoamStatus hwWlanStaVlan hwWlanStaIP hwWlanStaIPv6 hwWlanStaGateway hwWlanStaAssocTime hwWlanStaAccessTime hwWlanStaOnlineTime hwWlanStaAccessOnlineTime hwWlanStaStatOperMode hwWlanStaWirelessStatRxFrames hwWlanStaWirelessRxBytes hwWlanStaWirelessRxRate hwWlanStaWirelessStatTxFrames hwWlanStaWirelessTxBytes hwWlanStaWirelessTxRate hwWlanStaPeriodSendDropFrames hwWlanStaPeriodReSendFrames hwWlanStaPeriodReSendBytes hwWlanStaRssi hwWlanStaNoise hwWlanStaSnrUs hwWlanStaRxPowerUs hwWlanStaChannelUtilRate hwWlanStaChannelBusyRate hwWlanStaChannelTxRatio hwWlanStaChannelRxRatio hwWlanStaChannelFreeRate hwWlanStaChannelInterfRate hwWlanStaPeriodSendFrames hwWlanStaApId hwWlanStationUapsdCapacity hwWlanStationPowerSavePercent hwWlanStaAssocStartTime hwWlanStaAssocSuccessTime hwWlanStaAuthStartTime hwWlanStaAuthSuccessTime hwWlanStaDhcpStartTime hwWlanStaDhcpSuccessTime hwWlanStaVHTCapable hwWlanStaVHTTxBFCapable hwWlanStaMUMIMOCapable hwWlanStaWpaStartTime hwWlanStaWpaSuccessTime hwWlanStaWirelessPacketDelay hwWlanStaAccessSuccessRate hwWlanStaTotalAccessTime hwWlanStaDelayStatus hwWlanStaAssocDuration hwWlanStaWpaDuration hwWlanStaAuthDuration hwWlanStaDhcpDuration hwWlanStationDevType hwWlanStaNaviACID hwWlanStaWirelessStatRxIPv6Frames hwWlanStaWirelessRxIPv6Bytes hwWlanStaWirelessStatTxIPv6Frames hwWlanStaWirelessTxIPv6Bytes hwWlanStaGatewayIPv6 hwWlanStaCategoryName hwWlanStaVendorName hwWlanStaModelName hwWlanStaOS Index Value"
+
+Οι στήλες που περιέχουν μη αριθμητικές τιμές, πλην των ονομασιών των συσκευών "Access Point", θα ανωνυμοποιούνται κατά ISO/IEC 20889:2018, με μέθοδο "salt hashing sha512" με χρήση
+ημερομηνίας μέτρησης και κρυφό αλφαριθμητικό στοιχείο ως salting prefix κατά την προώθησή τους στην πλατφόρμα διαλειτουργικότητας.
+
+Επίλογος:
+
+Η χρήση των δεδομένων κατάστασης του ασύρματου δικτύου θα προσφέρει πολλαπλά οφέλη στον Πανεπιστήμιο Πατρών τόσο στην βελτιστοποίηση της επισκεψιμότητας του εστιατορίου όσο και
+στην αποσυμφόρηση των χώρων αναμονής και την κατάλληλη ανάδραση από το προσωπικό του εστιατορίου και της φοιτητικής μέριμνας στην άμεση ανταπόκριση αλλά και στον πιο ενημερωμένο
+μακροπρόθεσμο σχεδιασμό ενώ ταυτόχρονα θα προσφέρει άνεση και ενημέρωση στο φοιτητικό κοινό για τον καλύτερο προγραμματισμό των επισκέψεών τους στο εστιατόριο. 
+
