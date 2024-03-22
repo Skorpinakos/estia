@@ -166,11 +166,11 @@ function parseMenus(menus){
     let split_words=["πρώτο πιάτο","κυρίως πιάτο","μπουφές σαλάτα","επιδόρπιο"]
     const regexPattern = new RegExp(`\\b(${split_words.join('|')})\\b`, 'gi');
 
-    let lunch_parts=lunch.replaceAll("-\n"," ").split(regexPattern).map(item => item.trim());
+    let lunch_parts=lunch.replaceAll("-\n"," ").replace("\n"," ").split(regexPattern).map(item => item.trim());
     //console.log(lunch_parts);
 
-    let dinner_parts=dinner.replaceAll("-\n"," ").split(regexPattern).map(item => item.trim());
-    //console.log(dinner_parts);
+    let dinner_parts=dinner.replaceAll("-\n"," ").replace("\n"," ").split(regexPattern).map(item => item.trim());
+    console.log(dinner_parts);
 
     menus_structured={"lunch":lunch_parts,"dinner":dinner_parts,"breakfast":breakfast_parts};
     return menus_structured;
