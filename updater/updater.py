@@ -4,7 +4,7 @@ import schedule
 import time
 from dotenv import load_dotenv
 import os
-
+from menu_processor_online import get_current_menus
 class Var:
     def __init__(self,name,declaration_type,assigned_object_inline_text):
         self.name=name
@@ -38,8 +38,8 @@ def edit_variables(file_content,new_vars):
         for i,line in enumerate(lines.copy()):
             if len(line.split(" "))<2:
                 continue
-            if line.split(" ")[1]==var.name:
-                print("found "+var+" in line "+str(i))
+            if line.split(" ")[1][0:var.length]==var.name:
+                print("found "+var.name+" in line "+str(i))
                 lines[i]=var.declaration_type+" "+var.name+" = "+var.assigned_object_inline_text
                 leftover_flag=0
                 break
@@ -57,19 +57,18 @@ def edit_variables(file_content,new_vars):
 
 
 def update_file(repo,file_path,vars):
-    try:
-        # Attempt to retrieve the existing file
-        contents = repo.get_contents(file_path)
-        # Decode the content from byte string to UTF-8 string
-        file_content = contents.decoded_content.decode('utf-8')
-        new_content=edit_variables(file_content,vars)
-        print(new_content) 
-        #new_contents = "Updated content " + time.ctime()
-        # Update the file in the repository
-        #repo.update_file(contents.path, "Updated file", new_contents, contents.sha)
-        print(f"File updated at {time.ctime()}")
-    except Exception as e:
-        print(f"An error occurred: {e}")
+    
+    # Attempt to retrieve the existing file
+    contents = repo.get_contents(file_path)
+    # Decode the content from byte string to UTF-8 string
+    file_content = contents.decoded_content.decode('utf-8')
+    new_content=edit_variables(file_content,vars)
+    print(new_content) 
+    #new_contents = "Updated content " + time.ctime()
+    # Update the file in the repository
+    repo.update_file(contents.path, "Updated file", new_content, contents.sha)
+    print(f"File updated at {time.ctime()}")
+
 
 
 
@@ -77,12 +76,13 @@ def main(freq):
     repo,file_path=init()
     # Schedule the function to run every 2 minutes
     vars=[]
-    test_var=Var("test_var","let","{[],[]}")
-    vars.append(test_var)
+    menus=get_current_menus()
+    menus_var=Var("menus_text","let",str(menus))
+    vars.append(menus_var)
     schedule.every(freq).seconds.do(update_file,repo,file_path,vars)
     # Run the scheduler indefinitely
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-main(freq=10)
+main(freq=1200)

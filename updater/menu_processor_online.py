@@ -16,5 +16,5 @@ def get_current_menus():
     return menus
 
 
-
-print(get_current_menus())
+if __name__ == "__main__":
+    print(get_current_menus())
