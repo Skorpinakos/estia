@@ -220,6 +220,7 @@ addMenuItems(menus);
 let data_line,data_time;
 let recorded,projected;
 let recorded_people,projected_people;
+let test_var = {}
 data_time=fake_data()
 recorded_waittimes=data_time[0]
 projected_waittimes=data_time[1]
