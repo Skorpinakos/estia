@@ -163,10 +163,13 @@ function parseMenus(menus){
     //console.log(breakfast_slices);
     //console.log(breakfast_main);
 
-    let lunch_parts=lunch.replaceAll("-\n"," ").split('\n').map(item => item.trim());
+    let split_words=["πρώτο πιάτο","κυρίως πιάτο","μπουφές σαλάτα","επιδόρπιο"]
+    const regexPattern = new RegExp(`\\b(${split_words.join('|')})\\b`, 'gi');
+
+    let lunch_parts=lunch.replaceAll("-\n"," ").split(regexPattern).map(item => item.trim());
     //console.log(lunch_parts);
 
-    let dinner_parts=dinner.replaceAll("-\n"," ").split('\n').map(item => item.trim());
+    let dinner_parts=dinner.replaceAll("-\n"," ").split(regexPattern).map(item => item.trim());
     //console.log(dinner_parts);
 
     menus_structured={"lunch":lunch_parts,"dinner":dinner_parts,"breakfast":breakfast_parts};
@@ -220,7 +223,6 @@ addMenuItems(menus);
 let data_line,data_time;
 let recorded,projected;
 let recorded_people,projected_people;
-let test_var = {}
 data_time=fake_data()
 recorded_waittimes=data_time[0]
 projected_waittimes=data_time[1]
