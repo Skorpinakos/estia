@@ -144,14 +144,70 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
 
 let menus_text = ['Γάλα, καφές, τσάι, χυμός, βούτυρο, άρτος, μέλι, χυμός, αυγό', 'Πρώτο Πιάτο: Κοφτό μακαρονάκι με σάλτσα\nΚυρίως Πιάτο: Γίγαντες ή Φακές σούπα\nΜπουφές Σαλάτα: Ταραμοσαλάτα, ελιές, μαρούλι με κρεμμύδια φρέσκα,ρόκα λόλα\n,λάχανο άσπρο,κόκκινο, καρότο,παντζάρια\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Τυρί Φέτα- Γλυκό', 'Πρώτο Πιάτο: Πουρές με μπέικον\nΚυρίως Πιάτο: Ταλιατέλες με σάλτσα ντομάτας τυρί τριμμένο ή Πίτσα special (τυρί, ζαμπόν-μπέικον, πιπέρια- ή μαργαρίτα,πατάτες\nτηγανιτές\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα, λόλα λάχανο, άσπρο, κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, ']
 
+
+//split-a-string-based-on-multiple-delimiters
+
+function splitStringByDelimiters(str, delimiters) {
+    // Escape special characters in delimiters and join them into a regex pattern
+    const regexPattern = delimiters.map(delimiter => 
+        delimiter.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1")
+    ).join("|");
+
+    // Create a RegExp object with global search enabled
+    const regex = new RegExp(regexPattern, 'g');
+
+    // Split the string by the constructed RegExp
+    return str.split(regex).filter(Boolean); // filter(Boolean) removes empty strings from the result
+}
+
+
+
+// finds which "ή" serve as a division and which as a subdivision, change divisions with "$", also remove parenthesis
+function processString(inputString) {
+    // Replace all \n with spaces
+    let updatedString = inputString.replace(/\n/g, ' ');
+    
+    // Remove multiple spaces
+    updatedString = updatedString.replace(/\s\s+/g, ' ');
+    
+    // Find all indexes where the character "ή" appears followed by a space and a Greek capital letter
+    // Greek capital letters range from U+0391 to U+03A9
+    let regex = /ή (?=[Α-Ω])/g;
+    let indexes = [];
+    let match;
+    
+    while ((match = regex.exec(updatedString)) !== null) {
+        indexes.push(match.index);
+    }
+    
+    // Replace those "ή" with the "$" character
+    for (let i = indexes.length - 1; i >= 0; i--) {
+        let index = indexes[i];
+        updatedString = updatedString.substring(0, index) + '$' + updatedString.substring(index + 1);
+    }
+    
+    return updatedString.replaceAll("("," ").replaceAll("("," ");
+}
+
+// formats commas
+function refineCommas(inputString) {
+    // Removes any spaces before commas and ensures one space after each comma.
+    // Also trims leading and trailing whitespace from the string.
+    return inputString.replace(/\s*,\s*/g, ', ').trim();
+}
+
+
 //function to parse menus
 function parseMenus(menus){
 
     let menus_structured={};
 
     let breakfast=menus_text[0].toLowerCase();
-    let lunch=menus_text[1].toLowerCase();
-    let dinner=menus_text[2].toLowerCase();
+    let lunch=processString(menus_text[1]).toLowerCase();
+    let dinner=processString(menus_text[2]).toLowerCase();
+
+    
+
 
 
     let breakfast_items=breakfast.split(',').map(item => item.trim());
@@ -164,13 +220,16 @@ function parseMenus(menus){
     //console.log(breakfast_main);
 
     let split_words=["πρώτο πιάτο","κυρίως πιάτο","μπουφές σαλάτα","επιδόρπιο"]
-    const regexPattern = new RegExp(`\\b(${split_words.join('|')})\\b`, 'gi');
 
-    let lunch_parts=lunch.replaceAll("-\n"," ").replace("\n"," ").split(regexPattern).map(item => item.trim());
+    lunch=lunch.replaceAll("-"," ").replaceAll("\n"," ").replaceAll(":","");
+    let lunch_parts=splitStringByDelimiters(lunch,split_words).map(item => item.trim());
     //console.log(lunch_parts);
 
-    let dinner_parts=dinner.replaceAll("-\n"," ").replace("\n"," ").split(regexPattern).map(item => item.trim());
-    console.log(dinner_parts);
+    dinner=dinner.replaceAll("-"," ").replaceAll("\n"," ").replaceAll(":","");
+    let dinner_parts=splitStringByDelimiters(dinner,split_words).map(item => item.trim());
+    //console.log(dinner_parts);
+
+    
 
     menus_structured={"lunch":lunch_parts,"dinner":dinner_parts,"breakfast":breakfast_parts};
     return menus_structured;
@@ -196,9 +255,11 @@ function addMenuItems(menus) {
     Object.entries(menus).forEach(([mealType, menuItems]) => {
         const menuContainer = document.getElementById(`${mealType}-menu`);
         menuItems.forEach(item => {
-            let item_processed=item.replaceAll(" ή "," ή<br><br>").replaceAll("με ή<br><br>","με ή ").replaceAll("πρώτο πιάτο:","").replaceAll("κυρίως πιάτο:","").replaceAll("μπουφές σαλάτα:","").replaceAll("επιδόρπιο:","").replaceAll(" ή<br><br>","<br><br>")
+            let item_processed = item.replace(/\s*\$\s*/g, "<br><br>");
             item_processed=capitalizeFirstLetter(item_processed);
             item_processed=capitalizeAfterBr(item_processed);
+            item_processed=refineCommas(item_processed);
+            item_processed=item_processed.replaceAll("<br><br>","</p><hr><p>") //this came later along on top of the <br> separator
             const blob = document.createElement('div');
             blob.className = 'menu-blob';
             blob.innerHTML = `<p>${item_processed}</p>`;
