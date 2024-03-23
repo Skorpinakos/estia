@@ -140,9 +140,6 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
 
 
 
-//menus 
-
-let menus_text = ['Γάλα, καφές, τσάι,χυμός , βούτυρο, άρτος, μαρμελάδα, ζαμπόν,τυρί', 'Πρώτο Πιάτο: Μπάμιες\nΚυρίως Πιάτο: Χοιρινό αλά μπότσαρη με ριζότο ή Αρνί ψητό  με πατάτες φούρνου\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα, λόλα λάχανο, άσπρο, κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, ', 'Πρώτο Πιάτο: Κριθαρότο λαχανικών\nΚυρίως Πιάτο: Τριβελάκι καρμπονάρα τυρί τριμμένο ή Φασολάκια λαδερά με πατάτες\nΜπουφές Σαλάτα: Ντομάτα, πιπεριά, κρεμμύδι, λάχανο, άσπρο,κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Τυρί Φέτα']
 
 
 //split-a-string-based-on-multiple-delimiters
@@ -200,7 +197,7 @@ function refineCommas(inputString) {
 
 
 //function to parse menus
-function parseMenus(menus){
+function parseMenus(menus_text){
 
     let menus_structured={};
 
@@ -275,6 +272,14 @@ function addMenuItems(menus) {
     });
 }
 
+
+
+// Main
+window.addEventListener('load', function() {
+//menus 
+
+let menus_text = ['Γάλα, καφές, τσάι,χυμός , βούτυρο, άρτος, μαρμελάδα, ζαμπόν,τυρί', 'Πρώτο Πιάτο: Μπάμιες\nΚυρίως Πιάτο: Χοιρινό αλά μπότσαρη με ριζότο ή Αρνί ψητό  με πατάτες φούρνου\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα, λόλα λάχανο, άσπρο, κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, ', 'Πρώτο Πιάτο: Κριθαρότο λαχανικών\nΚυρίως Πιάτο: Τριβελάκι καρμπονάρα τυρί τριμμένο ή Φασολάκια λαδερά με πατάτες\nΜπουφές Σαλάτα: Ντομάτα, πιπεριά, κρεμμύδι, λάχανο, άσπρο,κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Τυρί Φέτα']
+
 // parse menu text
 let menus=parseMenus(menus_text);
 
@@ -304,3 +309,4 @@ plotTimeSeriesData('lineSizeChart',2500,'Line Size (People)',recorded_linesizes,
 
 document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y;
 document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y;
+});
