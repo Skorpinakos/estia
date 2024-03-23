@@ -186,15 +186,17 @@ function processString(inputString) {
         updatedString = updatedString.substring(0, index) + '$' + updatedString.substring(index + 1);
     }
     
-    return updatedString.replaceAll("("," ").replaceAll("("," ");
+    return updatedString.replaceAll("("," ").replaceAll(")"," ");
 }
 
 // formats commas
 function refineCommas(inputString) {
     // Removes any spaces before commas and ensures one space after each comma.
+    // Deletes any commas that are at the end of the string, followed only by whitespaces.
     // Also trims leading and trailing whitespace from the string.
-    return inputString.replace(/\s*,\s*/g, ', ').trim();
+    return inputString.replace(/\s*,\s*/g, ', ').replace(/,+\s*$/, '').trim();
 }
+
 
 
 //function to parse menus
@@ -212,8 +214,13 @@ function parseMenus(menus){
 
     let breakfast_items=breakfast.split(',').map(item => item.trim());
     let breakfast_drinks=breakfast_items.slice(0,4);
-    let breakfast_main=breakfast_items[breakfast_items.length - 1];
-    let breakfast_slices=breakfast_items.slice(4,breakfast_items.length-1);
+    if (breakfast_items[breakfast_items.length -1]!="τυρί"){
+    var breakfast_main=breakfast_items[breakfast_items.length - 1];
+    var breakfast_slices=breakfast_items.slice(4,breakfast_items.length-1);
+    }else{
+    var breakfast_main=breakfast_items[breakfast_items.length - 2]+"-"+breakfast_items[breakfast_items.length - 1];
+    var breakfast_slices=breakfast_items.slice(4,breakfast_items.length-2);
+    }
     let breakfast_parts=[breakfast_main,breakfast_slices.join(', '),breakfast_drinks.join(', ')]
     //console.log(breakfast_drinks);
     //console.log(breakfast_slices);
