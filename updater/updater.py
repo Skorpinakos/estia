@@ -80,7 +80,7 @@ def update_file(repo,file_path):
     print(new_content) 
     #new_contents = "Updated content " + time.ctime()
     # Update the file in the repository
-    repo.update_file(contents.path, "Updated file", new_content, contents.sha)
+    repo.update_file(contents.path, "Updated Webpage at "+str(formatted_date), new_content, contents.sha)
     print(f"File updated at {time.ctime()}")
 
 
@@ -98,4 +98,4 @@ def main(freq):
         schedule.run_pending()
         time.sleep(1)
 
-main(freq=5)
+main(freq=1200)
