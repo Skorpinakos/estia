@@ -85,4 +85,4 @@ def main(freq):
         schedule.run_pending()
         time.sleep(1)
 
-main(freq=10)
+main(freq=1800)
