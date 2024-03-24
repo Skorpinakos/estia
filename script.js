@@ -1,5 +1,5 @@
 var menus_text = ['Γάλα, καφές, τσάι,χυμός , βούτυρο, άρτος, μαρμελάδα, ζαμπόν,τυρί', 'Πρώτο Πιάτο: Μπάμιες\nΚυρίως Πιάτο: Χοιρινό αλά μπότσαρη με ριζότο ή Αρνί ψητό  με πατάτες φούρνου\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα, λόλα λάχανο, άσπρο, κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, ', 'Πρώτο Πιάτο: Κριθαρότο λαχανικών\nΚυρίως Πιάτο: Τριβελάκι καρμπονάρα τυρί τριμμένο ή Φασολάκια λαδερά με πατάτες\nΜπουφές Σαλάτα: Ντομάτα, πιπεριά, κρεμμύδι, λάχανο, άσπρο,κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Τυρί Φέτα'];
-var last_update_datetime = "2024-03-24 22:16:44";
+var last_update_datetime = "2024-03-24 21:36:41";
 
 function fake_data(){
         // Generate random data points for two arrays with timestamps
@@ -287,6 +287,19 @@ function addMenuItems(menus) {
     });
 }
 
+// Function to update the restaurant capacity
+function updateRestaurantCapacity(percentage) {
+    // Ensure the percentage is within bounds
+    percentage = Math.max(0, Math.min(percentage, 100));
+
+    // Update the capacity bar width
+    const capacityBar = document.getElementById('capacity-bar');
+    capacityBar.style.width = percentage + '%';
+
+    // Update the capacity text
+    const capacityText = document.getElementById('current_Capacity');
+    capacityText.textContent = percentage + '%';
+}
 
 
 // Main
@@ -310,6 +323,7 @@ window.addEventListener('load', function() {
 
     let data_line,data_time;
     data_time=fake_data()
+    let capacity = 79 ;
     recorded_waittimes=data_time[0]
     projected_waittimes=data_time[1]
 
@@ -319,9 +333,11 @@ window.addEventListener('load', function() {
 
     plotTimeSeriesData('waitTimeChart',700,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
     plotTimeSeriesData('lineSizeChart',1400,'Line Size (People)',recorded_linesizes,projected_linesizes);
+    updateRestaurantCapacity(capacity);
 
-    document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y;
-    document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y;
+    document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y.toString();
+    document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y.toString();
+    document.getElementById('current_Capacity').textContent = capacity.toString()+"%";
 
 
     // menu button listener

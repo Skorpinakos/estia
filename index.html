@@ -27,7 +27,7 @@
             <section id="wait-times" class="chart-section">
                 <div class="chart-title"></div>
                 <h2 style="display: inline-block; vertical-align: middle;">&nbsp;Current Wait Time</h2>
-                <h2 id="current_WaitTime" class="count" style="display: inline-block; vertical-align: middle; padding-right: 10px;">NaN</h2>
+                <h2 id="current_WaitTime" class="count" style="display: inline-block; vertical-align: middle; padding-right: 10px; width: 2em; text-align: right;">NaN</h2>
                 <img class="svg" src="clock.svg" alt="Clock Icon" style="display: inline-block; width: 35px; height: 35px; vertical-align: middle; padding-bottom: 0px;padding-right: 5px;">
                 </div>
                 <div class="chart-container">
@@ -39,13 +39,26 @@
             <section id="line-sizes" class="chart-section">
                 <div class="chart-title"></div>
                     <h2 style="display: inline-block; vertical-align: middle;">&nbsp;Current Line Size</h2>
-                    <h2 id="current_LineSize" class="count" style="display: inline-block; vertical-align: middle; padding-right: 10px;">NaN</h2>
+                    <h2 id="current_LineSize" class="count" style="display: inline-block; vertical-align: middle; padding-right: 10px; width: 2em; text-align: right;">NaN</h2>
                     <img class="svg" src="users.svg" alt="Crowd Icon" style="display: inline-block; width: 45px; height: 45px; vertical-align: middle; padding-bottom: 8px;">
                 </div>
                 <div class="chart-container">
                     <canvas id="lineSizeChart"></canvas>
                 </div>
             </section>
+
+            <section id="restaurant-capacity" class="capacity-section">
+                <div class="capacity-title">
+                    
+                    <h2 style="display: inline-block; vertical-align: middle;">&nbsp;Current Seating Capacity</h2>
+                    <h2 id="current_Capacity" class="count" style="display: inline-block; vertical-align: middle; padding-left: 10px; width: 2em; text-align: right;">NaN</h2> 
+                    <img class="svg" src="chair.svg" alt="Chair Icon" style="display: inline-block; width: 30px; height: 35px; vertical-align: middle; ">
+                </div>
+                <div class="capacity-container">
+                    <div id="capacity-bar" class="capacity-bar"></div>
+                </div>
+            </section>
+            
 
             <section id="todays-menu" class="menu-section">
                 <h2 class="Menu-Title">&nbsp;Today's Menu</h2>
