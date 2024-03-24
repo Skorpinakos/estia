@@ -20,7 +20,7 @@ body, html {
     line-height: 1.6;
     color: #444;
     
-    padding-top: 55px; /* Add padding to avoid content being hidden behind the navbar */
+    padding-top: 50px; /* Add padding to avoid content being hidden behind the navbar */
 
 }
 
@@ -109,8 +109,7 @@ body, html {
 
 .chart-section{
     background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
-    margin-bottom: 50px;
-    margin-top: 10px;
+    margin-bottom: 30px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width: 100%;
@@ -169,7 +168,8 @@ body, html {
 }
 
 .Menu-Title {
-    margin-bottom: 15px;
+    margin-bottom: 1px;
+    padding-top: 8px;
 }
 .menu-image img.responsive-img {
     max-width: 100%;
@@ -223,7 +223,7 @@ body, html {
 .menu-section{
     background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
     margin-bottom: 40px;
-    border-radius: 8px;
+    border-radius: 5px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 600px;
@@ -297,7 +297,7 @@ body, html {
   }
 
   .menu-item {
-    margin-bottom: 40px; /* Space between each menu type */
+    margin-bottom: 8px; /* Space between each menu type */
 }
 
 .menu-item h3 {

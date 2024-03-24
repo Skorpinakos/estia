@@ -28,6 +28,11 @@ def serve_svg(filename):
     return send_from_directory('.', f'{filename}.svg')
 
 # Serve images dynamically
+@app.route('/<filename>.webp')
+def serve_webp(filename):
+    return send_from_directory('.', f'{filename}.webp')
+
+# Serve images dynamically
 @app.route('/<filename>.png')
 def serve_png(filename):
     return send_from_directory('.', f'{filename}.png')
