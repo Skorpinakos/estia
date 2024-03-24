@@ -277,86 +277,87 @@ function addMenuItems(menus) {
 
 // Main
 window.addEventListener('load', function() {
-//menus 
+    //set last updated tag
+    document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
 
-var menus_text = ['Γάλα, καφές, τσάι,χυμός , βούτυρο, άρτος, μαρμελάδα, ζαμπόν,τυρί', 'Πρώτο Πιάτο: Μπάμιες\nΚυρίως Πιάτο: Χοιρινό αλά μπότσαρη με ριζότο ή Αρνί ψητό  με πατάτες φούρνου\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα, λόλα λάχανο, άσπρο, κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, ', 'Πρώτο Πιάτο: Κριθαρότο λαχανικών\nΚυρίως Πιάτο: Τριβελάκι καρμπονάρα τυρί τριμμένο ή Φασολάκια λαδερά με πατάτες\nΜπουφές Σαλάτα: Ντομάτα, πιπεριά, κρεμμύδι, λάχανο, άσπρο,κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Τυρί Φέτα'];
+    //menus 
 
-// parse menu text
-let menus=parseMenus(menus_text);
+    var menus_text = ['Γάλα, καφές, τσάι,χυμός , βούτυρο, άρτος, μαρμελάδα, ζαμπόν,τυρί', 'Πρώτο Πιάτο: Μπάμιες\nΚυρίως Πιάτο: Χοιρινό αλά μπότσαρη με ριζότο ή Αρνί ψητό  με πατάτες φούρνου\nΜπουφές Σαλάτα: Μαρούλι με κρεμμύδια φρέσκα, ρόκα, λόλα λάχανο, άσπρο, κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, ', 'Πρώτο Πιάτο: Κριθαρότο λαχανικών\nΚυρίως Πιάτο: Τριβελάκι καρμπονάρα τυρί τριμμένο ή Φασολάκια λαδερά με πατάτες\nΜπουφές Σαλάτα: Ντομάτα, πιπεριά, κρεμμύδι, λάχανο, άσπρο,κόκκινο, καρότο\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Τυρί Φέτα'];
 
-// Call the function to add the menu items
-addMenuItems(menus);
+    // parse menu text
+    let menus=parseMenus(menus_text);
 
-
-
-
-
-// graphs
+    // Call the function to add the menu items
+    addMenuItems(menus);
 
 
-let data_line,data_time;
-let recorded,projected;
-let recorded_people,projected_people;
-data_time=fake_data()
-recorded_waittimes=data_time[0]
-projected_waittimes=data_time[1]
-
-data_line=fake_data()
-recorded_linesizes=data_line[0]
-projected_linesizes=data_line[1]
-
-plotTimeSeriesData('waitTimeChart',700,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
-plotTimeSeriesData('lineSizeChart',1400,'Line Size (People)',recorded_linesizes,projected_linesizes);
-
-document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y;
-document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y;
 
 
-// menu button listener
-// Add smooth scroll with offset to menu button
-document.querySelector('.nav-item[href="#menu"]').addEventListener('click', function(e) {
-    e.preventDefault(); // Prevent default anchor click behavior
 
-    // Remove 'active' class from all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
+    // graphs
+
+
+    let data_line,data_time;
+    data_time=fake_data()
+    recorded_waittimes=data_time[0]
+    projected_waittimes=data_time[1]
+
+    data_line=fake_data()
+    recorded_linesizes=data_line[0]
+    projected_linesizes=data_line[1]
+
+    plotTimeSeriesData('waitTimeChart',700,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
+    plotTimeSeriesData('lineSizeChart',1400,'Line Size (People)',recorded_linesizes,projected_linesizes);
+
+    document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y;
+    document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y;
+
+
+    // menu button listener
+    // Add smooth scroll with offset to menu button
+    document.querySelector('.nav-item[href="#menu"]').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default anchor click behavior
+
+        // Remove 'active' class from all nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // Add 'active' class to menu button
+        this.classList.add('active');
+
+        // Get the position of the "Today's Menu" section
+        const menuSection = document.getElementById('todays-menu');
+        const offset = 100; // Change this value to the desired offset
+        const bodyRect = document.body.getBoundingClientRect().top;
+        const sectionRect = menuSection.getBoundingClientRect().top;
+        const sectionPosition = sectionRect - bodyRect;
+
+        // Scroll to the "Today's Menu" section with the offset
+        window.scrollTo({
+            top: sectionPosition - offset, // Adjusts the final position by the offset
+            behavior: 'smooth'
+        });
     });
 
-    // Add 'active' class to menu button
-    this.classList.add('active');
+    // home button listener
+    // Add smooth scroll to home button
+    document.querySelector('.nav-item[href="#home"]').addEventListener('click', function(e) {
+        e.preventDefault(); // Prevent default anchor click behavior
 
-    // Get the position of the "Today's Menu" section
-    const menuSection = document.getElementById('todays-menu');
-    const offset = 100; // Change this value to the desired offset
-    const bodyRect = document.body.getBoundingClientRect().top;
-    const sectionRect = menuSection.getBoundingClientRect().top;
-    const sectionPosition = sectionRect - bodyRect;
+        // Remove 'active' class from all nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
 
-    // Scroll to the "Today's Menu" section with the offset
-    window.scrollTo({
-        top: sectionPosition - offset, // Adjusts the final position by the offset
-        behavior: 'smooth'
+        // Add 'active' class to home button
+        this.classList.add('active');
+
+        // Scroll smoothly to the top of the page
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     });
-});
-
-// home button listener
-// Add smooth scroll to home button
-document.querySelector('.nav-item[href="#home"]').addEventListener('click', function(e) {
-    e.preventDefault(); // Prevent default anchor click behavior
-
-    // Remove 'active' class from all nav items
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-    });
-
-    // Add 'active' class to home button
-    this.classList.add('active');
-
-    // Scroll smoothly to the top of the page
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});
 
 });

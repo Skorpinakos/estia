@@ -254,6 +254,13 @@ body, html {
 }
 
 
+.last-updated {
+    font-size: 0.75rem; /* Smaller font size for subtlety */
+    color: #666; /* A light grey color, adjust as needed */
+    text-align: right; /* Align to the right of the footer */
+    margin-top: 10px; /* Add some space above the text */
+}
+
 .bottom-nav {
     position: fixed;
     bottom: 0;
