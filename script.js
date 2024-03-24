@@ -94,41 +94,54 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
                 legend: {
                     display: false
                 }},
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        parser: 'HH:mm', // This ensures the format of the time being parsed
-                        tooltipFormat: 'HH:mm'
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            parser: 'HH:mm',
+                            tooltipFormat: 'h:mm a',
+                            unit: 'minute',
+                            stepSize: 30, // Adjust based on your data
+                            displayFormats: {
+                                minute: 'h:mm a',
+                                hour: 'h:mm a'
+                            }
+                        },
+                        ticks: {
+                            autoSkip: true,
+                            maxTicksLimit: 20,
+                            major: {
+                                enabled: true
+                            },
+                            // Custom tick formatting
+                            callback: function(value, index, values) {
+                                // Convert the value (timestamp) to a Date object
+                                const date = new Date(value);
+                                // Format the time as "h:mm a" ensuring consistent spacing
+                                const formattedTime = this.getLabelForValue(value).replace(/\sAM$/, 'AM').replace(/\sPM$/, 'PM');
+                                // Return the formatted time for display
+                                return formattedTime;
+                            }
+                        },
+                        afterBuildTicks: (scale) => {
+                            scale.ticks = scale.ticks.filter(tick => {
+                                const date = new Date(tick.value);
+                                const minutes = date.getMinutes();
+                                return minutes === 0 || minutes === 30;
+                            });
+                        },
+                        min: dataArray1[0].x,
+                        max: dataArray2[dataArray2.length-1].x
                     },
-                    ticks: {
-                        autoSkip: true,
-                        maxTicksLimit: 20, // Adjust based on your preference
-                        major: {
-                            enabled: true // this will include major ticks with a different styling
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: y_title
                         }
-                    },
-                    afterBuildTicks: (scale) => {
-                        scale.ticks = scale.ticks.filter(tick => {
-                            // Check if the tick corresponds to a full or half hour
-                            const date = new Date(tick.value);
-                            const minutes = date.getMinutes();
-                            return minutes == 0 || minutes == 30;
-                        });
-                    },
-                    
-                    min: dataArray1[0].x,
-                    max: dataArray2[dataArray2.length-1].x
-                },
-                y: {
-                    
-                    beginAtZero: true,
-                    title: {
-                        display: true,
-                        text: y_title
                     }
                 }
-            },
+                ,
             animation: {
                 duration: animation_duration, // general animation time
             },
