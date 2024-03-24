@@ -304,8 +304,8 @@ data_line=fake_data()
 recorded_linesizes=data_line[0]
 projected_linesizes=data_line[1]
 
-plotTimeSeriesData('waitTimeChart',1000,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
-plotTimeSeriesData('lineSizeChart',2500,'Line Size (People)',recorded_linesizes,projected_linesizes);
+plotTimeSeriesData('waitTimeChart',700,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
+plotTimeSeriesData('lineSizeChart',1400,'Line Size (People)',recorded_linesizes,projected_linesizes);
 
 document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y;
 document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y;
