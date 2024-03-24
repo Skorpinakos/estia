@@ -5,6 +5,7 @@ import time
 from dotenv import load_dotenv
 import os
 from menu_processor_online import get_current_menus
+from datetime import datetime
 class Var:
     def __init__(self,name,declaration_type,assigned_object_inline_text):
         self.name=name
@@ -56,7 +57,20 @@ def edit_variables(file_content,new_vars):
 
 
 
-def update_file(repo,file_path,vars):
+def update_file(repo,file_path):
+
+    # Get current date and time
+    current_date = datetime.now()
+    # Format the date and time to exclude microseconds
+    formatted_date = current_date.strftime("%Y-%m-%d %H:%M:%S")
+
+    vars=[]
+    menus=get_current_menus()
+    menus_var=Var("menus_text","var",str(menus)+";")
+    time_var=Var("last_update_datetime","var",str('"'+formatted_date+'";'))
+    vars.append(menus_var)
+    vars.append(time_var)
+
     
     # Attempt to retrieve the existing file
     contents = repo.get_contents(file_path)
@@ -73,16 +87,15 @@ def update_file(repo,file_path,vars):
 
 
 def main(freq):
+
+
     repo,file_path=init()
     # Schedule the function to run every 2 minutes
-    vars=[]
-    menus=get_current_menus()
-    menus_var=Var("menus_text","let",str(menus))
-    vars.append(menus_var)
-    schedule.every(freq).seconds.do(update_file,repo,file_path,vars)
+    
+    schedule.every(freq).seconds.do(update_file,repo,file_path)
     # Run the scheduler indefinitely
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-main(freq=1800)
+main(freq=5)
