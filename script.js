@@ -309,4 +309,53 @@ plotTimeSeriesData('lineSizeChart',1400,'Line Size (People)',recorded_linesizes,
 
 document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y;
 document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y;
+
+
+// menu button listener
+// Add smooth scroll with offset to menu button
+document.querySelector('.nav-item[href="#menu"]').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default anchor click behavior
+
+    // Remove 'active' class from all nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Add 'active' class to menu button
+    this.classList.add('active');
+
+    // Get the position of the "Today's Menu" section
+    const menuSection = document.getElementById('todays-menu');
+    const offset = 100; // Change this value to the desired offset
+    const bodyRect = document.body.getBoundingClientRect().top;
+    const sectionRect = menuSection.getBoundingClientRect().top;
+    const sectionPosition = sectionRect - bodyRect;
+
+    // Scroll to the "Today's Menu" section with the offset
+    window.scrollTo({
+        top: sectionPosition - offset, // Adjusts the final position by the offset
+        behavior: 'smooth'
+    });
+});
+
+// home button listener
+// Add smooth scroll to home button
+document.querySelector('.nav-item[href="#home"]').addEventListener('click', function(e) {
+    e.preventDefault(); // Prevent default anchor click behavior
+
+    // Remove 'active' class from all nav items
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Add 'active' class to home button
+    this.classList.add('active');
+
+    // Scroll smoothly to the top of the page
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});
+
 });
