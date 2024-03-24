@@ -6,7 +6,7 @@
 }
 
 body {
-    background-image: url('back.webp'); /* Adjust the file name/path as necessary */
+    background-image: url('media/back.webp'); /* Adjust the file name/path as necessary */
     background-size: cover; /* Cover the entire page */
     background-position: center; /* Center the background image */
     background-repeat:repeat-y; /* Do not repeat the image */
