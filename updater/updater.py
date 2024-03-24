@@ -39,7 +39,7 @@ def edit_variables(file_content,new_vars):
         for i,line in enumerate(lines.copy()):
             if len(line.split(" "))<2:
                 continue
-            if line.split(" ")[1][0:var.length]==var.name:
+            if line.strip().split(" ")[1][0:var.length]==var.name:
                 print("found "+var.name+" in line "+str(i))
                 lines[i]=var.declaration_type+" "+var.name+" = "+var.assigned_object_inline_text
                 leftover_flag=0
