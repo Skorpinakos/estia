@@ -283,7 +283,7 @@ body, html {
 
 .menu-section{
     background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
-    margin-bottom: 100px;
+    margin-bottom: 180px;
     margin-top: 90px;
     border-radius: 5px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
