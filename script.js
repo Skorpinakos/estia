@@ -332,7 +332,7 @@ window.addEventListener('load', function() {
     projected_linesizes=data_line[1]
 
     plotTimeSeriesData('waitTimeChart',700,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
-    plotTimeSeriesData('lineSizeChart',1400,'Line Size (People)',recorded_linesizes,projected_linesizes);
+    plotTimeSeriesData('lineSizeChart',1400,'Queue Length (People)',recorded_linesizes,projected_linesizes);
     updateRestaurantCapacity(capacity);
 
     document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y.toString();

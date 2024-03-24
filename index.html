@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=0.9">
     <title>University Restaurant Dashboard Patras</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/moment"></script>
@@ -26,7 +26,7 @@
         <div class="main-content"></div>
             <section id="wait-times" class="chart-section">
                 <div class="chart-title"></div>
-                <h2 style="display: inline-block; vertical-align: middle;">&nbsp;Current Wait Time</h2>
+                <h2 style="display: inline-block; vertical-align: middle; padding-left: 15px;">Entry Wait Time</h2>
                 <h2 id="current_WaitTime" class="count" style="display: inline-block; vertical-align: middle; padding-right: 10px; width: 2em; text-align: right;">NaN</h2>
                 <img class="svg" src="clock.svg" alt="Clock Icon" style="display: inline-block; width: 35px; height: 35px; vertical-align: middle; padding-bottom: 0px;padding-right: 5px;">
                 </div>
@@ -38,7 +38,7 @@
         
             <section id="line-sizes" class="chart-section">
                 <div class="chart-title"></div>
-                    <h2 style="display: inline-block; vertical-align: middle;">&nbsp;Current Line Size</h2>
+                    <h2 style="display: inline-block; vertical-align: middle; padding-left: 15px;">Queue Length</h2>
                     <h2 id="current_LineSize" class="count" style="display: inline-block; vertical-align: middle; padding-right: 10px; width: 2em; text-align: right;">NaN</h2>
                     <img class="svg" src="users.svg" alt="Crowd Icon" style="display: inline-block; width: 45px; height: 45px; vertical-align: middle; padding-bottom: 8px;">
                 </div>
@@ -49,13 +49,19 @@
 
             <section id="restaurant-capacity" class="capacity-section">
                 <div class="capacity-title">
-                    
-                    <h2 style="display: inline-block; vertical-align: middle;">&nbsp;Current Seating Capacity</h2>
+                    <h2 style="display: inline-block; vertical-align: middle; padding-left: 5px;">Seating Capacity</h2>
                     <h2 id="current_Capacity" class="count" style="display: inline-block; vertical-align: middle; padding-left: 10px; width: 2em; text-align: right;">NaN</h2> 
                     <img class="svg" src="chair.svg" alt="Chair Icon" style="display: inline-block; width: 30px; height: 35px; vertical-align: middle; ">
                 </div>
                 <div class="capacity-container">
                     <div id="capacity-bar" class="capacity-bar"></div>
+                </div>
+                <div class="capacity-axis">
+                    <span>0%</span>
+                    <span>25%</span>
+                    <span>50%</span>
+                    <span>75%</span>
+                    <span>100%</span>
                 </div>
             </section>
             

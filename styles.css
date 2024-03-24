@@ -20,7 +20,7 @@ body, html {
     line-height: 1.6;
     color: #444;
     
-    padding-top: 50px; /* Add padding to avoid content being hidden behind the navbar */
+    padding-top: 35px; /* Add padding to avoid content being hidden behind the navbar */
 
 }
 
@@ -36,13 +36,14 @@ body, html {
 .header {
     width: 100%; /* Full width */
     background-color: #ca7f54; /* Or your existing navbar background color */
-    color: white;
-    padding: 10px 0;
+    color: rgb(255, 255, 255);
+    padding: 5px 0;
     position: fixed; /* Changed from 'static' to 'fixed' */
     top: 0; /* Stick to the top of the page */
     left: 0; /* Align to the left of the page */
     z-index: 1000; /* Ensure navbar is above other content */
     box-shadow: 0 3px 5px rgba(0,0,0,0.3); /* Optional: adds shadow for depth */
+    height: 60px;
 
 }
 
@@ -75,7 +76,7 @@ body, html {
 }
 
 .nav-links a {
-    color: white;
+    color: rgb(251, 210, 174);
     text-decoration: none;
     padding: 10px 15px; /* Adjust padding to control the size of the buttons */
     border-radius: 5px; /* Adds rounded corners to your buttons */
@@ -90,7 +91,7 @@ body, html {
 }
 
 .nav-links a {
-    color: white;
+    color: rgb(251, 210, 174);
     text-decoration: none;
     padding: 5px 10px;
     border-radius: 5px;
@@ -109,7 +110,7 @@ body, html {
 
 .chart-section{
     background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
-    margin-bottom: 30px;
+    margin-bottom: 15px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width: 100%;
@@ -171,20 +172,41 @@ body, html {
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     margin-top: 0px;
-    padding: 15px;
+    padding-top: 5px;
+    padding-bottom: 10px;
     width: 100%;
     max-width: 600px;
 }
 
 .capacity-title {
     margin-bottom: 10px;
+
+    padding-right: 10px;
+    padding-left: 10px;
 }
 
 .capacity-container {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    background-color: #fff5ed;
+    border-radius: 8px;
     overflow: hidden;
+    max-height: 20px;
+    width: 90%;
+    margin: 0 auto;
+    position: relative;
+}
+
+
+.capacity-axis {
+    display: flex;
+    justify-content: space-between; /* This distributes the labels across the width */
+    width: 90%; /* Match the width of the capacity-container for alignment */
+    margin: 0 auto; /* Center align */
+    font-size: 0.75rem; /* Adjust size as needed */
+    color: #444; /* Adjust color as needed */
+    padding-left: 10px;
+    padding-right: 0px;
+    padding-bottom: 0px;
+    padding-top: 3px;
 }
 
 .capacity-bar {
@@ -193,11 +215,12 @@ body, html {
     background-color: #cf8d5e; /* Change to your desired color */
     width: 50%; /* Adjust based on the actual capacity percentage */
     text-align: right;
-    padding-right: 10px;
     box-sizing: border-box;
     line-height: 30px;
-    color: white;
+    color: rgb(246, 225, 206);
 }
+
+
 
 
 
@@ -303,6 +326,8 @@ body, html {
 
 .bottom-nav {
     position: fixed;
+
+    max-height: 60px;
     bottom: 0;
     width: 100%;
     background-color: #ca7f54; 
