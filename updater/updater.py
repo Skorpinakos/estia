@@ -77,7 +77,7 @@ def update_file(repo,file_path):
     # Decode the content from byte string to UTF-8 string
     file_content = contents.decoded_content.decode('utf-8')
     new_content=edit_variables(file_content,vars)
-    print(new_content) 
+    #print(new_content) 
     #new_contents = "Updated content " + time.ctime()
     # Update the file in the repository
     repo.update_file(contents.path, "Updated Webpage at "+str(formatted_date), new_content, contents.sha)
@@ -98,4 +98,4 @@ def main(freq):
         schedule.run_pending()
         time.sleep(1)
 
-main(freq=1200)
+main(freq=14400)
