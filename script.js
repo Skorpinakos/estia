@@ -1,4 +1,4 @@
-var last_update_datetime = 2024-03-24 19:09:41
+var last_update_datetime = "2024-03-24 19:11:16"
 
 function fake_data(){
         // Generate random data points for two arrays with timestamps
