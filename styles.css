@@ -65,11 +65,7 @@ body, html {
     align-items: center;
 }
 
-.university-seal {
-    width: 50px; /* Adjust based on actual size needed */
-    height: 50px; /* Adjust based on actual size needed */
-    margin-right: 10px; /* Adjust spacing to your liking */
-}
+
 
 .navbar {
     display: flex;
@@ -114,6 +110,7 @@ body, html {
 .chart-section{
     background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
     margin-bottom: 50px;
+    margin-top: 10px;
     border-radius: 8px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width: 100%;
