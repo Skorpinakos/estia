@@ -323,7 +323,7 @@ window.addEventListener('load', function() {
 
     let data_line,data_time;
     data_time=fake_data()
-    let capacity = 79 ;
+    let capacity = Math.round(Math.random()*100);
     recorded_waittimes=data_time[0]
     projected_waittimes=data_time[1]
 
