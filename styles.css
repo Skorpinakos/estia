@@ -298,6 +298,47 @@ body, html {
     text-align: center;
 }
 
+hr {
+    border: none;
+    height: 2px;
+    background: #8f5e3b4b; /* Change as needed */
+    border-radius: 1px; /* Rounded corners */
+    margin: 7px;
+}
+
+/* Target the first item of the breakfast menu */
+#breakfast-menu .menu-blob:nth-child(2) {
+    background-color: #debca44b; /* Light gray background */
+    border: 2px solid #a26f4b4b; /* Light grey border */
+    border-radius: 15px; /* Rounded corners */
+    padding: 15px; /* Space inside the blob */
+    margin: 10px 0; /* Space between blobs */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Soft shadow around each blob */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+/* Target the second item of the lunch menu */
+#lunch-menu .menu-blob:nth-child(3) {
+    background-color: #debca44b; /* Light gray background */
+    border: 2px solid #a26f4b4b; /* Light grey border */
+    border-radius: 15px; /* Rounded corners */
+    padding: 15px; /* Space inside the blob */
+    margin: 10px 0; /* Space between blobs */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Soft shadow around each blob */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
+/* Target the second item of the dinner menu */
+#dinner-menu .menu-blob:nth-child(3) {
+    background-color: #debca44b; /* Light gray background */
+    border: 2px solid #a26f4b4b; /* Light grey border */
+    border-radius: 15px; /* Rounded corners */
+    padding: 15px; /* Space inside the blob */
+    margin: 10px 0; /* Space between blobs */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); /* Soft shadow around each blob */
+    transition: transform 0.3s ease; /* Smooth hover effect */
+}
+
 .menu-item h3 {
     margin-top: 1px; /* Adjust based on preference */
 }
