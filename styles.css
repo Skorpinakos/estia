@@ -78,6 +78,8 @@ body, html {
 .nav-links a {
     color: rgb(251, 210, 174);
     text-decoration: none;
+    min-height: 48px;
+    min-width: 48px;
     padding: 10px 15px; /* Adjust padding to control the size of the buttons */
     border-radius: 5px; /* Adds rounded corners to your buttons */
     background-color: #ec5814d4; /* Background color for your buttons */
@@ -88,6 +90,8 @@ body, html {
 .nav-links li {
     display: inline;
     margin-left: 20px;
+    min-height: 48px;
+    min-width: 48px;
 }
 
 .nav-links a {
@@ -96,6 +100,8 @@ body, html {
     padding: 5px 10px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+    min-height: 48px;
+    min-width: 48px;
     
 }
 
