@@ -15,6 +15,14 @@ const urlsToCache = [
   'media/back.webp'
 ];
 
+const getRootUrl = () => {
+  const url = new URL(window.location);
+  url.pathname = url.pathname.replace(/\/[^/]*$/, '/');
+  return url.toString();
+};
+
+const rootURL = getRootUrl();
+
 // Install event - cache the application shell individually
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -22,8 +30,8 @@ self.addEventListener('install', event => {
       .then(cache => {
         console.log('Opened cache');
         const cachePromises = urlsToCache.map(urlToCache => {
-          return cache.add(urlToCache).catch(error => {
-            console.error(`Caching failed for ${urlToCache}:`, error);
+          return cache.add((rootURL+urlToCache).replaceAll("//","/")).catch(error => {
+            console.error(`Caching failed for ${(rootURL+urlToCache).replaceAll("//","/")}:`, error);
             // Optionally, accumulate the errors in an array or object if you need to report or log them.
           });
         });
