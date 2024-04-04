@@ -1,5 +1,5 @@
 const CACHE_NAME = 'sense-campus-patras-v1';
-const urlsToCache = [
+const urlsToCache = [/*
   '/index.html',
   '/styles.css', 
   '/script.js',  
@@ -11,7 +11,7 @@ const urlsToCache = [
   '/data.js',
   'media/clock.svg',
   'media/seat.svg',
-  'media/users.svg',
+  'media/users.svg',*/
   'media/back.webp'
 ];
 
