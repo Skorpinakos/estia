@@ -18,10 +18,10 @@ def index_html():
 def styles():
     return send_from_directory('.', 'styles.css')
 
-# Serve flavicon.ico
-@app.route('/flavicon.ico')
-def flavicon():
-    return send_from_directory('.', 'flavicon.ico')
+# Serve favicon.ico
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory('.', 'favicon.ico')
 
 # Serve JavaScript files
 @app.route('/script.js')
