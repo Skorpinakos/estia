@@ -20,7 +20,7 @@ def styles():
 
 # Serve flavicon.ico
 @app.route('/flavicon.ico')
-def styles():
+def flavicon():
     return send_from_directory('.', 'flavicon.ico')
 
 # Serve JavaScript files

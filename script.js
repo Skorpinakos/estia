@@ -300,6 +300,12 @@ function updateRestaurantCapacity(percentage) {
     capacityText.textContent = percentage + '%';
 }
 
+const getRootUrl = () => {
+    const url = new URL(window.location);
+    url.pathname = url.pathname.replace(/\/[^/]*$/, '/');
+    return url.toString();
+  };
+  
 
 
 
@@ -402,12 +408,18 @@ window.addEventListener('load', function() {
 });
 
 // add service worker
+
+
+
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/service-worker.js').then(registration => {
+      const rootURL = getRootUrl();
+      console.log(rootURL);
+      navigator.serviceWorker.register(rootURL+'service-worker.js').then(registration => {
         console.log('ServiceWorker registration successful with scope: ', registration.scope);
       }, err => {
         console.log('ServiceWorker registration failed: ', err);
+        console.log(err)
       });
     });
   }
