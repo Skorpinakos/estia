@@ -12,7 +12,8 @@ const urlsToCache = [
   'media/clock.svg',
   'media/seat.svg',
   'media/users.svg',
-  'media/back.webp'
+  'media/back.webp',
+  'favicon.ico'
 ];
 
 // Install event - cache the application shell
