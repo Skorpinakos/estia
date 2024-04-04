@@ -10,7 +10,6 @@ const urlsToCache = [
   '/media/icons/icon_512.png',
   '/data.js',
   'media/clock.svg',
-  'media/chair.svg',
   'media/seat.svg',
   'media/users.svg',
   'media/back.webp'
@@ -22,7 +21,10 @@ self.addEventListener('install', event => {
     caches.open(CACHE_NAME)
       .then(cache => {
         console.log('Opened cache');
-        return cache.addAll(urlsToCache);
+        return cache.addAll(urlsToCache).catch(error => {
+          console.error('Caching failed for one or more resources:', error);
+          throw error; // Re-throw the error to make sure the Service Worker installation fails.
+        });
       })
   );
 });
