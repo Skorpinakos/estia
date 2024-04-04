@@ -8,7 +8,6 @@ const urlsToCache = [
   'media/icons/icon_192.png',
   'media/icons/icon_256.png',
   'media/icons/icon_512.png',
-  'data.js',
   'media/clock.svg',
   'media/seat.svg',
   'media/users.svg',
