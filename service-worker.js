@@ -2,8 +2,8 @@ const CACHE_NAME = 'sense-campus-patras-v1';
 const urlsToCache = [/*
   '/index.html',
   '/styles.css', 
-  '/script.js',  */
-  '/manifest.json',
+  '/script.js',  
+  '/manifest.json',*/
   '/media/icons/icon_64.png',
   '/media/icons/icon_192.png',
   '/media/icons/icon_256.png',
