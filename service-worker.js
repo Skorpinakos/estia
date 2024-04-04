@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sense-campus-patras-v1';
+const CACHE_NAME = 'sense-campus-patras-v2';
 const urlsToCache = [
   'styles.css', 
   'manifest.json',
@@ -54,10 +54,6 @@ self.addEventListener('fetch', event => {
           return response;
         }
 
-        // Not in cache - return the result from the live server
-        // This will require access to the network, so if you really
-        // don't want to use fetch at all, you could omit these lines
-        // and not serve anything when the request isn't in the cache.
         return fetch(event.request);
       })
   );
