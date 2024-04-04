@@ -367,7 +367,7 @@ window.addEventListener('load', function() {
 
         // Get the position of the "Today's Menu" section
         const menuSection = document.getElementById('todays-menu');
-        const offset = 80; // Change this value to the desired offset
+        const offset = 45; // Change this value to the desired offset
         const bodyRect = document.body.getBoundingClientRect().top;
         const sectionRect = menuSection.getBoundingClientRect().top;
         const sectionPosition = sectionRect - bodyRect;
