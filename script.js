@@ -414,9 +414,9 @@ window.addEventListener('load', function() {
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       const rootURL = getRootUrl();
-      console.log(rootURL);
+      //console.log(rootURL);
       navigator.serviceWorker.register(rootURL+'service-worker.js').then(registration => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+        //console.log('ServiceWorker registration successful with scope: ', registration.scope);
       }, err => {
         console.log('ServiceWorker registration failed: ', err);
         console.log(err)

@@ -1,47 +1,29 @@
 const CACHE_NAME = 'sense-campus-patras-v1';
 const urlsToCache = [
-  '/index.html',
-  '/styles.css',
-  '/script.js',
-  '/manifest.json',
-  '/media/icons/icon_64.png',
-  '/media/icons/icon_192.png',
-  '/media/icons/icon_256.png',
-  '/media/icons/icon_512.png',
-  '/data.js',
+  'index.html',
+  'styles.css', 
+  'script.js',  
+  'manifest.json',
+  'media/icons/icon_64.png',
+  'media/icons/icon_192.png',
+  'media/icons/icon_256.png',
+  'media/icons/icon_512.png',
+  'data.js',
   'media/clock.svg',
   'media/seat.svg',
   'media/users.svg',
   'media/back.webp'
 ];
 
-const getRootUrl = () => {
-  const url = new URL(window.location);
-  url.pathname = url.pathname.replace(/\/[^/]*$/, '/');
-  return url.toString();
-};
-
-const rootURL = getRootUrl();
-
-
-// Install event - cache the application shell individually
+// Install event - cache the application shell
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache');
-        const cachePromises = urlsToCache.map(urlToCache => {
-          return cache.add((rootURL+urlToCache).replaceAll("//","/")).catch(error => {
-            console.error(`Caching failed for ${(rootURL+urlToCache).replaceAll("//","/")}:`, error);
-            // Optionally, accumulate the errors in an array or object if you need to report or log them.
-          });
-        });
-        return Promise.all(cachePromises).then(() => {
-          console.log('All assets are cached');
-        }).catch(error => {
-          console.error('One or more assets failed to cache during the installation:', error);
-          // It might be a good idea to fail the installation if critical resources are not cached successfully.
-          throw error;
+        //console.log('Opened cache');
+        return cache.addAll(urlsToCache).catch(error => {
+          console.error('Caching failed for one or more resources:', error);
+          throw error; // Re-throw the error to make sure the Service Worker installation fails.
         });
       })
   );
@@ -49,13 +31,13 @@ self.addEventListener('install', event => {
 
 // Activate event - clean up old caches
 self.addEventListener('activate', event => {
-  var cacheWhitelist = [CACHE_NAME];
+  var cacheWhitelist = ['sense-campus-patras-v1'];
   event.waitUntil(
     caches.keys().then(cacheNames => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('Deleting old cache:', cacheName);
+            //console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -75,6 +57,9 @@ self.addEventListener('fetch', event => {
         }
 
         // Not in cache - return the result from the live server
+        // This will require access to the network, so if you really
+        // don't want to use fetch at all, you could omit these lines
+        // and not serve anything when the request isn't in the cache.
         return fetch(event.request);
       })
   );
