@@ -23,6 +23,7 @@ const getRootUrl = () => {
 
 const rootURL = getRootUrl();
 
+
 // Install event - cache the application shell individually
 self.addEventListener('install', event => {
   event.waitUntil(
