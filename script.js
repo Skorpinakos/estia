@@ -1,5 +1,4 @@
-var menus_text = ['Γάλα, καφές, τσάι, χυμός ,βούτυρο, άρτος, πραλίνα, σφολιάτα', 'Πρώτο Πιάτο: Σούπα λαχανικών\nΚυρίως Πιάτο: Σουβλάκι χοιρινό με πατάτες τηγανιτές, πίτα ή Κοτόπουλο ψητό με λαζανάκι\nΜπουφές Σαλάτα: Μαρούλι, ρόκα, λόλα, κρουτόν, λάχανο άσπρο-κόκκινο,πολίτικη, καλαμπόκι, μουστάρδα\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Τζατζίκι', 'Πρώτο Πιάτο: Κους κους με μανιτάρια\nΚυρίως Πιάτο: Αρακάς λαδερός με πατάτες ή Σπανακόρυζο\nΜπουφές Σαλάτα: Ντομάτα, πιπεριά, κρεμμύδι, μαρούλι, κρεμμυδάκι φρέσκο ,ρόκα ,λόλα\nΕπιδόρπιο: Φρούτο Εποχής 2 επιλογές, Τυρί φέτα'];
-var last_update_datetime = "2024-04-04 09:12:10";
+
 
 function fake_data(){
         // Generate random data points for two arrays with timestamps
@@ -302,8 +301,21 @@ function updateRestaurantCapacity(percentage) {
 }
 
 
+
+
 // Main
+import {menus_text} from './data.js';
+import {last_update_datetime} from './data.js';
+
 window.addEventListener('load', function() {
+    
+
+
+
+
+
+
+
     //set last updated tag
     document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
 
@@ -324,12 +336,12 @@ window.addEventListener('load', function() {
     let data_line,data_time;
     data_time=fake_data()
     let capacity = Math.round(Math.random()*100);
-    recorded_waittimes=data_time[0]
-    projected_waittimes=data_time[1]
+    let recorded_waittimes=data_time[0]
+    let projected_waittimes=data_time[1]
 
     data_line=fake_data()
-    recorded_linesizes=data_line[0]
-    projected_linesizes=data_line[1]
+    let recorded_linesizes=data_line[0]
+    let projected_linesizes=data_line[1]
 
     plotTimeSeriesData('waitTimeChart',700,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
     plotTimeSeriesData('lineSizeChart',1400,'Queue Length (People)',recorded_linesizes,projected_linesizes);
@@ -388,3 +400,14 @@ window.addEventListener('load', function() {
     });
 
 });
+
+// add service worker
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service-worker.js').then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }

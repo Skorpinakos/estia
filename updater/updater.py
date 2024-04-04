@@ -26,7 +26,7 @@ def init():
 
     # Replace 'your_username', 'your_repo', and 'your_file_path'
     repo = g.get_repo("Skorpinakos/estia")
-    file_path = "script.js"
+    file_path = "data.js"
     return repo,file_path
 
 def edit_variables(file_content,new_vars):

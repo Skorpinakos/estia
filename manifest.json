@@ -1,0 +1,27 @@
+{
+    "short_name": "Sense Campus Patras",
+    "name": "Sense Campus Patras Dinning Hall Smart App",
+    "icons": [
+      {
+        "src": "media/icons/icon_64.png",
+        "sizes": "64x64 32x32 24x24 16x16",
+        "type": "image/png"
+      },
+      {
+        "src": "media/icons/icon_192.png",
+        "type": "image/png",
+        "sizes": "192x192"
+      },
+      {
+        "src": "media/icons/icon_256.png",
+        "type": "image/png",
+        "sizes": "256x256"
+      }
+
+    ],
+    "start_url": "index.html",
+    "display": "standalone",
+    "theme_color": "#ec5814d4",
+    "background_color": "#f4d6c1f3"
+  }
+  

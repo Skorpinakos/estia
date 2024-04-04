@@ -15,7 +15,7 @@ def get_current_menus():
     food_texts=[]
     for text in paragraph_texts:
         if "Πιάτο" in text or "καφές" in text: #this check is kinda good but it could get better
-            food_texts.append(text)
+            food_texts.append(text.replace("'",'"'))
 
     menus=food_texts[0:3].copy()  ### each menu appears 3 times so we take the first 3
     #menus=left_shift(menus,1)
