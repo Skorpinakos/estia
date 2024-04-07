@@ -47,3 +47,37 @@ def parse_menus(menus_text):
 
     menus_structured = {"lunch": lunch_parts, "dinner": dinner_parts, "breakfast": breakfast_parts}
     return menus_structured
+
+def refine_commas(input_string):
+    # Removes spaces before commas, ensures one space after each comma,
+    # deletes trailing commas only followed by whitespaces, and trims the string.
+    input_string = re.sub(r'\s*,\s*', ', ', input_string)
+    input_string = re.sub(r',+\s*$', '', input_string)
+    return input_string.strip()
+
+def capitalize_first_letter(string):
+    # Capitalizes the first letter of the string, after trimming.
+    return string.strip()[0].upper() + string.strip()[1:] if string else ''
+
+def capitalize_after_br(html_string):
+    # Capitalizes the letter immediately following every <br><br>.
+    def capitalize_match(match):
+        return match.group(1) + match.group(2).upper()
+    return re.sub(r'(<br><br>)(.)', capitalize_match, html_string)
+
+def process_menu_item_text(item):
+    # Processes a single menu item string with the defined operations.
+    processed_item = capitalize_first_letter(item)
+    #print(processed_item)
+    processed_item = processed_item.replace('$', '<br><br>')
+    processed_item = capitalize_after_br(processed_item)
+    processed_item = refine_commas(processed_item)
+    processed_item = processed_item.replace('<br><br>', '</p><hr><p>')
+    return processed_item
+
+def process_all_menu_items(menus):
+    # Processes all menu items given a dictionary of meal types and items.
+    processed_menus = {}
+    for meal_type, menu_items in menus.items():
+        processed_menus[meal_type] = [process_menu_item_text(item) for item in menu_items]
+    return processed_menus

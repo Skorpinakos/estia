@@ -153,53 +153,6 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
 }
 
 
-// formats commas
-function refineCommas(inputString) {
-    // Removes any spaces before commas and ensures one space after each comma.
-    // Deletes any commas that are at the end of the string, followed only by whitespaces.
-    // Also trims leading and trailing whitespace from the string.
-    return inputString.replace(/\s*,\s*/g, ', ').replace(/,+\s*$/, '').trim();
-}
-
-
-
-function capitalizeFirstLetter(string) {
-    return string.trim().charAt(0).toUpperCase() + string.trim().slice(1);
-  }
-
-function capitalizeAfterBr(htmlString) {
-    return htmlString.replace(/(<br><br>)(.)/g, function(match, p1, p2) {
-        return p1 + p2.trim().toUpperCase();
-    });
-}
-
-
-function processMenuItemText(item) {
-    // Capitalize the first letter of the item
-    let processedItem = capitalizeFirstLetter(item);
-
-    // Replace special symbols with line breaks, then capitalize after breaks
-    processedItem = processedItem.replace(/\s*\$\s*/g, "<br><br>");
-    processedItem = capitalizeAfterBr(processedItem);
-
-    // Refine commas usage
-    processedItem = refineCommas(processedItem);
-
-    // Replace pairs of <br> with a paragraph break followed by a horizontal rule
-    processedItem = processedItem.replaceAll("<br><br>", "</p><hr><p>");
-
-    return processedItem;
-}
-
-
-//function to process all menu items
-function processAllMenuItems(menus) {
-    const processedMenus = {};
-    Object.entries(menus).forEach(([mealType, menuItems]) => {
-        processedMenus[mealType] = menuItems.map(item => processMenuItemText(item));
-    });
-    return processedMenus;
-}
 
 
 // Modified addProcessedMenuItemsToDOM to accept pre-processed items
@@ -257,7 +210,7 @@ window.addEventListener('load', function() {
 
 
     // parse menu text
-    let menus=processAllMenuItems(menus_text);
+    let menus=menus_text;
 
     // Call the function to add the menu items
     addProcessedMenuItemsToDOM(menus);

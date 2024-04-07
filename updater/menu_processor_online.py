@@ -1,4 +1,4 @@
-from menu_parser import parse_menus
+from menu_parser import parse_menus,process_all_menu_items
 
 def left_shift(lst, n=1):
     return lst[n:].copy() + lst[:n].copy()
@@ -34,7 +34,7 @@ def get_current_menus():
             print("Order is not in order, shifting..")
             menus=left_shift(menus,1)
     
-    return parse_menus(menus)
+    return process_all_menu_items(parse_menus(menus))
 
 
 if __name__ == "__main__":
