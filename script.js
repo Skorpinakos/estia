@@ -153,53 +153,6 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
 }
 
 
-
-
-
-//split-a-string-based-on-multiple-delimiters
-
-function splitStringByDelimiters(str, delimiters) {
-    // Escape special characters in delimiters and join them into a regex pattern
-    const regexPattern = delimiters.map(delimiter => 
-        delimiter.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1")
-    ).join("|");
-
-    // Create a RegExp object with global search enabled
-    const regex = new RegExp(regexPattern, 'g');
-
-    // Split the string by the constructed RegExp
-    return str.split(regex).filter(Boolean); // filter(Boolean) removes empty strings from the result
-}
-
-
-
-// finds which "ή" serve as a division and which as a subdivision, change divisions with "$", also remove parenthesis
-function processString(inputString) {
-    // Replace all \n with spaces
-    let updatedString = inputString.replace(/\n/g, ' ');
-    
-    // Remove multiple spaces
-    updatedString = updatedString.replace(/\s\s+/g, ' ');
-    
-    // Find all indexes where the character "ή" appears followed by a space and a Greek capital letter
-    // Greek capital letters range from U+0391 to U+03A9
-    let regex = /ή (?=[Α-Ω])/g;
-    let indexes = [];
-    let match;
-    
-    while ((match = regex.exec(updatedString)) !== null) {
-        indexes.push(match.index);
-    }
-    
-    // Replace those "ή" with the "$" character
-    for (let i = indexes.length - 1; i >= 0; i--) {
-        let index = indexes[i];
-        updatedString = updatedString.substring(0, index) + '$' + updatedString.substring(index + 1);
-    }
-    
-    return updatedString.replaceAll("("," ").replaceAll(")"," ");
-}
-
 // formats commas
 function refineCommas(inputString) {
     // Removes any spaces before commas and ensures one space after each comma.
@@ -209,52 +162,6 @@ function refineCommas(inputString) {
 }
 
 
-
-//function to parse menus
-function parseMenus(menus_text){
-
-    let menus_structured={};
-
-    let breakfast=menus_text[0].toLowerCase();
-    let lunch=processString(menus_text[1]).toLowerCase();
-    let dinner=processString(menus_text[2]).toLowerCase();
-
-    
-
-
-
-    let breakfast_items=breakfast.split(',').map(item => item.trim());
-    let breakfast_drinks=breakfast_items.slice(0,4);
-    if (breakfast_items[breakfast_items.length -1]!="τυρί"){
-    var breakfast_main=breakfast_items[breakfast_items.length - 1];
-    var breakfast_slices=breakfast_items.slice(4,breakfast_items.length-1);
-    }else{
-    var breakfast_main=breakfast_items[breakfast_items.length - 2]+"-"+breakfast_items[breakfast_items.length - 1];
-    var breakfast_slices=breakfast_items.slice(4,breakfast_items.length-2);
-    }
-    let breakfast_parts=[breakfast_main,breakfast_slices.join(', '),breakfast_drinks.join(', ')]
-    //console.log(breakfast_drinks);
-    //console.log(breakfast_slices);
-    //console.log(breakfast_main);
-
-    let split_words=["πρώτο πιάτο","κυρίως πιάτο","μπουφές σαλάτα","επιδόρπιο"]
-
-    lunch=lunch.replaceAll("-"," ").replaceAll("\n"," ").replaceAll(":","");
-    let lunch_parts=splitStringByDelimiters(lunch,split_words).map(item => item.trim());
-    //console.log(lunch_parts);
-
-    dinner=dinner.replaceAll("-"," ").replaceAll("\n"," ").replaceAll(":","");
-    let dinner_parts=splitStringByDelimiters(dinner,split_words).map(item => item.trim());
-    //console.log(dinner_parts);
-
-    
-
-    menus_structured={"lunch":lunch_parts,"dinner":dinner_parts,"breakfast":breakfast_parts};
-    return menus_structured;
-
-
-
-};
 
 function capitalizeFirstLetter(string) {
     return string.trim().charAt(0).toUpperCase() + string.trim().slice(1);
@@ -327,7 +234,7 @@ window.addEventListener('load', function() {
 
 
     // parse menu text
-    let menus=parseMenus(menus_text);
+    let menus=menus_text;
 
     // Call the function to add the menu items
     addMenuItems(menus);
