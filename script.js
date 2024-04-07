@@ -172,26 +172,49 @@ function capitalizeAfterBr(htmlString) {
         return p1 + p2.trim().toUpperCase();
     });
 }
-  
 
-// Function to add menu options to the HTML
-function addMenuItems(menus) {
-    // For each meal type (breakfast, lunch, dinner)
+
+function processMenuItemText(item) {
+    // Capitalize the first letter of the item
+    let processedItem = capitalizeFirstLetter(item);
+
+    // Replace special symbols with line breaks, then capitalize after breaks
+    processedItem = processedItem.replace(/\s*\$\s*/g, "<br><br>");
+    processedItem = capitalizeAfterBr(processedItem);
+
+    // Refine commas usage
+    processedItem = refineCommas(processedItem);
+
+    // Replace pairs of <br> with a paragraph break followed by a horizontal rule
+    processedItem = processedItem.replaceAll("<br><br>", "</p><hr><p>");
+
+    return processedItem;
+}
+
+
+//function to process all menu items
+function processAllMenuItems(menus) {
+    const processedMenus = {};
     Object.entries(menus).forEach(([mealType, menuItems]) => {
+        processedMenus[mealType] = menuItems.map(item => processMenuItemText(item));
+    });
+    return processedMenus;
+}
+
+
+// Modified addProcessedMenuItemsToDOM to accept pre-processed items
+function addProcessedMenuItemsToDOM(processedMenus) {
+    Object.entries(processedMenus).forEach(([mealType, processedItems]) => {
         const menuContainer = document.getElementById(`${mealType}-menu`);
-        menuItems.forEach(item => {
-            let item_processed = item.replace(/\s*\$\s*/g, "<br><br>");
-            item_processed=capitalizeFirstLetter(item_processed);
-            item_processed=capitalizeAfterBr(item_processed);
-            item_processed=refineCommas(item_processed);
-            item_processed=item_processed.replaceAll("<br><br>","</p><hr><p>") //this came later along on top of the <br> separator
+        processedItems.forEach(itemProcessed => {
             const blob = document.createElement('div');
             blob.className = 'menu-blob';
-            blob.innerHTML = `<p>${item_processed}</p>`;
+            blob.innerHTML = `<p>${itemProcessed}</p>`;
             menuContainer.appendChild(blob);
         });
     });
 }
+
 
 // Function to update the restaurant capacity
 function updateRestaurantCapacity(percentage) {
@@ -234,10 +257,10 @@ window.addEventListener('load', function() {
 
 
     // parse menu text
-    let menus=menus_text;
+    let menus=processAllMenuItems(menus_text);
 
     // Call the function to add the menu items
-    addMenuItems(menus);
+    addProcessedMenuItemsToDOM(menus);
 
 
 
