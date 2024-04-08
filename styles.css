@@ -146,6 +146,7 @@ body, html {
 
 .chart-title h2 {
     margin-right: auto; /* This ensures the h2 stays on the left */
+    font-size: 28px;
 }
 
 .svg {
@@ -207,7 +208,7 @@ body, html {
     justify-content: space-between; /* This distributes the labels across the width */
     width: 90%; /* Match the width of the capacity-container for alignment */
     margin: 0 auto; /* Center align */
-    font-size: 0.75rem; /* Adjust size as needed */
+    font-size: 14px; /* Adjust size as needed */
     color: #444; /* Adjust color as needed */
     padding-left: 10px;
     padding-right: 0px;
@@ -237,6 +238,11 @@ body, html {
 .Menu-Title {
     margin-bottom: 1px;
     padding-top: 8px;
+}
+
+.Menu-Title h2 {
+    font-size: 28px;
+    
 }
 .menu-image img.responsive-img {
     max-width: 100%;
@@ -347,13 +353,14 @@ hr {
 
 .menu-item h3 {
     margin-top: 1px; /* Adjust based on preference */
+    font-size: 18px;
 }
 
 
 
 
 .last-updated {
-    font-size: 0.75rem; /* Smaller font size for subtlety */
+    font-size: 14px; /* Smaller font size for subtlety */
     color: #666; /* A light grey color, adjust as needed */
     text-align: right; /* Align to the right of the footer */
     margin-top: 10px; /* Add some space above the text */
@@ -407,6 +414,7 @@ hr {
     border-radius: 20px; /* Rounded corners */
     margin: 20px 0; /* Space above and below the title */
     box-shadow: 0 2px 4px rgba(0,0,0,0.2); /* Add shadow for depth */
+    font-size: 22px;
 }
 
 .menu-blob {
@@ -423,6 +431,7 @@ hr {
     margin: 0; /* Remove default margin */
     color: #333; /* Dark text for visibility */
     text-align: center; /* Center the text */
+    font-size: 16px;
 }
 
 .menu-blob:hover {
@@ -434,10 +443,10 @@ hr {
         padding: 1px; /* Reduce padding */
     }
     .menu-item h3 {
-        font-size: 14px; /* Reduce font size */
+        font-size: 22px; /* Reduce font size */
     }
     .menu-blob p {
-        font-size: 10px; /* Reduce font size for menu items */
+        font-size: 14px; /* Reduce font size for menu items */
     }
     /* Add any other necessary style adjustments */
 }
