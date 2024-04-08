@@ -1,6 +1,7 @@
 
 
-function fake_data(){
+function fake_data(mode){
+    if(mode=="size"){
         // Generate random data points for two arrays with timestamps
         const now = new Date();
         const fiveHoursBefore = new Date(now.getTime() - 1 * 60 * 60 * 1000);
@@ -18,6 +19,26 @@ function fake_data(){
         }
         }
         return [dataArray1,dataArray2];
+    }else{
+        // Generate random data points for two arrays with timestamps
+        const now = new Date();
+        const fiveHoursBefore = new Date(now.getTime() - 1 * 60 * 60 * 1000);
+        const fiveHoursAfter = new Date(now.getTime() + 1 * 60 * 60 * 1000);
+        const dataArray1 = [];
+        const dataArray2 = [];
+    
+        let value = 6;
+        for (let time = new Date(fiveHoursBefore); time <= fiveHoursAfter; time.setMinutes(time.getMinutes() + 1)) {
+            value=Math.abs(value+Math.round(Math.random()*2)-1)+1;
+            if (time<now){
+            dataArray1.push({ x: new Date(time), y: value });
+            }else{
+            dataArray2.push({ x: new Date(time), y: value});
+        }
+        value=value-1;
+        }
+        return [dataArray1,dataArray2];
+    }
 
 }
 
@@ -223,20 +244,20 @@ window.addEventListener('load', function() {
 
 
     let data_line,data_time;
-    data_time=fake_data()
+    data_time=fake_data("minutes")
     let capacity = Math.round(Math.random()*100);
     let recorded_waittimes=data_time[0]
     let projected_waittimes=data_time[1]
 
-    data_line=fake_data()
+    data_line=fake_data("size")
     let recorded_linesizes=data_line[0]
     let projected_linesizes=data_line[1]
 
-    plotTimeSeriesData('waitTimeChart',200,'Wait Time (Seconds)',recorded_waittimes,projected_waittimes);
+    plotTimeSeriesData('waitTimeChart',200,'Wait Time (Minutes)',recorded_waittimes,projected_waittimes);
     plotTimeSeriesData('lineSizeChart',500,'Queue Length (People)',recorded_linesizes,projected_linesizes);
     updateRestaurantCapacity(capacity);
 
-    document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y.toString();
+    document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y.toString()+"'";
     document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y.toString();
     document.getElementById('current_Capacity').textContent = capacity.toString()+"%";
 
