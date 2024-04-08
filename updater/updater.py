@@ -98,4 +98,10 @@ def main(freq):
         schedule.run_pending()
         time.sleep(1)
 
-main(freq=14400)
+
+while True:
+    try:
+        main(freq=14400)
+    except:
+        time.sleep(360)
+        
