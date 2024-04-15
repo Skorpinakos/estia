@@ -366,43 +366,47 @@ hr {
     margin-top: 10px; /* Add some space above the text */
 }
 
-.bottom-nav {
-    position: fixed;
 
-    max-height: 60px;
+    
+ 
+
+
+  .navbar {
+    height:55px;
+    position: fixed;
     bottom: 0;
     width: 100%;
     background-color: #ca7f54; 
-    box-shadow: 0 -3px 5px rgba(0,0,0,0.2);
     display: flex;
-    justify-content: space-around;
-    padding: 10px 0;
-    z-index: 1000;
-  }
-  
-  .nav-item {
-    text-decoration: none;
-    color: #fff; /* Contrast color for readability */
-    font-weight: bold;
-    display: block;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.3); /* Adding shadow for a lifted effect */
+}
+.navbar a {
+    padding: 20px;
+    font-size: 24px;;
+    height:55px;
+    flex-grow: 1;
     text-align: center;
-    transition: color 0.3s ease;
-    padding: 10px 15px;
-    border-radius: 5px; /* Adds a slight curve to the buttons */
-  }
-  
-  .nav-item:hover {
-    color: #fd8353; /* Lighter shade for hover effect */
-    background-color: rgba(255, 255, 255, 0.2); /* Slight highlight effect on hover */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Raised effect on hover */
-  }
-  
-  .nav-item.active {
-    color: #fd8353;
-    background-color: rgba(255, 255, 255, 0.3);
-  }
+    padding: 10px 0;
+    background-color: #ca7f54;  /* Slightly lighter background for the buttons */
+    color: white;
+    text-decoration: none;
+    border-right: 2px solid #b36f47; /* Divider style */
+    font-weight: bold;
+}
+.navbar a:last-child {
+    border-right: none; /* Remove border for the last item */
+}
+ 
+.navbar a.active {
+    background-color: #e6a07c;  /* A lighter shade to highlight the active button */
+    /*color: #ffffff;  /* Change text color to black for better contrast */
+    padding-top: 6px;  /* Adjust padding to maintain the button's height despite the border */
+}
 
-  .menu-item {
+.menu-item {
     margin-bottom: 8px; /* Space between each menu type */
 }
 
@@ -420,9 +424,9 @@ hr {
 .menu-blob {
     background-color: #fff; /* White background */
     border: 2px solid #f0f0f0; /* Light grey border */
-    border-radius: 15px; /* Rounded corners */
-    padding: 15px; /* Space inside the blob */
-    margin: 10px 0; /* Space between blobs */
+    border-radius: 12px; /* Rounded corners */
+    padding: 10px; /* Space inside the blob */
+    margin: 7px 0; /* Space between blobs */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow around each blob */
     transition: transform 0.3s ease; /* Smooth hover effect */
 }

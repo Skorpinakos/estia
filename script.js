@@ -264,15 +264,15 @@ window.addEventListener('load', function() {
 
     // menu button listener
     // Add smooth scroll with offset to menu button
-    document.querySelector('.nav-item[href="#menu"]').addEventListener('click', function(e) {
+    document.querySelector('.bottom-nav .navbar a[href="#todays-menu"]').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default anchor click behavior
 
         // Remove 'active' class from all nav items
-        document.querySelectorAll('.nav-item').forEach(item => {
+        document.querySelectorAll('.navbar a').forEach(item => {
             item.classList.remove('active');
         });
 
-        // Add 'active' class to menu button
+        // Add 'active' class 
         this.classList.add('active');
 
         // Get the position of the "Today's Menu" section
@@ -291,15 +291,15 @@ window.addEventListener('load', function() {
 
     // home button listener
     // Add smooth scroll to home button
-    document.querySelector('.nav-item[href="#home"]').addEventListener('click', function(e) {
+    document.querySelector('.bottom-nav .navbar a[href="#home"]').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default anchor click behavior
 
         // Remove 'active' class from all nav items
-        document.querySelectorAll('.nav-item').forEach(item => {
+        document.querySelectorAll('.navbar a').forEach(item => {
             item.classList.remove('active');
         });
 
-        // Add 'active' class to home button
+        // Add 'active' class 
         this.classList.add('active');
 
         // Scroll smoothly to the top of the page
