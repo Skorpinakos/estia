@@ -14,7 +14,15 @@ def process_string(input_string):
     
     # Find all indexes where "ή" appears followed by a space and a Greek capital letter and replace with "$"
     updated_string = re.sub(r'ή (?=[Α-Ω])', '$', updated_string)
-    
+
+    safe_string=[]
+    for i in updated_string.split(" "):
+        if len(i)>=13 and not ("-" in i):
+            safe_string.append(i[0:int(len(i)/2)]+"‐"+" ")
+            safe_string.append(i[int(len(i)/2):]+" ")
+        else:
+            safe_string.append(i+" ")
+    updated_string="".join(safe_string)
     # Replace parentheses with spaces
     return updated_string.replace("(", " ").replace(")", " ")
 
