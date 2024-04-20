@@ -101,7 +101,7 @@ def main(freq):
 
 while True:
     try:
-        main(freq=14400)
+        main(freq=21600)
     except:
         time.sleep(360)
         
