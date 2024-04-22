@@ -34,31 +34,31 @@ def make_request_to_wlc():
 
 
 
-def get_ids_access_points_by_facility(facility, broker_address):
+def get_sns_access_points_by_facility(facility, broker_address):
     # Define the base URL of the Context Broker and the endpoint
     base_url = "http://" + broker_address
-    endpoint = "/entities"
+    endpoint = "/v2/entities"
 
-    headers = {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-    }
+
 
     # Include a limit in the query parameters
     params = {
         "type": "AccessPoint",
-        "q": f"facility=={facility}",  # Query filter for entities of type AccessPoint with a specified facility
         "limit": 999  # Limit the number of entities to be returned, 999 is the max, default is 20.
     }
 
-    response = requests.get(f"{base_url}{endpoint}", headers=headers, params=params)
+    response = requests.get(f"{base_url}{endpoint}",  params=params)
+    
 
     # Check if the request was successful
     if 200 <= response.status_code < 300:
         # Parse the JSON response into a Python structure
         data = response.json()
         # Extract and return the list of IDs
-        return [entity['id'] for entity in data]
+        return [int(entity['id'].split(":")[-1]) for entity in data]
+    elif 400<=response.status_code<=404:
+        print("no entity found , returning sn of 0")
+        return [0,]
     else:
         # Handle potential errors (e.g., connection problems, authentication issues)
         return f"Failed to retrieve entities: {response.status_code}, {response.text}"
@@ -70,7 +70,7 @@ def get_ids_access_points_by_facility(facility, broker_address):
 
 def update_access_point(entity_id, broker_address,measurement):
     base_url = "http://"+broker_address
-    endpoint = f"/entities/{entity_id}/attrs"
+    endpoint = f"/v2/entities/{entity_id}/attrs"
     headers = {"Content-Type": "application/json"}
     updates = {
         "measurement": {
@@ -87,9 +87,10 @@ def update_access_point(entity_id, broker_address,measurement):
 def create_access_point(broker_address, measurement,facility, entity_id="default",name="default",loc="0,0"):
     if entity_id=="default":
         #ID FORMAT = AP:FACILITY:SN SN->serial number generated here
-        entity_id=max(max(get_ids_access_points_by_facility),0)
+        entity_sn=max(max(get_sns_access_points_by_facility(facility=facility,broker_address=broker_address)),0)+1
+        entity_id="AP:"+str(facility)+":"+str(entity_sn)
     base_url = "http://"+broker_address
-    endpoint = f"/entities"
+    endpoint = f"/v2/entities"
     headers = {"Content-Type": "application/json"}
     data = {
             "id": entity_id,
@@ -109,9 +110,10 @@ def create_access_point(broker_address, measurement,facility, entity_id="default
         }
     response = requests.post(f"{base_url}{endpoint}", json=data, headers=headers)
     if 200 <= response.status_code < 300:
-        return "AccessPoint created successfully."
+        return entity_id
     else:
         return f"Failed to create AccessPoint: {response.status_code} - {response.text}"
     
 
-create_access_point()
+print(create_access_point(broker_address=broker_address,measurement={"data":[{"x":1},{"x":3}]},facility="test",name="test"))
+print(update_access_point(entity_id="AP:test:3",broker_address=broker_address,measurement={"data":[{"x":2},{"x":9}]}))
