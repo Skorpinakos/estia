@@ -13,23 +13,35 @@ def read_csv_to_2d_list(filepath):
         list: A 2D list where each sublist represents a row from the CSV file.
     """
     with open(filepath, mode='r', encoding='utf-8') as file:
-        reader = csv.reader(file)
+        reader = csv.reader(file,delimiter=";")
         data = [row for row in reader]
     return data
 ##
 
 #init 
 import requests
+import random
+from collections import defaultdict
 broker_address="150.140.186.118:1026"
 facility="Estia_Rio_1"
 
 def make_request_to_wlc():
     data=[]
     #demo payload
-    data=read_csv_to_2d_list("get_data/demo_payload.csv")
+    data=read_csv_to_2d_list("fiware_integration/demo_payload.csv")
     #
+    res=data
+    new_measurement=defaultdict(list)
+    header=res[0]
+    for line in res[1:]:
+        #print(len(line))
+        temp_dict={}
+        for i,item in enumerate(line):
+            temp_dict[str(header[i])]=str(item)
 
-    return data
+        AP_name=temp_dict["hwWlanStaApName"]
+        new_measurement[AP_name].append(temp_dict)
+    return new_measurement
 
 
 
@@ -89,6 +101,12 @@ def create_access_point(broker_address, measurement,facility, entity_id="default
         #ID FORMAT = AP:FACILITY:SN SN->serial number generated here
         entity_sn=max(max(get_sns_access_points_by_facility(facility=facility,broker_address=broker_address)),0)+1
         entity_id="AP:"+str(facility)+":"+str(entity_sn)
+    else:
+        if int(entity_id.split(":")[-1]) in get_sns_access_points_by_facility(facility=facility,broker_address=broker_address):
+            print("already exists")
+            update_access_point(entity_id=entity_id,broker_address=broker_address,measurement=measurement)
+            return entity_id
+
     base_url = "http://"+broker_address
     endpoint = f"/v2/entities"
     headers = {"Content-Type": "application/json"}
@@ -110,10 +128,25 @@ def create_access_point(broker_address, measurement,facility, entity_id="default
         }
     response = requests.post(f"{base_url}{endpoint}", json=data, headers=headers)
     if 200 <= response.status_code < 300:
+        
         return entity_id
     else:
         return f"Failed to create AccessPoint: {response.status_code} - {response.text}"
     
 
-print(create_access_point(broker_address=broker_address,measurement={"data":[{"x":1},{"x":3}]},facility="test",name="test"))
-print(update_access_point(entity_id="AP:test:3",broker_address=broker_address,measurement={"data":[{"x":2},{"x":9}]}))
+
+
+    
+new_measurement=make_request_to_wlc()
+print(new_measurement.keys())
+for AP in new_measurement.keys():
+    print(len(new_measurement[AP]),AP)
+    random.seed(AP)
+    entity_id=create_access_point(broker_address=broker_address,measurement=new_measurement[AP],facility="test_estia",name=str(AP),entity_id="AP:"+"test_estia"+":"+str(random.randint(0,10**6)))
+    print(entity_id)
+
+
+
+exit()
+print("my_print",entity_id)
+print(update_access_point(entity_id=entity_id,broker_address=broker_address,measurement=make_request_to_wlc()))
