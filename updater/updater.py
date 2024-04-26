@@ -91,12 +91,13 @@ def main(freq):
 
     repo,file_path=init()
     # Schedule the function to run every 2 minutes
+    update_file(repo=repo,file_path=file_path)
     
     schedule.every(freq).seconds.do(update_file,repo,file_path)
     # Run the scheduler indefinitely
     while True:
         schedule.run_pending()
-        time.sleep(1)
+        time.sleep(0.01)
 
 
 while True:
