@@ -21,7 +21,7 @@ def process_string(input_string):
     for i in updated_string.split(" "):
         if len(i)>=13 and not ("-" in i):
             safe_string.append(i[0:int(3*len(i)/4)]+"‐"+" "+"<br>")
-            safe_string.append(i[int(len(i)/4):]+" ")
+            safe_string.append(i[int(3*len(i)/4):]+" ")
             print(i)
         else:
             safe_string.append(i+" ")
