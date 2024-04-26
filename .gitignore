@@ -1,3 +1,5 @@
 *.env
 __pycache__/
 *.pyc
+*cpython-310.pyc
+menu_processor_online.cpython-310.pyc
