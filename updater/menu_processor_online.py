@@ -1,4 +1,13 @@
 from menu_parser import parse_menus,process_all_menu_items
+import re
+
+def add_space_before_caps(strings):
+    # Define a function to insert spaces before capital letters, including Greek uppercase
+    def insert_space(s):
+        return re.sub(r'(?<!^)(?=[A-ZΑ-Ω])', ' ', s)
+
+    # Apply the function to each string in the list
+    return [insert_space(string) for string in strings]
 
 def left_shift(lst, n=1):
     return lst[n:].copy() + lst[:n].copy()
@@ -13,7 +22,8 @@ def get_current_menus():
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
 
-    paragraph_texts = [p.text for p in soup.find_all('p')] #this check is kinda good but it could get better
+    paragraph_texts = add_space_before_caps([p.text for p in soup.find_all('p')]) #this check is kinda good but it could get better
+
     food_texts=[]
     for text in paragraph_texts:
         if "Πιάτο" in text or "καφές" in text: #this check is kinda good but it could get better
@@ -21,6 +31,7 @@ def get_current_menus():
 
     menus=food_texts[0:3].copy()  ### each menu appears 3 times so we take the first 3
     #menus=left_shift(menus,1)
+    #print(menus)
 
     ### check for order shifts in my.upatras.gr
     while True:
@@ -33,6 +44,7 @@ def get_current_menus():
         else:
             print("Order is not in order, shifting..")
             menus=left_shift(menus,1)
+
     
     return process_all_menu_items(parse_menus(menus))
 
