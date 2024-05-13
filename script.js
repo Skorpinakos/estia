@@ -211,6 +211,28 @@ const getRootUrl = () => {
   };
   
 
+  let update_period_minutes = 3;
+
+  function schedulePageReload(lastUpdateStr) {
+    const lastUpdate = new Date(lastUpdateStr);
+    const now = new Date();
+    const update_period = parseInt(update_period_minutes * 60 * 1000); // update period in milliseconds
+    const standarddelay = 60 * 1000; // 60 seconds in milliseconds
+
+    let delay;
+
+    if ((now - lastUpdate) < update_period) {
+        // If less than two minutes have passed since the last update
+        delay = update_period - (now - lastUpdate);
+    } else {
+        // If more than two minutes have passed
+        delay = standarddelay;
+    }
+
+    setTimeout(function() {
+        window.location.reload(true);  // Force a reload from the server
+    }, delay);
+}
 
 
 // Main
@@ -228,6 +250,7 @@ window.addEventListener('load', function() {
 
     //set last updated tag
     document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
+    schedulePageReload(last_update_datetime);
 
 
     // parse menu text
