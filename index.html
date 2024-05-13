@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 
     
 </head>
@@ -98,11 +100,16 @@
             <div id="last-updated" class="last-updated"></div>
         </div>
     </footer>
+
+
     <nav class="bottom-nav">
         <div class="navbar">
-            <a href="#home" class="active">Home</a>
+            <a href="#home" class="active">Queue</a>
             <a href="#todays-menu">Menu</a>
-            <a href="#more">More</a>
+            <a class="more-btn" role="button" tabindex="0">
+                <i class="fas fa-sync-alt" style="width:35px;"></i>
+                <span id="timer" style="width:35px;">01:00</span>
+            </a>
         </div>
     </nav>
       
