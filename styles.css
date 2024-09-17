@@ -68,11 +68,47 @@ body, html {
 
 
 
+.bottom-nav .navbar a #timer {
+    margin-top: 8px;  /* Space between the "More" text and the timer */
+    font-size: 10px;  /* Smaller font size for the timer to fit the button style */
+    color: #ddd;  /* Light color for the timer, adjust as needed */
+    position: absolute;  /* Positions the timer absolutely within the button */
+    bottom: 0px;  /* Positions the timer 5px from the bottom */
+    width: 100%;  /* Ensures timer spans the width of the button for alignment */
+    text-align: center;  /* Ensures the timer text is centered */
+    
+}
+
 .navbar {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    flex-grow: 0;
+}
+.bottom-nav .navbar {
+    display: flex;  /* Uses flex to distribute space among children */
+    justify-content: space-around;  /* Distributes extra space evenly */
+    width: 100%;  /* Ensures the navbar spans the entire width of its parent */
+}
+
+.bottom-nav .navbar a {
+    flex: 1;
+
+    display: flex;  /* Uses flex to align items */
+    flex-direction: column;  /* Stacks items vertically */
+    align-items: center;  /* Aligns items in the center horizontally */
+    justify-content: center;  /* Centers content vertically */
+    flex-direction: column;  /* Stacks items vertically */
+    align-items: center;  /* Centers items horizontally */
+    justify-content: space-between;  /* Distributes space, pushing the timer to the bottom */
+    height: 100%;  
+}
+
+.bottom-nav .navbar a.more-btn i {
+    font-size: 1.2em;  /* Adjust size as necessary for visibility */
+    position: absolute;  /* Positions the icon absolutely within the button */
+    top: 50%;  /* Moves the top of the icon to the center of the button */
+    transform: translateY(-50%);  /* Shifts the icon up by half its height to center it exactly */
+    width: 100%;  /* Ensures icon is centered horizontally as well */
+    text-align: center;  /* Ensures the icon text is centered */
 }
 
 .nav-links a {

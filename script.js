@@ -210,8 +210,40 @@ const getRootUrl = () => {
     return url.toString();
   };
   
+let update_period_minutes = 360;
 
+function schedulePageReload(lastUpdateStr) {
+    const lastUpdate = new Date(lastUpdateStr);
+    const now = new Date();
+    const update_period = parseInt(update_period_minutes * 60 * 1000); // Update period in milliseconds
+    const standardDelay = 60 * 1000; // 60 seconds in milliseconds
 
+    let delay = (now - lastUpdate) < update_period ? update_period - (now - lastUpdate) : standardDelay;
+
+    // Start the countdown timer
+    updateTimer(delay);
+
+    setTimeout(function() {
+        window.location.reload(true);  // Force a reload from the server
+    }, delay);
+}
+
+// Function to update the timer on the page
+function updateTimer(duration) {
+    let secondsLeft = duration / 1000; // Convert milliseconds to seconds
+    const timerElement = document.getElementById('timer');
+    const interval = setInterval(function () {
+        const minutes = parseInt(secondsLeft / 60, 10);
+        const seconds = parseInt(secondsLeft % 60, 10);
+
+        timerElement.textContent = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
+
+        if (--secondsLeft < 0) {
+            clearInterval(interval); // Stop the interval when time runs out
+            timerElement.textContent = "00:00"; // Reset timer display
+        }
+    }, 1000);
+}
 
 // Main
 import {menus_text} from './data.js';
@@ -225,9 +257,9 @@ window.addEventListener('load', function() {
 
 
 
-
     //set last updated tag
     document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
+    schedulePageReload(last_update_datetime);
 
 
     // parse menu text
@@ -261,11 +293,18 @@ window.addEventListener('load', function() {
     document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y.toString();
     document.getElementById('current_Capacity').textContent = capacity.toString()+"%";
 
+    // Scroll smoothly to the top of the page
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+
 
     // menu button listener
     // Add smooth scroll with offset to menu button
     document.querySelector('.bottom-nav .navbar a[href="#todays-menu"]').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default anchor click behavior
+        e.stopPropagation(); 
 
         // Remove 'active' class from all nav items
         document.querySelectorAll('.navbar a').forEach(item => {
@@ -277,7 +316,7 @@ window.addEventListener('load', function() {
 
         // Get the position of the "Today's Menu" section
         const menuSection = document.getElementById('todays-menu');
-        const offset = 45; // Change this value to the desired offset
+        const offset = 35; // Change this value to the desired offset
         const bodyRect = document.body.getBoundingClientRect().top;
         const sectionRect = menuSection.getBoundingClientRect().top;
         const sectionPosition = sectionRect - bodyRect;
@@ -293,6 +332,7 @@ window.addEventListener('load', function() {
     // Add smooth scroll to home button
     document.querySelector('.bottom-nav .navbar a[href="#home"]').addEventListener('click', function(e) {
         e.preventDefault(); // Prevent default anchor click behavior
+        e.stopPropagation(); 
 
         // Remove 'active' class from all nav items
         document.querySelectorAll('.navbar a').forEach(item => {
@@ -310,6 +350,22 @@ window.addEventListener('load', function() {
     });
 
 });
+
+document.querySelector('.bottom-nav .navbar .more-btn').addEventListener('click', function(e) {
+
+    // Remove 'active' class from all nav items
+    document.querySelectorAll('.navbar a').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Add 'active' class 
+    this.classList.add('active');
+
+    setTimeout(function() {
+        location.reload(); // Reloads the page after a delay
+    }, 150);
+});
+
 
 // add service worker
 
