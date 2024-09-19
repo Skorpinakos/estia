@@ -37,7 +37,9 @@ function fake_data(mode){
         }
         value=value-1;
         }
+        console.log(dataArray1)
         return [dataArray1,dataArray2];
+        
     }
 
 }
