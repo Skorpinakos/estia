@@ -108,6 +108,8 @@ def update_file(repo, file_path):
     
     # Edit the file content by updating the variables
     new_content = edit_variables(file_content, vars)
+    new_content=new_content.replace(" = = "," = ") #IDK WHY
+    #print(new_content)
 
     # Update the file in the repository
     repo.update_file(contents.path, f"Updated Webpage at {formatted_date}", new_content, contents.sha)

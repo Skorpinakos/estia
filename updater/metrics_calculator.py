@@ -9,6 +9,10 @@ import matplotlib.pyplot as plt
 import contextily as ctx
 import geopandas as gpd
 from shapely.geometry import Point
+import numpy as np
+from datetime import timedelta
+
+
 
 def parse_locations(filepath):
     # Parse the locations file to extract spot names, descriptions, and coordinates
@@ -276,13 +280,12 @@ def main(plot=False):
         plot_spots_with_map(aps_history, aps_datetimes , locations_filepath, margin=2)
     return aps_datetimes,filtered_aps_history_list
 
-
 def main2():
     # Load environment variables from .env file
     load_dotenv()
 
-    # Fetch data for the last 2 hours
-    aps_history, aps_datetimes = get_data(hours=2)
+    # Fetch data for the last 6 hours
+    aps_history, aps_datetimes = get_data(hours=6)
 
     # Define the groups of APs to combine
     group_1 = ["R0_EST-AP_0.3", "R0_EST-AP_0.4", "R0_AMF-AP_0.3"]
@@ -292,36 +295,94 @@ def main2():
     combined_group_1 = []
     combined_group_2 = []
 
-    # Iterate over the datetimes to build the combined crowd sizes for each group
+    # Combine crowd sizes for each group based on current data
     for i, datetime_value in enumerate(aps_datetimes):
-        # Initialize crowd sizes for this datetime
-        crowd_size_group_1 = 0
-        crowd_size_group_2 = 0
-
-        # Combine crowd sizes for group 1
-        for ap in group_1:
-            if ap in aps_history and i < len(aps_history[ap]):
-                crowd_size_group_1 += aps_history[ap][i]
-
-        # Combine crowd sizes for group 2
-        for ap in group_2:
-            if ap in aps_history and i < len(aps_history[ap]):
-                crowd_size_group_2 += aps_history[ap][i]
-
-        # Append results as JSON objects with 'x' and 'y' keys
+        crowd_size_group_1 = sum(aps_history[ap][i] for ap in group_1 if ap in aps_history and i < len(aps_history[ap]))
+        crowd_size_group_2 = sum(aps_history[ap][i] for ap in group_2 if ap in aps_history and i < len(aps_history[ap]))
+        
         combined_group_1.append({"x": datetime_value.isoformat(), "y": crowd_size_group_1})
         combined_group_2.append({"x": datetime_value.isoformat(), "y": crowd_size_group_2})
 
-    # Write the results to a JavaScript file
-    write_to_js_file(combined_group_1, combined_group_2)
+    # Prepare historical data for interpolation
+    group_1_values = [entry["y"] for entry in combined_group_1]
+    group_2_values = [entry["y"] for entry in combined_group_2]
+
+    # Convert datetimes to numeric values (seconds since the start)
+    time_numeric = np.array([(dt - aps_datetimes[-1]).total_seconds() for dt in aps_datetimes])
+
+    # Perform polynomial interpolation for both groups (degree 3)
+    poly_group_1 = np.polyfit(time_numeric, group_1_values, 3)
+    poly_group_2 = np.polyfit(time_numeric, group_2_values, 3)
+
+    # Create polynomial models
+    poly_func_group_1 = np.poly1d(poly_group_1)
+    poly_func_group_2 = np.poly1d(poly_group_2)
+
+    # Generate future timestamps (every 75 seconds for the next 2 hours)
+    future_time_deltas = [timedelta(seconds=75 * i) for i in range(0, int(2 * 3600 / 75))]
+    future_datetimes = [aps_datetimes[0] + delta for delta in future_time_deltas]
+    
+    # Convert future times to numeric (seconds since the start)
+    future_time_numeric = np.array([(dt - aps_datetimes[0]).total_seconds() for dt in future_datetimes])
+
+    # Use the polynomial functions to predict future values
+    future_group_1_values = poly_func_group_1(future_time_numeric)
+    future_group_2_values = poly_func_group_2(future_time_numeric)
+
+    # Prepare the future results in the same format as the historical data
+    future_combined_group_1 = [{"x": dt.isoformat(), "y": int(value)} for dt, value in zip(future_datetimes, future_group_1_values)]
+    future_combined_group_2 = [{"x": dt.isoformat(), "y": int(value)} for dt, value in zip(future_datetimes, future_group_2_values)]
+
+    # Plot historical and predicted data
+    #plot_historical_and_predicted(combined_group_1, future_combined_group_1, "Group 1")
+    #plot_historical_and_predicted(combined_group_2, future_combined_group_2, "Group 2")
+
+    # Write the historical and future data separately
+    write_to_js_file(combined_group_1, combined_group_2, future_combined_group_1[1:], future_combined_group_2[1:])
+
+def plot_historical_and_predicted(historical_data, future_data, group_name):
+    # Prepare the data for plotting
+    historical_dates = [entry["x"] for entry in historical_data]
+    historical_values = [entry["y"] for entry in historical_data]
+
+    future_dates = [entry["x"] for entry in future_data[1:]]
+    future_values = [entry["y"] for entry in future_data[1:]]
+
+    plt.figure(figsize=(12, 6))
+    
+    # Plot historical data
+    plt.plot(historical_dates, historical_values, label='Historical Data', marker='o')
+    
+    # Plot future predictions
+    plt.plot(future_dates, future_values, label='Predicted Data', linestyle='--', marker='x', color='orange')
+
+    plt.title(f'Crowd Size Prediction for {group_name}')
+    plt.xlabel('Datetime')
+    plt.ylabel('Crowd Size')
+    plt.xticks(rotation=45)
+    plt.legend()
+    plt.tight_layout()
+    plt.grid()
+    plt.show()
 
 
-def write_to_js_file(group_1_data, group_2_data):
-    # Prepare the JavaScript content as strings (one line per element)
-    js_content = f"""
-    var group1 = {json.dumps(group_1_data, separators=(',', ':'))};
-    var group2 = {json.dumps(group_2_data, separators=(',', ':'))};
-    """
+
+def write_to_js_file(historic_group_1, historic_group_2, future_group_1, future_group_2):
+    # Sort historical data by datetime
+    historic_group_1.sort(key=lambda x: x["x"])
+    historic_group_2.sort(key=lambda x: x["x"])
+
+    # Sort future data by datetime
+    future_group_1.sort(key=lambda x: x["x"])
+    future_group_2.sort(key=lambda x: x["x"])
+
+    # Prepare the JavaScript content for historical and future data
+    js_content = (
+        f"var historic_group1 = {json.dumps(historic_group_1, separators=(',', ':'))};\n"
+        f"var historic_group2 = {json.dumps(historic_group_2, separators=(',', ':'))};\n"
+        f"var future_group1 = {json.dumps(future_group_1, separators=(',', ':'))};\n"
+        f"var future_group2 = {json.dumps(future_group_2, separators=(',', ':'))};\n"
+    )
 
     # Write the content to a .js file
     with open("output_data.js", "w") as js_file:

@@ -29,9 +29,11 @@
         <div class="main-content"></div>
             <section id="wait-times" class="chart-section">
                 <div class="chart-title"></div>
-                <h2 style="display: inline-block; vertical-align: middle; padding-left: 15px;">Entry Wait Time</h2>
+                <h2 style="display: inline-block; vertical-align: middle; padding-left: 15px;">Waiting Area</h2>
                 <h2 id="current_WaitTime" class="count" style="display: inline-block; vertical-align: middle; padding-right: 10px; width: 2em; text-align: right;">NaN</h2>
-                <img class="svg" src="media/clock.svg" alt="Clock Icon" style="display: inline-block; width: 35px; height: 35px; vertical-align: middle; padding-bottom: 0px;padding-right: 2px;">
+                
+                <img class="svg" src="media/users.svg" alt="Crowd Icon" style="display: inline-block; width: 45px; height: 45px; vertical-align: middle; padding-bottom: 8px; padding-right: 5px;">
+                    
                 </div>
                 <div class="chart-container">
                     <canvas id="waitTimeChart"></canvas>
@@ -41,9 +43,10 @@
         
             <section id="line-sizes" class="chart-section">
                 <div class="chart-title"></div>
-                    <h2 style="display: inline-block; vertical-align: middle; padding-left: 15px;">Queue Length</h2>
-                    <h2 id="current_LineSize" class="count" style="display: inline-block; vertical-align: middle; padding-right: 10px; width: 2em; text-align: right;">NaN</h2>
-                    <img class="svg" src="media/users.svg" alt="Crowd Icon" style="display: inline-block; width: 45px; height: 45px; vertical-align: middle; padding-bottom: 8px; padding-right: 5px;">
+                    <h2 style="display: inline-block; vertical-align: middle; padding-left: 15px;">Restaurant</h2>
+                    <h2 id="current_LineSize" class="count" style="display: inline-block; vertical-align: middle; padding-right: 15px; width: 2em; text-align: right;">NaN</h2>
+                    
+                    <img class="svg" src="media/seat.svg" alt="Chair Icon" style="display: inline-block; width: 45px; height: 45px; vertical-align: middle; padding-right: 0px;padding-left: 5px;">
                 </div>
                 <div class="chart-container">
                     <canvas id="lineSizeChart"></canvas>
@@ -52,9 +55,9 @@
 
             <section id="restaurant-capacity" class="capacity-section">
                 <div class="capacity-title">
-                    <h2 style="display: inline-block; vertical-align: middle; padding-left: 5px;">Seating Capacity</h2>
+                    <h2 style="display: inline-block; vertical-align: middle; padding-left: 5px;">Traffic</h2>
                     <h2 id="current_Capacity" class="count" style="display: inline-block; vertical-align: middle; padding-left: 5px; width: 2em; text-align: right;">NaN</h2> 
-                    <img class="svg" src="media/seat.svg" alt="Chair Icon" style="display: inline-block; width: 40px; height: 40px; vertical-align: middle; padding-right: 3px;">
+                    <img class="svg" src="media/clock.svg" alt="Clock Icon" style="display: inline-block; width: 30px; height: 30px; vertical-align: bottom; padding-bottom: 0px;padding-right: 2px;padding-top: 5px;">
                 </div>
                 <div class="capacity-container">
                     <div id="capacity-bar" class="capacity-bar"></div>

@@ -1,4 +1,11 @@
-
+function convertArray(arr) {
+    return arr.map(item => {
+        return {
+            x: new Date(item.x), // Convert the "x" field to a Date object
+            y: Math.abs(item.y) // Keep "y" as it is
+        };
+    });
+}
 
 function fake_data(mode){
     if(mode=="size"){
@@ -37,7 +44,7 @@ function fake_data(mode){
         }
         value=value-1;
         }
-        console.log(dataArray1)
+       // console.log(dataArray1)
         return [dataArray1,dataArray2];
         
     }
@@ -55,6 +62,7 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
     let dataArray2=projected;
     //create between point
     let current_measurement=dataArray1[dataArray1.length-1]
+    console.log(current_measurement);
     dataArray2=[current_measurement,].concat(dataArray2);//place current measurement in the start of projection array to connect the two lines
     
     //create fake invisible datapoint to increase y-lim seamelessly
@@ -63,6 +71,7 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
     const yValues = all_data.map(item => item.y);
     // Finding the maximum value among all 'y' values
     const max = Math.max(...yValues);
+    console.log(max);
     let y_lim = parameter_max_height_percentage*max;
 
 
@@ -250,6 +259,7 @@ function updateTimer(duration) {
 // Main
 import {menus_text} from './data.js';
 import {last_update_datetime} from './data.js';
+import {future_group1,future_group2,historic_group1,historic_group2} from './data.js';
 
 window.addEventListener('load', function() {
     
@@ -278,20 +288,26 @@ window.addEventListener('load', function() {
 
 
     let data_line,data_time;
-    data_time=fake_data("minutes")
-    let capacity = Math.round(Math.random()*100);
+    data_time=[convertArray(historic_group1),convertArray(future_group1)]//fake_data("minutes")
+    //console.log([convertArray(historic_group1),convertArray(future_group1)])
+    //console.log(fake_data("minutes"))
+    
     let recorded_waittimes=data_time[0]
     let projected_waittimes=data_time[1]
+    
 
-    data_line=fake_data("size")
+    data_line=[convertArray(historic_group2),convertArray(future_group2)]//fake_data("size")
     let recorded_linesizes=data_line[0]
     let projected_linesizes=data_line[1]
 
-    plotTimeSeriesData('waitTimeChart',200,'Wait Time (Minutes)',recorded_waittimes,projected_waittimes);
-    plotTimeSeriesData('lineSizeChart',500,'Queue Length (People)',recorded_linesizes,projected_linesizes);
+
+    let capacity = Math.round(100*(recorded_waittimes[recorded_waittimes.length-1].y+recorded_linesizes[recorded_linesizes.length-1].y)/(recorded_waittimes.reduce((max, item) => (item.y > max ? item.y : max), -Infinity)+recorded_linesizes.reduce((max, item) => (item.y > max ? item.y : max), -Infinity)));
+
+    plotTimeSeriesData('waitTimeChart',200,'Waiting Area Occupancy',recorded_waittimes,projected_waittimes);
+    plotTimeSeriesData('lineSizeChart',500,'Restaurant Occupancy',recorded_linesizes,projected_linesizes);
     updateRestaurantCapacity(capacity);
 
-    document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y.toString()+"'";
+    document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y.toString();
     document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y.toString();
     document.getElementById('current_Capacity').textContent = capacity.toString()+"%";
 
