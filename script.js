@@ -176,6 +176,11 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
             animation: {
                 duration: animation_duration, // general animation time
             },
+            elements: {
+                line: {
+                    tension: 0.95 // This makes the lines smoother (0 for straight, 1 for max smoothness)
+                }
+            },
             
             
         }
