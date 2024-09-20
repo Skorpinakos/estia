@@ -11,6 +11,7 @@ import geopandas as gpd
 from shapely.geometry import Point
 import numpy as np
 from datetime import timedelta
+from sklearn.linear_model import LinearRegression
 
 
 
@@ -246,8 +247,8 @@ def get_data(hours=6):
                 for ap in status:
                     aps_history[ap].append(status[ap])
 
-            return aps_history, aps_datetimes
-
+            return sort_by_time(aps_datetimes, aps_history)
+            return aps_history,aps_datetimes
     except Error as e:
         print(f"Error: {e}")
 
@@ -257,28 +258,95 @@ def get_data(hours=6):
             connection.close()
             print("MySQL connection is closed")
 
-def main(plot=False):
-    # Load environment variables from .env file
-    load_dotenv()
-    aps_history, aps_datetimes = get_data(hours=48)
+def sort_by_time(aps_datetimes, aps_history):
+    # Ensure the dictionary and datetime list are sorted according to the datetime list
+    # First, pair each datetime with its index for sorting
+    indexed_datetimes = list(enumerate(aps_datetimes))
+    # Sort the indexed datetime list by datetime values
+    indexed_datetimes.sort(key=lambda x: x[1])
 
-    # Parse the locations
-    locations_filepath = "locations.txt"
-    locations = parse_locations(locations_filepath)
+    # Create a new sorted list of datetimes
+    sorted_datetimes = [aps_datetimes[index] for index, _ in indexed_datetimes]
 
-    # Filter aps_history to only include spots present in locations
-    filtered_aps_history = {spot: aps_history[spot] for spot in aps_history if spot in locations}
+    # Create a new dictionary where each list of device entries is sorted to match the sorted datetime list
+    sorted_aps_history = defaultdict(list)
+    for key in aps_history:
+        # Reorder each list in the dictionary according to the new datetime order
+        sorted_list = [aps_history[key][index] for index, _ in indexed_datetimes]
+        sorted_aps_history[key] = sorted_list
 
-    # Save filtered aps_history into a list and print the result
-    filtered_aps_history_list = list(filtered_aps_history.items())
+    return  sorted_aps_history,sorted_datetimes
 
-    # Print the filtered APs
-    for spot, history in filtered_aps_history_list:
-        print(f"Spot: {spot}, History: {history}")
+def moving_average(data, window_size):
+    """Applies a moving average filter to smooth the data."""
+    cumulative_sum = np.cumsum(np.insert(data, 0, 0)) 
+    smoothed_data = (cumulative_sum[window_size:] - cumulative_sum[:-window_size]) / window_size
+    return smoothed_data
 
-    if plot==True:
-        plot_spots_with_map(aps_history, aps_datetimes , locations_filepath, margin=2)
-    return aps_datetimes,filtered_aps_history_list
+
+def get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additional_aps, group_2, combined_group_1, combined_group_2, smoothing_window=5):
+    # Fetch data for the last 48 hours
+    aps_history_48h, aps_datetimes_48h = get_data(hours=48)
+
+    # Define the time range for prediction: same 2-hour period from yesterday
+    last_timestamp = aps_datetimes[-1]
+    start_prediction_time = last_timestamp - timedelta(days=1)
+    end_prediction_time = start_prediction_time + timedelta(hours=2)
+
+    # Find the indices for the previous day's relevant time frame
+    previous_day_indices = [i for i, dt in enumerate(aps_datetimes_48h) if start_prediction_time <= dt <= end_prediction_time]
+
+    # Initialize lists for previous day prediction data
+    predicted_group_1 = []
+    predicted_group_2 = []
+
+    # Normalize and combine crowd sizes for predictions based on previous day's data
+    for i in previous_day_indices:
+        # Apply combination logic from main2 for both groups
+        if special_ap in aps_history_48h and i < len(aps_history_48h[special_ap]) and aps_history_48h[special_ap][i] > 50:
+            crowd_size_group_1 = sum((aps_history_48h[ap][i] for ap in additional_aps if ap in aps_history_48h), aps_history_48h[special_ap][i])
+        else:
+            crowd_size_group_1 = aps_history_48h[special_ap][i] if special_ap in aps_history_48h else 0
+
+        crowd_size_group_2 = sum(aps_history_48h[ap][i] for ap in group_2 if ap in aps_history_48h)
+
+        # Normalize these values to ensure smooth continuation from today's last point
+        last_group_1_value = combined_group_1[-1]['y'] if combined_group_1 else 0
+        last_group_2_value = combined_group_2[-1]['y'] if combined_group_2 else 0
+
+        if predicted_group_1:
+            previous_group_1_value = predicted_group_1[-1]['y']
+        else:
+            previous_group_1_value = crowd_size_group_1
+
+        if predicted_group_2:
+            previous_group_2_value = predicted_group_2[-1]['y']
+        else:
+            previous_group_2_value = crowd_size_group_2
+
+        # Normalize the crowd size
+        normalized_group_1_value = last_group_1_value + (crowd_size_group_1 - previous_group_1_value)
+        normalized_group_2_value = last_group_2_value + (crowd_size_group_2 - previous_group_2_value)
+
+        # Store the predicted values
+        predicted_group_1.append({"x": aps_datetimes_48h[i].isoformat(), "y": int(normalized_group_1_value)})
+        predicted_group_2.append({"x": aps_datetimes_48h[i].isoformat(), "y": int(normalized_group_2_value)})
+
+    # Extract the 'y' values from the predictions to apply smoothing
+    group_1_y_values = [point['y'] for point in predicted_group_1]
+    group_2_y_values = [point['y'] for point in predicted_group_2]
+
+    # Apply moving average smoothing
+    smoothed_group_1_y = moving_average(group_1_y_values, smoothing_window)
+    smoothed_group_2_y = moving_average(group_2_y_values, smoothing_window)
+
+    # Trim the datetime values to match the smoothed arrays
+    smoothed_group_1 = [{"x": predicted_group_1[i + smoothing_window // 2]['x'], "y": int(smoothed_group_1_y[i])}
+                        for i in range(len(smoothed_group_1_y))]
+    smoothed_group_2 = [{"x": predicted_group_2[i + smoothing_window // 2]['x'], "y": int(smoothed_group_2_y[i])}
+                        for i in range(len(smoothed_group_2_y))]
+
+    return smoothed_group_1, smoothed_group_2
 
 def main2():
     # Load environment variables from .env file
@@ -288,7 +356,8 @@ def main2():
     aps_history, aps_datetimes = get_data(hours=6)
 
     # Define the groups of APs to combine
-    group_1 = ["R0_EST-AP_0.3", "R0_EST-AP_0.4", "R0_AMF-AP_0.3"]
+    special_ap = "R0_EST-AP_0.3"
+    additional_aps = ["R0_EST-AP_0.4", "R0_AMF-AP_0.3"]
     group_2 = ["R0_EST-AP_0.2", "R0_EST-AP_0.1"]
 
     # Initialize lists to hold the combined results for each group
@@ -297,56 +366,35 @@ def main2():
 
     # Combine crowd sizes for each group based on current data
     for i, datetime_value in enumerate(aps_datetimes):
-        crowd_size_group_1 = sum(aps_history[ap][i] for ap in group_1 if ap in aps_history and i < len(aps_history[ap]))
-        crowd_size_group_2 = sum(aps_history[ap][i] for ap in group_2 if ap in aps_history and i < len(aps_history[ap]))
-        
+        if special_ap in aps_history and i < len(aps_history[special_ap]) and aps_history[special_ap][i] > 50:
+            crowd_size_group_1 = sum((aps_history[ap][i] for ap in additional_aps if ap in aps_history), aps_history[special_ap][i])
+        else:
+            crowd_size_group_1 = aps_history[special_ap][i] if special_ap in aps_history else 0
+
+        crowd_size_group_2 = sum(aps_history[ap][i] for ap in group_2 if ap in aps_history)
+
         combined_group_1.append({"x": datetime_value.isoformat(), "y": crowd_size_group_1})
         combined_group_2.append({"x": datetime_value.isoformat(), "y": crowd_size_group_2})
 
-    # Prepare historical data for interpolation
-    group_1_values = [entry["y"] for entry in combined_group_1]
-    group_2_values = [entry["y"] for entry in combined_group_2]
+    # Get future predictions using the previous day's data
+    future_combined_group_1, future_combined_group_2 = get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additional_aps, group_2, combined_group_1, combined_group_2)
 
-    # Convert datetimes to numeric values (seconds since the start)
-    time_numeric = np.array([(dt - aps_datetimes[-1]).total_seconds() for dt in aps_datetimes])
-
-    # Perform polynomial interpolation for both groups (degree 3)
-    poly_group_1 = np.polyfit(time_numeric, group_1_values, 3)
-    poly_group_2 = np.polyfit(time_numeric, group_2_values, 3)
-
-    # Create polynomial models
-    poly_func_group_1 = np.poly1d(poly_group_1)
-    poly_func_group_2 = np.poly1d(poly_group_2)
-
-    # Generate future timestamps (every 75 seconds for the next 2 hours)
-    future_time_deltas = [timedelta(seconds=75 * i) for i in range(0, int(2 * 3600 / 75))]
-    future_datetimes = [aps_datetimes[0] + delta for delta in future_time_deltas]
-    
-    # Convert future times to numeric (seconds since the start)
-    future_time_numeric = np.array([(dt - aps_datetimes[0]).total_seconds() for dt in future_datetimes])
-
-    # Use the polynomial functions to predict future values
-    future_group_1_values = poly_func_group_1(future_time_numeric)
-    future_group_2_values = poly_func_group_2(future_time_numeric)
-
-    # Prepare the future results in the same format as the historical data
-    future_combined_group_1 = [{"x": dt.isoformat(), "y": int(value)} for dt, value in zip(future_datetimes, future_group_1_values)]
-    future_combined_group_2 = [{"x": dt.isoformat(), "y": int(value)} for dt, value in zip(future_datetimes, future_group_2_values)]
-
-    # Plot historical and predicted data
-    #plot_historical_and_predicted(combined_group_1, future_combined_group_1, "Group 1")
-    #plot_historical_and_predicted(combined_group_2, future_combined_group_2, "Group 2")
+    # Plot historical and predicted data for both groups
+    plot_historical_and_predicted(future_combined_group_1, combined_group_1, "Group 1")
+    plot_historical_and_predicted(future_combined_group_2, combined_group_2, "Group 2")
 
     # Write the historical and future data separately
     write_to_js_file(combined_group_1, combined_group_2, future_combined_group_1[1:], future_combined_group_2[1:])
 
-def plot_historical_and_predicted(historical_data, future_data, group_name):
+
+def plot_historical_and_predicted( future_data_unsorted,historical_data_unsorted, group_name):
     # Prepare the data for plotting
+    historical_data=sorted(historical_data_unsorted,key= lambda x:x["x"])
     historical_dates = [entry["x"] for entry in historical_data]
     historical_values = [entry["y"] for entry in historical_data]
-
-    future_dates = [entry["x"] for entry in future_data[1:]]
-    future_values = [entry["y"] for entry in future_data[1:]]
+    future_data=sorted(future_data_unsorted,key= lambda x:x["x"])
+    future_dates = [entry["x"] for entry in future_data[0:]]
+    future_values = [entry["y"] for entry in future_data[0:]]
 
     plt.figure(figsize=(12, 6))
     

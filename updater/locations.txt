@@ -1,0 +1,12 @@
+R0_EST-AP_0.3 , eisodos , 38.286061, 21.789896
+
+R0_EST-AP_0.4 , foinikas , 38.285817, 21.789896
+
+R0_EST-AP_0.2 , estiatorio notos ,38.285863, 21.789460
+
+R0_EST-AP_0.1 , estiatorio voras ,38.286020, 21.789460
+
+#R0_AMF-AP_0.3 , anamoni AFE ,38.285885, 21.790193
+
+
+
