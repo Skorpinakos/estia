@@ -306,7 +306,7 @@ window.addEventListener('load', function() {
     let projected_linesizes=data_line[1]
 
 
-    let capacity = Math.round(100*(recorded_waittimes[recorded_waittimes.length-1].y+recorded_linesizes[recorded_linesizes.length-1].y)/(recorded_waittimes.reduce((max, item) => (item.y > max ? item.y : max), -Infinity)+recorded_linesizes.reduce((max, item) => (item.y > max ? item.y : max), -Infinity)));
+    let capacity = Math.round(100*(recorded_waittimes[recorded_waittimes.length-1].y+recorded_linesizes[recorded_linesizes.length-1].y)/([...recorded_linesizes, ...projected_linesizes].reduce((max, item) => (item.y > max ? item.y : max), -Infinity)+[...recorded_waittimes, ...projected_waittimes].reduce((max, item) => (item.y > max ? item.y : max), -Infinity)));
 
     plotTimeSeriesData('waitTimeChart',200,'Waiting Area Occupancy',recorded_waittimes,projected_waittimes);
     plotTimeSeriesData('lineSizeChart',500,'Restaurant Occupancy',recorded_linesizes,projected_linesizes);
