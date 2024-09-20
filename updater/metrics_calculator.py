@@ -283,7 +283,6 @@ def moving_average(data, window_size):
     smoothed_data = (cumulative_sum[window_size:] - cumulative_sum[:-window_size]) / window_size
     return smoothed_data
 
-
 def get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additional_aps, group_2, combined_group_1, combined_group_2, smoothing_window=5):
     # Fetch data for the last 48 hours
     aps_history_48h, aps_datetimes_48h = get_data(hours=48)
@@ -299,6 +298,9 @@ def get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additio
     # Initialize lists for previous day prediction data
     predicted_group_1 = []
     predicted_group_2 = []
+
+    # Get today's date
+    today_date = last_timestamp.date()
 
     # Normalize and combine crowd sizes for predictions based on previous day's data
     for i in previous_day_indices:
@@ -328,9 +330,13 @@ def get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additio
         normalized_group_1_value = last_group_1_value + (crowd_size_group_1 - previous_group_1_value)
         normalized_group_2_value = last_group_2_value + (crowd_size_group_2 - previous_group_2_value)
 
+        # Correct the date while keeping the time
+        previous_datetime = aps_datetimes_48h[i]
+        correct_datetime = datetime.combine(today_date, previous_datetime.time())  # Replace date with today's date, keep the time
+
         # Store the predicted values
-        predicted_group_1.append({"x": aps_datetimes_48h[i].isoformat(), "y": int(normalized_group_1_value)})
-        predicted_group_2.append({"x": aps_datetimes_48h[i].isoformat(), "y": int(normalized_group_2_value)})
+        predicted_group_1.append({"x": correct_datetime.isoformat(), "y": int(normalized_group_1_value)})
+        predicted_group_2.append({"x": correct_datetime.isoformat(), "y": int(normalized_group_2_value)})
 
     # Extract the 'y' values from the predictions to apply smoothing
     group_1_y_values = [point['y'] for point in predicted_group_1]
