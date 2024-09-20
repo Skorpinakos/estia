@@ -293,7 +293,11 @@ window.addEventListener('load', function() {
 
 
     let data_line,data_time;
+    var startTime = performance.now()
     data_time=[convertArray(historic_group1),convertArray(future_group1)]//fake_data("minutes")
+    var endTime = performance.now()
+    console.log(`Call to convert array took ${endTime - startTime} milliseconds`)
+    
     //console.log([convertArray(historic_group1),convertArray(future_group1)])
     //console.log(fake_data("minutes"))
     
