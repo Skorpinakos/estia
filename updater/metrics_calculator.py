@@ -386,8 +386,8 @@ def main2():
     future_combined_group_1, future_combined_group_2 = get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additional_aps, group_2, combined_group_1, combined_group_2)
 
     # Plot historical and predicted data for both groups
-    plot_historical_and_predicted(future_combined_group_1, combined_group_1, "Group 1")
-    plot_historical_and_predicted(future_combined_group_2, combined_group_2, "Group 2")
+    #plot_historical_and_predicted(future_combined_group_1, combined_group_1, "Group 1")
+    #plot_historical_and_predicted(future_combined_group_2, combined_group_2, "Group 2")
 
     # Write the historical and future data separately
     write_to_js_file(combined_group_1, combined_group_2, future_combined_group_1[1:], future_combined_group_2[1:])
