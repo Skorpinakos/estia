@@ -131,7 +131,7 @@ def main(freq):
 # Run the script in an infinite loop with error handling
 while True:
     try:
-        main(freq=420)  # 21600 seconds = 6 hours
+        main(freq=600)  # 21600 seconds = 6 hours
     except Exception as e:
         print(f"Error occurred: {str(e)}")
         time.sleep(360)  # Retry after 6 minutes
