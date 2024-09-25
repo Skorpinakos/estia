@@ -226,7 +226,7 @@ const getRootUrl = () => {
     return url.toString();
   };
   
-let update_period_minutes = 7;
+let update_period_minutes = 10;
 
 function schedulePageReload(lastUpdateStr) {
     const lastUpdate = new Date(lastUpdateStr);
