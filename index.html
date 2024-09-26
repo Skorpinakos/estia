@@ -98,10 +98,15 @@
     <div id="pdfModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>More Information</h2>
-            <div class="pdf-container">
-                <!-- Embed PDF in iframe or object -->
-                <iframe src="programma.pdf" width="100%" height="100%" frameborder="0"></iframe>
+            <h2>Week's Schedule</h2>
+            <!-- Add a link to download the PDF file -->
+            <div>
+            <br>
+            <a id="pdf-download-link" href="" download style="float:right; margin-top: -25px;" class="no-link-style">Download PDF</a>
+            </div>
+            <canvas id="pdf-canvas"></canvas>
+            <div id="pdf-info">
+                <span>Week: <span id="week-number"></span></span> / <span id="total-pages"></span> pages.
             </div>
         </div>
     </div>
@@ -129,31 +134,87 @@
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            // Get modal element
-            var modal = document.getElementById("pdfModal");
-    
-            // Get the button that opens the modal
-            var btn = document.getElementById("moreButton");
-    
-            // Get the <span> element that closes the modal
-            var span = document.getElementsByClassName("close")[0];
-    
-            // When the user clicks the button, open the modal 
-            btn.onclick = function() {
+            let pdfDoc = null,
+                scale = 1.0,
+                canvas = document.getElementById('pdf-canvas'),
+                ctx = canvas.getContext('2d');
+
+            // Modal related elements
+            const modal = document.getElementById('pdfModal');
+            const closeModal = document.getElementsByClassName('close')[0];
+            const moreButton = document.getElementById('moreButton');
+            const downloadLink = document.getElementById('pdf-download-link'); // Download link
+
+            // The URL of the PDF file (update with your actual PDF file URL)
+            const pdfUrl = 'programma.pdf';
+
+            // Set the href attribute of the download link to point to the PDF file
+            downloadLink.href = pdfUrl;
+
+            // Function to calculate the current week of the month with leap week logic
+            const getWeekOfMonth = () => {
+                const now = new Date();
+                const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+                const firstDayOfWeek = firstDayOfMonth.getDay();
+                const currentDay = now.getDate();
+
+                const firstMonday = firstDayOfWeek === 1 ? 1 : (8 - (firstDayOfWeek === 0 ? 7 : firstDayOfWeek));
+
+                if (currentDay < firstMonday) {
+                    return 1;
+                }
+
+                const daysSinceFirstMonday = currentDay - firstMonday;
+                const weekNumber = Math.floor(daysSinceFirstMonday / 7) + 2;
+
+                return weekNumber;
+            };
+
+            // Load the PDF document
+            const loadPDF = async (url) => {
+                const loadingTask = pdfjsLib.getDocument(url);
+                pdfDoc = await loadingTask.promise;
+                document.getElementById('total-pages').textContent = pdfDoc.numPages;
+
+                const weekNumber = getWeekOfMonth();
+                const pageNum = Math.min(weekNumber, pdfDoc.numPages);
+
+                document.getElementById('week-number').textContent = pageNum;
+                renderPage(pageNum);
+            };
+
+            // Render the PDF page
+            const renderPage = async (num) => {
+                const page = await pdfDoc.getPage(num);
+                const viewport = page.getViewport({ scale });
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+
+                const renderContext = {
+                    canvasContext: ctx,
+                    viewport: viewport
+                };
+
+                await page.render(renderContext).promise;
+            };
+
+            // Show modal and load the PDF when the "More" button is clicked
+            moreButton.onclick = function() {
                 modal.style.display = "block";
-            }
-    
-            // When the user clicks on <span> (x), close the modal
-            span.onclick = function() {
+                loadPDF(pdfUrl); // Load the PDF file
+            };
+
+            // Close the modal when the "X" button is clicked
+            closeModal.onclick = function() {
                 modal.style.display = "none";
-            }
-    
-            // When the user clicks anywhere outside of the modal, close it
+            };
+
+            // Close the modal when clicking outside of it
             window.onclick = function(event) {
                 if (event.target == modal) {
                     modal.style.display = "none";
                 }
-            }
+            };
         });
     </script>
 
@@ -161,7 +222,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
     <script type="module" defer src="script.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.min.js"></script>
+
 
 </body>
 </html>

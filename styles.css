@@ -5,8 +5,35 @@
     scroll-behavior: smooth;
 }
 
+
+
+
+
+/* Center modal content */
+.modal-content {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    justify-content: center;
+    align-items: center;
+    height: 100%; /* Ensure it takes full height of modal */
+    padding: 20px;
+}
+
+/* Remove default link styling */
+.no-link-style {
+    color: inherit;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 20px; /* Optional spacing */
+}
+
+.no-link-style:hover {
+    text-decoration: underline; /* Optional: underline on hover */
+}
+
+/* Basic modal styling */
 .modal {
-    display: none;
+    display: block; /* Change to none when hiding the modal */
     position: fixed;
     z-index: 1;
     left: 0;
@@ -14,17 +41,37 @@
     width: 100%;
     height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.4); /* Modal background */
 }
 
 .modal-content {
     background-color: #fff;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
     margin: 10% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 80%;
-    max-height: 80%;
-    overflow: auto;
+    max-width: 900px; /* Adjust to your needs */
 }
 
 .close {
