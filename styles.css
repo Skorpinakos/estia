@@ -5,6 +5,70 @@
     scroll-behavior: smooth;
 }
 
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-height: 80%;
+    overflow: auto;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.pdf-container {
+    height: 400px;
+    overflow: auto;
+}
+
+.more-btn {
+    position: absolute; /* Allow the button to be positioned freely within the section */
+    right: 15px; /* Align to the right side of the section */
+    top: 4%; /* Vertically align to the middle of the section */
+    transform: translateY(-50%); /* Adjust for perfect vertical centering */
+    cursor: pointer;
+    background-color: #debca44b; /* Light gray background */
+    border: 2px solid #a26f4b4b; /* Light grey border */
+    color: white;
+    border: none;
+    padding: 7px 14px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.more-btn:hover {
+    background-color: #ca7f54;
+}
+
+
+
+
 body {
     background-image: url('media/back.webp'); /* Adjust the file name/path as necessary */
     background-size: cover; /* Cover the entire page */
@@ -102,7 +166,7 @@ body, html {
     height: 100%;  
 }
 
-.bottom-nav .navbar a.more-btn i {
+.bottom-nav .navbar a.more-butn i {
     font-size: 1.2em;  /* Adjust size as necessary for visibility */
     position: absolute;  /* Positions the icon absolutely within the button */
     top: 50%;  /* Moves the top of the icon to the center of the button */
@@ -272,8 +336,9 @@ body, html {
 
 
 .Menu-Title {
-    margin-bottom: 1px;
-    padding-top: 8px;
+    display: inline-block; /* To ensure title and button align horizontally */
+    font-size: 24px;
+    font-weight: bold;
 }
 
 .Menu-Title h2 {
@@ -329,14 +394,16 @@ body, html {
     gap: 20px; /* Adjust based on preference */
 }
 
-.menu-section{
-    background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3); /* Gradient from white to pink to light brown */
+.menu-section {
+    position: relative; /* Add this to make the button positioning relative to the section */
+    background: linear-gradient(145deg, #f8e4db, #fce2d6dc, #f4d6c1f3);
     margin-bottom: 180px;
     margin-top: 90px;
     border-radius: 5px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 600px;
+    padding: 10px 15px; /* Adjust padding for consistent layout */
 }
 
 

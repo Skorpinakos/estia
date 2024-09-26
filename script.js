@@ -378,7 +378,7 @@ window.addEventListener('load', function() {
 
 });
 
-document.querySelector('.bottom-nav .navbar .more-btn').addEventListener('click', function(e) {
+document.querySelector('.bottom-nav .navbar .more-butn').addEventListener('click', function(e) {
 
     // Remove 'active' class from all nav items
     document.querySelectorAll('.navbar a').forEach(item => {

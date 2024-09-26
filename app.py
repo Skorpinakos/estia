@@ -44,6 +44,10 @@ def service_worker():
 def manifest():
     return send_from_directory('.', 'manifest.json')
 
+@app.route('/programma.pdf')
+def pdf():
+    return send_from_directory('.', 'programma.pdf')
+
 #Serve media
 @app.route('/media/<filename>')
 def serve_media(filename):
