@@ -104,7 +104,7 @@
             <br>
             <a id="pdf-download-link" href="" download style="float:right; margin-top: -25px;" class="no-link-style">Download PDF</a>
             </div>
-            <canvas id="pdf-canvas"></canvas>
+            <canvas id="pdf-canvas" style="padding-left: 350px;"></canvas>
             <div id="pdf-info">
                 <span>Week: <span id="week-number"></span></span> / <span id="total-pages"></span> pages.
             </div>
@@ -135,7 +135,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             let pdfDoc = null,
-                scale = 1.0,
+                scale = 1.2,
                 canvas = document.getElementById('pdf-canvas'),
                 ctx = canvas.getContext('2d');
 
