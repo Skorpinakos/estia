@@ -94,15 +94,14 @@
         
 
     </main>
-    <!-- The Modal -->
     <div id="pdfModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Week's Schedule</h2>
-            <!-- Add a link to download the PDF file -->
+            <div style="display: flex; justify-content: space-between; position: sticky; top: 0; left: 0; z-index: 10; width: 100%;">
+                <span class="close" style="text-align: left;">&times;</span>
+                <a id="pdf-download-link" href="" download style="text-align: right;padding-top: 10px;" class="no-link-style">Download PDF</a>
+            </div>
             <div>
-            <br>
-            <a id="pdf-download-link" href="" download style="float:right; margin-top: -25px;" class="no-link-style">Download PDF</a>
+                <br>
             </div>
             <canvas id="pdf-canvas" style="padding-left: 350px;"></canvas>
             <div id="pdf-info">
@@ -133,89 +132,105 @@
     </nav>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            let pdfDoc = null,
-                scale = 1.2,
-                canvas = document.getElementById('pdf-canvas'),
-                ctx = canvas.getContext('2d');
+document.addEventListener("DOMContentLoaded", function () {
+    let pdfDoc = null,
+        canvas = document.getElementById('pdf-canvas'),
+        ctx = canvas.getContext('2d'),
+        pdfContainer = document.querySelector('.modal-content'); // The scrollable container
 
-            // Modal related elements
-            const modal = document.getElementById('pdfModal');
-            const closeModal = document.getElementsByClassName('close')[0];
-            const moreButton = document.getElementById('moreButton');
-            const downloadLink = document.getElementById('pdf-download-link'); // Download link
+    const modal = document.getElementById('pdfModal');
+    const closeModal = document.getElementsByClassName('close')[0];
+    const moreButton = document.getElementById('moreButton');
+    const downloadLink = document.getElementById('pdf-download-link');
 
-            // The URL of the PDF file (update with your actual PDF file URL)
-            const pdfUrl = 'programma.pdf';
+    const pdfUrl = 'programma.pdf';
+    downloadLink.href = pdfUrl;
 
-            // Set the href attribute of the download link to point to the PDF file
-            downloadLink.href = pdfUrl;
+    const getWeekOfMonth = () => {
+        const now = new Date();
+        const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const firstDayOfWeek = firstDayOfMonth.getDay();
+        const currentDay = now.getDate();
+        const firstMonday = firstDayOfWeek === 1 ? 1 : (8 - (firstDayOfWeek === 0 ? 7 : firstDayOfWeek));
+        if (currentDay < firstMonday) {
+            return 1;
+        }
+        const daysSinceFirstMonday = currentDay - firstMonday;
+        return Math.floor(daysSinceFirstMonday / 7) + 2;
+    };
 
-            // Function to calculate the current week of the month with leap week logic
-            const getWeekOfMonth = () => {
-                const now = new Date();
-                const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-                const firstDayOfWeek = firstDayOfMonth.getDay();
-                const currentDay = now.getDate();
+    const loadPDF = async (url) => {
+        const loadingTask = pdfjsLib.getDocument(url);
+        pdfDoc = await loadingTask.promise;
+        document.getElementById('total-pages').textContent = pdfDoc.numPages;
 
-                const firstMonday = firstDayOfWeek === 1 ? 1 : (8 - (firstDayOfWeek === 0 ? 7 : firstDayOfWeek));
+        const weekNumber = getWeekOfMonth();
+        const pageNum = Math.min(weekNumber, pdfDoc.numPages);
 
-                if (currentDay < firstMonday) {
-                    return 1;
-                }
+        document.getElementById('week-number').textContent = pageNum;
+        await renderPage(pageNum);
 
-                const daysSinceFirstMonday = currentDay - firstMonday;
-                const weekNumber = Math.floor(daysSinceFirstMonday / 7) + 2;
+        scrollToCurrentDay(); // Scroll to the correct part of the canvas after rendering
+    };
 
-                return weekNumber;
-            };
+    const renderPage = async (num) => {
+        const page = await pdfDoc.getPage(num);
+        const viewport = page.getViewport({ scale: 1 });
 
-            // Load the PDF document
-            const loadPDF = async (url) => {
-                const loadingTask = pdfjsLib.getDocument(url);
-                pdfDoc = await loadingTask.promise;
-                document.getElementById('total-pages').textContent = pdfDoc.numPages;
+        // Set canvas size based on the PDF's dimensions
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
 
-                const weekNumber = getWeekOfMonth();
-                const pageNum = Math.min(weekNumber, pdfDoc.numPages);
+        const renderContext = {
+            canvasContext: ctx,
+            viewport: viewport
+        };
 
-                document.getElementById('week-number').textContent = pageNum;
-                renderPage(pageNum);
-            };
+        await page.render(renderContext).promise;
+    };
 
-            // Render the PDF page
-            const renderPage = async (num) => {
-                const page = await pdfDoc.getPage(num);
-                const viewport = page.getViewport({ scale });
-                canvas.height = viewport.height;
-                canvas.width = viewport.width;
+    const scrollToCurrentDay = () => {
+        const today = new Date().getDay(); // Get today's day of the week (0 = Sunday, 1 = Monday, etc.)
 
-                const renderContext = {
-                    canvasContext: ctx,
-                    viewport: viewport
-                };
+        if (today === 0) {
+            return; // If today is Sunday, do nothing (optional)
+        }
 
-                await page.render(renderContext).promise;
-            };
+        const daysInWeek = 7;
+        const canvasWidth = canvas.width; // Full width of the canvas (entire page)
+        const dayWidth = canvasWidth / daysInWeek; // Assume the week is equally divided
 
-            // Show modal and load the PDF when the "More" button is clicked
-            moreButton.onclick = function() {
-                modal.style.display = "block";
-                loadPDF(pdfUrl); // Load the PDF file
-            };
+        const scrollX = dayWidth * (today - 1); // Scroll position based on today's day (Monday = 1)
 
-            // Close the modal when the "X" button is clicked
-            closeModal.onclick = function() {
-                modal.style.display = "none";
-            };
-
-            // Close the modal when clicking outside of it
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            };
+        // Smoothly scroll the container horizontally to the calculated position
+        pdfContainer.scrollTo({
+            left: scrollX-120,
+            behavior: 'smooth'
         });
+    };
+
+    // Show modal and load the PDF when the "More" button is clicked
+    moreButton.onclick = function () {
+        modal.style.display = "block";
+        document.body.classList.add('modal-open'); // Prevent background scrolling
+        loadPDF(pdfUrl); // Load the PDF file
+    };
+
+    // Close the modal when the "X" button is clicked
+    closeModal.onclick = function () {
+        modal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
+    };
+
+    // Close the modal when clicking outside of it
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+            document.body.classList.remove('modal-open'); // Re-enable background scrolling
+        }
+    };
+});
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/moment"></script>
