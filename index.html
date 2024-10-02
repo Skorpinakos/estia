@@ -146,6 +146,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const pdfUrl = 'programma.pdf';
     downloadLink.href = pdfUrl;
 
+    modal.style.display = "none";
+    document.body.classList.remove('modal-open'); // Re-enable background scrolling
+
     const getWeekOfMonth = () => {
         const now = new Date();
         const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
