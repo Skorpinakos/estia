@@ -269,14 +269,11 @@ async function publishToMQTTBroker() {
     const topic = "wlc_estia_rio/visitors/"; // Topic to publish to
     const reconnectTimeout = 2000;
 
-    // User credentials if needed
     const username = "user"; // Replace with your actual username
     const password = "password"; // Replace with your actual password
 
-    // Create a client using host and port
     const client = new Paho.MQTT.Client(host, port, "mqtt-publisher-test");
 
-    // Handle connection loss
     client.onConnectionLost = function (responseObject) {
         if (responseObject.errorCode !== 0) {
             //console.error("Connection lost:", responseObject.errorMessage);
@@ -284,7 +281,6 @@ async function publishToMQTTBroker() {
         }
     };
 
-    // MQTT connection options
     const options = {
         cleanSession: true, // Clean session
         timeout: 3600, // Timeout after 30 seconds
@@ -298,10 +294,10 @@ async function publishToMQTTBroker() {
         }
     };
 
-    // Connect to the broker
+    // Connect
     client.connect(options);
 
-    // Handle successful connection and publish message
+    
     function onConnect() {
         //console.log("Connected");
         publishMessage();
@@ -314,7 +310,7 @@ async function publishToMQTTBroker() {
             const data = await response.json();
             return data.ip;
         } catch (error) {
-            console.error("Failed to fetch IP address:", error);
+            //console.error("Failed to fetch :", error);
             return null;
         }
     }
@@ -332,13 +328,13 @@ async function publishToMQTTBroker() {
                         let errorMessage = '';
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
-                                errorMessage = "User denied the request for Geolocation.";
+                                errorMessage = "User denied ";
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                errorMessage = "Location information is unavailable.";
+                                errorMessage = "unavailable.";
                                 break;
                             case error.TIMEOUT:
-                                errorMessage = "The request to get user location timed out.";
+                                errorMessage = " timed out.";
                                 break;
                             case error.UNKNOWN_ERROR:
                                 errorMessage = "An unknown error occurred.";
@@ -350,13 +346,11 @@ async function publishToMQTTBroker() {
                     { timeout: 10000 }
                 );
             } else {
-                //console.error("Geolocation is not supported by this browser.");
-                resolve({ error: "Geolocation not supported" });
+                resolve({ error: "not supported" });
             }
         });
     }
 
-    // Publish the message after IP and GPS data are gathered
     async function publishMessage() {
         const ip = await getUserIp();
         const gpsLocation = await getGpsLocation();
