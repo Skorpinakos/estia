@@ -269,8 +269,7 @@ async function publishToMQTTBroker() {
     const topic = "wlc_estia_rio/visitors/"; // Topic to publish to
     const reconnectTimeout = 2000;
 
-    const username = "user"; // Replace with your actual username
-    const password = "password"; // Replace with your actual password
+
 
     const client = new Paho.MQTT.Client(host, port, "mqtt-publisher-test");
 
@@ -284,8 +283,6 @@ async function publishToMQTTBroker() {
     const options = {
         cleanSession: true, // Clean session
         timeout: 3600, // Timeout after 30 seconds
-        userName: username,
-        password: password,
         useSSL: true, // Use SSL/TLS connection for WSS
         onSuccess: onConnect,
         onFailure: function (message) {
