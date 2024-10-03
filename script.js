@@ -261,6 +261,82 @@ function updateTimer(duration) {
     }, 1000);
 }
 
+//func for visitor logs
+async function log_visit() {
+const endpointUrl = "http://150.140.186.118:1801/log_visit"; // Your HTTP endpoint
+
+// Fetch the user's IP address
+async function getUserIp() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.error("Failed to fetch IP address:", error);
+        return null;
+    }
+}
+
+// Fetch the user's GPS coordinates
+function getGpsLocation() {
+    return new Promise((resolve) => {
+        if ("geolocation" in navigator) {
+            navigator.geolocation.getCurrentPosition(
+                position => resolve({
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                }),
+                error => resolve(null),
+                { timeout: 10000 }
+            );
+        } else {
+            resolve(null);
+        }
+    });
+}
+
+// Send the data to the HTTP endpoint
+async function sendLogToServer() {
+    const ip = await getUserIp();
+    const gpsLocation = await getGpsLocation();
+    const dateTime = new Date().toISOString();
+
+    if (!ip) {
+        console.error("Could not retrieve IP, aborting.");
+        return;
+    }
+
+    // Create message payload
+    const payload = {
+        datetime: dateTime,
+        ip: ip,
+        location: gpsLocation
+            ? `Lat: ${gpsLocation.latitude}, Lon: ${gpsLocation.longitude}`
+            : "GPS not available"
+    };
+
+    try {
+        const response = await fetch(endpointUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            console.log("Successfully logged visit:", payload);
+        } else {
+            console.error("Failed to log visit. Status:", response.status);
+        }
+    } catch (error) {
+        console.error("Error sending data to server:", error);
+    }
+}
+
+// Execute the function to send data
+sendLogToServer();
+}
 // Main
 
 
@@ -292,6 +368,10 @@ window.addEventListener('load', function () {
 
 // Function that contains the rest of the code (inside the 'load' event)
 function executeRestOfScript() {
+
+  //log visitor
+  log_visit();
+
   // Set last updated tag
   document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
   schedulePageReload(last_update_datetime);
