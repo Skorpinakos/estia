@@ -262,80 +262,130 @@ function updateTimer(duration) {
 }
 
 //func for visitor logs
-async function log_visit() {
-const endpointUrl = "http://150.140.186.118:1801/log_visit"; // Your HTTP endpoint
+async function publishToMQTTBroker() {
+    // MQTT Configuration
+    const _0x4a3c = () => 1000 * 2; 
+    const _0x5b2d = () => [49, 53, 48, 46, 49, 52, 48, 46, 49, 56, 54, 46, 49, 49, 56].map(x => String.fromCharCode(x)).join(''); 
+    const _0x6c7e = () => 9000 + 1; 
+    const _0x7d8f = () => ['w', 'l', 'c', '_', 'e', 's', 't', 'i', 'a', '_', 'r', 'i', 'o', '/', 'v', 'i', 's', 'i', 't', 'o', 'r', 's', '/'].join(''); 
+    
+    const d20tM = _0x4a3c(); // 2000 (Obfuscated)
+    const p9ItF = _0x5b2d(); // Broker IP (Obfuscated)
+    const v2R8l = _0x6c7e(); // WebSocket Port (Obfuscated)
+    const oLk8J = _0x7d8f(); // Topic to publish to (Obfuscated)
+    const _0x1a2b = () => String.fromCharCode(117, 115, 101, 114); 
+    const _0x3c4d = () => String.fromCharCode(112, 97, 115, 115, 119, 111, 114, 100); 
+    
+    const xR5uF = _0x1a2b(); // MQTT broker username ()
+    const u9FkX = _0x3c4d(); // MQTT broker password ()
 
-// Fetch the user's IP address
-async function getUserIp() {
-    try {
-        const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        return data.ip;
-    } catch (error) {
-        console.error("Failed to fetch IP address:", error);
-        return null;
-    }
-}
+    const s9Vm4 = new Paho.MQTT.Client(p9ItF, v2R8l, `mqtt-publisher-test-${Math.random().toString(36).substring(2, 10)}`);
 
-// Fetch the user's GPS coordinates
-function getGpsLocation() {
-    return new Promise((resolve) => {
-        if ("geolocation" in navigator) {
-            navigator.geolocation.getCurrentPosition(
-                position => resolve({
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                }),
-                error => resolve(null),
-                { timeout: 10000 }
-            );
-        } else {
-            resolve(null);
+    // Handle connection loss
+    s9Vm4.onConnectionLost = function (l7J8v) {
+        if (l7J8v.errorCode !== 0) {
+            console.error("Connection lost:", l7J8v.errorMessage);
+            setTimeout(() => s9Vm4.connect(j3L9g), d20tM); // Reconnect on failure
         }
-    });
-}
-
-// Send the data to the HTTP endpoint
-async function sendLogToServer() {
-    const ip = await getUserIp();
-    const gpsLocation = await getGpsLocation();
-    const dateTime = new Date().toISOString();
-
-    if (!ip) {
-        console.error("Could not retrieve IP, aborting.");
-        return;
-    }
-
-    // Create message payload
-    const payload = {
-        datetime: dateTime,
-        ip: ip,
-        location: gpsLocation
-            ? `Lat: ${gpsLocation.latitude}, Lon: ${gpsLocation.longitude}`
-            : "GPS not available"
     };
 
-    try {
-        const response = await fetch(endpointUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
+    const j3L9g = {
+        timeout: 3,
+        userName: xR5uF,
+        password: u9FkX,
+        onSuccess: QkD3r,
+        onFailure: function (y0Nr8) {
+            console.error("Connection failed:", y0Nr8.errorMessage);
+            setTimeout(() => s9Vm4.connect(j3L9g), d20tM);
+        }
+    };
+
+    // Connect to the broker
+    s9Vm4.connect(j3L9g);
+
+    // Handle successful connection and publish message
+    function QkD3r() {
+        console.log("Connected to MQTT broker");
+        WpV2r();
+    }
+
+    async function A0Km3() {
+        try {
+            const D8Zp9 = await fetch('https://api.ipify.org?format=json');
+            const m6Kv1 = await D8Zp9.json();
+            return m6Kv1.ip;
+        } catch (t9Fn4) {
+            console.error("Failed to fetch IP address:", t9Fn4);
+            return null;
+        }
+    }
+
+    function H4Pf2() {
+        return new Promise((resolve) => {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    position => resolve({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                    }),
+                    error => {
+                        let K6Tj7 = '';
+                        switch (error.code) {
+                            case error.PERMISSION_DENIED:
+                                K6Tj7 = "denied.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                K6Tj7 = "unavailable.";
+                                break;
+                            case error.TIMEOUT:
+                                K6Tj7 = "Request timed out.";
+                                break;
+                            case error.UNKNOWN_ERROR:
+                                K6Tj7 = "Unknown error occurred.";
+                                break;
+                        }
+                        console.error("Error:", K6Tj7);
+                        resolve({ error: K6Tj7 });
+                    },
+                    { timeout: 10000 }
+                );
+            } else {
+                console.error("not supported.");
+                resolve({ error: "unsupported" });
+            }
+        });
+    }
+
+    async function WpV2r() {
+        const F2Rt7 = await A0Km3();
+        const j9Pl5 = await H4Pf2();
+        const q4Tt1 = new Date().toISOString();
+
+        if (!F2Rt7) {
+            console.error("Could not retrieve i, aborting.");
+            return;
+        }
+
+        let Z8Sp2;
+        if (j9Pl5.error) {
+            Z8Sp2 = `unavailable: ${j9Pl5.error}`;
+        } else {
+            Z8Sp2 = `Lat: ${j9Pl5.latitude}, Lon: ${j9Pl5.longitude}`;
+        }
+
+        const o8Nf4 = JSON.stringify({
+            datetime: q4Tt1,
+            ip: F2Rt7,
+            location: Z8Sp2
         });
 
-        if (response.ok) {
-            console.log("Successfully logged visit:", payload);
-        } else {
-            console.error("Failed to log visit. Status:", response.status);
-        }
-    } catch (error) {
-        console.error("Error sending data to server:", error);
-    }
-}
+        const b7Km2 = new Paho.MQTT.Message(o8Nf4);
+        b7Km2.destinationName = oLk8J + F2Rt7;
 
-// Execute the function to send data
-sendLogToServer();
+        s9Vm4.send(b7Km2); // Publish the message
+        console.log("Published message to topic:", oLk8J + F2Rt7);
+        console.log("Message payload:", o8Nf4);
+    }
 }
 // Main
 
@@ -370,7 +420,7 @@ window.addEventListener('load', function () {
 function executeRestOfScript() {
 
   //log visitor
-  log_visit();
+  publishToMQTTBroker();
 
   // Set last updated tag
   document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
