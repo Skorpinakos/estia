@@ -287,7 +287,7 @@ async function publishToMQTTBroker() {
     // MQTT connection options
     const options = {
         cleanSession: true, // Clean session
-        timeout: 30, // Timeout after 30 seconds
+        timeout: 3600, // Timeout after 30 seconds
         userName: username,
         password: password,
         useSSL: true, // Use SSL/TLS connection for WSS
