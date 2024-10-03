@@ -44,7 +44,7 @@ function fake_data(mode){
         }
         value=value-1;
         }
-       // console.log(dataArray1)
+       //console.log(dataArray1)
         return [dataArray1,dataArray2];
         
     }
@@ -62,7 +62,7 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
     let dataArray2=projected;
     //create between point
     let current_measurement=dataArray1[dataArray1.length-1]
-    console.log(current_measurement);
+    //console.log(current_measurement);
     dataArray2=[current_measurement,].concat(dataArray2);//place current measurement in the start of projection array to connect the two lines
     
     //create fake invisible datapoint to increase y-lim seamelessly
@@ -71,7 +71,7 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
     const yValues = all_data.map(item => item.y);
     // Finding the maximum value among all 'y' values
     const max = Math.max(...yValues);
-    console.log(max);
+    //console.log(max);
     let y_lim = parameter_max_height_percentage*max;
 
 
@@ -279,7 +279,7 @@ async function publishToMQTTBroker() {
     // Handle connection loss
     client.onConnectionLost = function (responseObject) {
         if (responseObject.errorCode !== 0) {
-            console.error("Connection lost:", responseObject.errorMessage);
+            //console.error("Connection lost:", responseObject.errorMessage);
             setTimeout(() => client.connect(options), reconnectTimeout); // Reconnect on failure
         }
     };
@@ -293,7 +293,7 @@ async function publishToMQTTBroker() {
         useSSL: true, // Use SSL/TLS connection for WSS
         onSuccess: onConnect,
         onFailure: function (message) {
-            console.error("Connection failed:", message.errorMessage);
+            //console.error("Connection failed:", message.errorMessage);
             setTimeout(() => client.connect(options), reconnectTimeout);
         }
     };
@@ -303,7 +303,7 @@ async function publishToMQTTBroker() {
 
     // Handle successful connection and publish message
     function onConnect() {
-        console.log("Connected to MQTT broker");
+        //console.log("Connected");
         publishMessage();
     }
 
@@ -344,13 +344,13 @@ async function publishToMQTTBroker() {
                                 errorMessage = "An unknown error occurred.";
                                 break;
                         }
-                        console.error("GPS Error:", errorMessage);
+                        //console.error("Error:", errorMessage);
                         resolve({ error: errorMessage });
                     },
                     { timeout: 10000 }
                 );
             } else {
-                console.error("Geolocation is not supported by this browser.");
+                //console.error("Geolocation is not supported by this browser.");
                 resolve({ error: "Geolocation not supported" });
             }
         });
@@ -363,14 +363,13 @@ async function publishToMQTTBroker() {
         const dateTime = new Date().toISOString();
 
         if (!ip) {
-            console.error("Could not retrieve IP, aborting.");
+            console.error("Could not retrieve I, aborting.");
             return;
         }
 
-        // Create message payload with enhanced error reporting for location
         let locationInfo;
         if (gpsLocation.error) {
-            locationInfo = `GPS not available: ${gpsLocation.error}`;
+            locationInfo = `not available: ${gpsLocation.error}`;
         } else {
             locationInfo = `Lat: ${gpsLocation.latitude}, Lon: ${gpsLocation.longitude}`;
         }
@@ -384,9 +383,7 @@ async function publishToMQTTBroker() {
         const message = new Paho.MQTT.Message(messagePayload);
         message.destinationName = topic + ip;
 
-        client.send(message); // Publish the message
-        console.log("Published message to topic:", topic + ip);
-        console.log("Message payload:", messagePayload);
+        client.send(message); 
     }
 }
 // Main
@@ -439,7 +436,7 @@ function executeRestOfScript() {
   var startTime = performance.now();
   data_time = [convertArray(historic_group1), convertArray(future_group1)]; //fake_data("minutes")
   var endTime = performance.now();
-  console.log(`Call to convert array took ${endTime - startTime} milliseconds`);
+  //console.log(`Call to convert array took ${endTime - startTime} milliseconds`);
 
   let recorded_waittimes = data_time[0];
   let projected_waittimes = data_time[1];
@@ -544,8 +541,8 @@ if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register(rootURL+'service-worker.js').then(registration => {
         //console.log('ServiceWorker registration successful with scope: ', registration.scope);
       }, err => {
-        console.log('ServiceWorker registration failed: ', err);
-        console.log(err)
+        //console.log('ServiceWorker registration failed: ', err);
+        //console.log(err)
       });
     });
   }
