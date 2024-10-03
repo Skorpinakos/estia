@@ -61,4 +61,4 @@ def serve_icons(filename):
     return send_from_directory(media_folder, filename)
 
 if __name__ == '__main__':
-    app.run(debug=True, port=1100, host='0.0.0.0')
+    app.run(debug=True, port=1107, host='0.0.0.0')

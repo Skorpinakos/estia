@@ -264,63 +264,63 @@ function updateTimer(duration) {
 //func for visitor logs
 async function publishToMQTTBroker() {
     // MQTT Configuration
-    const _0x4a3c = () => 1000 * 2; 
-    const _0x5b2d = () => [49, 53, 48, 46, 49, 52, 48, 46, 49, 56, 54, 46, 49, 49, 56].map(x => String.fromCharCode(x)).join(''); 
-    const _0x6c7e = () => 9000 + 1; 
-    const _0x7d8f = () => ['w', 'l', 'c', '_', 'e', 's', 't', 'i', 'a', '_', 'r', 'i', 'o', '/', 'v', 'i', 's', 'i', 't', 'o', 'r', 's', '/'].join(''); 
-    
-    const d20tM = _0x4a3c(); // 2000 (Obfuscated)
-    const p9ItF = _0x5b2d(); // Broker IP (Obfuscated)
-    const v2R8l = _0x6c7e(); // WebSocket Port (Obfuscated)
-    const oLk8J = _0x7d8f(); // Topic to publish to (Obfuscated)
-    const _0x1a2b = () => String.fromCharCode(117, 115, 101, 114); 
-    const _0x3c4d = () => String.fromCharCode(112, 97, 115, 115, 119, 111, 114, 100); 
-    
-    const xR5uF = _0x1a2b(); // MQTT broker username ()
-    const u9FkX = _0x3c4d(); // MQTT broker password ()
+    const host = "labserver.sense-campus.gr"; // Broker hostname
+    const port = 9002; // WebSocket Secure Port
+    const topic = "wlc_estia_rio/visitors/"; // Topic to publish to
+    const reconnectTimeout = 2000;
 
-    const s9Vm4 = new Paho.MQTT.Client(p9ItF, v2R8l, `mqtt-publisher-test-${Math.random().toString(36).substring(2, 10)}`);
+    // User credentials if needed
+    const username = "user"; // Replace with your actual username
+    const password = "password"; // Replace with your actual password
+
+    // Create a client using host and port
+    const client = new Paho.MQTT.Client(host, port, "mqtt-publisher-test");
 
     // Handle connection loss
-    s9Vm4.onConnectionLost = function (l7J8v) {
-        if (l7J8v.errorCode !== 0) {
-            console.error("Connection lost:", l7J8v.errorMessage);
-            setTimeout(() => s9Vm4.connect(j3L9g), d20tM); // Reconnect on failure
+    client.onConnectionLost = function (responseObject) {
+        if (responseObject.errorCode !== 0) {
+            console.error("Connection lost:", responseObject.errorMessage);
+            setTimeout(() => client.connect(options), reconnectTimeout); // Reconnect on failure
         }
     };
 
-    const j3L9g = {
-        timeout: 3,
-        userName: xR5uF,
-        password: u9FkX,
-        onSuccess: QkD3r,
-        onFailure: function (y0Nr8) {
-            console.error("Connection failed:", y0Nr8.errorMessage);
-            setTimeout(() => s9Vm4.connect(j3L9g), d20tM);
+    // MQTT connection options
+    const options = {
+        cleanSession: true, // Clean session
+        timeout: 30, // Timeout after 30 seconds
+        userName: username,
+        password: password,
+        useSSL: true, // Use SSL/TLS connection for WSS
+        onSuccess: onConnect,
+        onFailure: function (message) {
+            console.error("Connection failed:", message.errorMessage);
+            setTimeout(() => client.connect(options), reconnectTimeout);
         }
     };
 
     // Connect to the broker
-    s9Vm4.connect(j3L9g);
+    client.connect(options);
 
     // Handle successful connection and publish message
-    function QkD3r() {
-        console.log("Connected");
-        WpV2r();
+    function onConnect() {
+        console.log("Connected to MQTT broker");
+        publishMessage();
     }
 
-    async function A0Km3() {
+    // Fetch the user's IP address
+    async function getUserIp() {
         try {
-            const D8Zp9 = await fetch('https://api.ipify.org?format=json');
-            const m6Kv1 = await D8Zp9.json();
-            return m6Kv1.ip;
-        } catch (t9Fn4) {
-            console.error("Failed to fetch IP address:", t9Fn4);
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+        } catch (error) {
+            console.error("Failed to fetch IP address:", error);
             return null;
         }
     }
 
-    function H4Pf2() {
+    // Fetch the user's GPS coordinates with detailed error handling
+    function getGpsLocation() {
         return new Promise((resolve) => {
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
@@ -329,63 +329,64 @@ async function publishToMQTTBroker() {
                         longitude: position.coords.longitude,
                     }),
                     error => {
-                        let K6Tj7 = '';
+                        let errorMessage = '';
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
-                                K6Tj7 = "denied.";
+                                errorMessage = "User denied the request for Geolocation.";
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                K6Tj7 = "unavailable.";
+                                errorMessage = "Location information is unavailable.";
                                 break;
                             case error.TIMEOUT:
-                                K6Tj7 = "Request timed out.";
+                                errorMessage = "The request to get user location timed out.";
                                 break;
                             case error.UNKNOWN_ERROR:
-                                K6Tj7 = "Unknown error occurred.";
+                                errorMessage = "An unknown error occurred.";
                                 break;
                         }
-                        console.error("Error:", K6Tj7);
-                        resolve({ error: K6Tj7 });
+                        console.error("GPS Error:", errorMessage);
+                        resolve({ error: errorMessage });
                     },
                     { timeout: 10000 }
                 );
             } else {
-                console.error("not supported.");
-                resolve({ error: "unsupported" });
+                console.error("Geolocation is not supported by this browser.");
+                resolve({ error: "Geolocation not supported" });
             }
         });
     }
 
-    async function WpV2r() {
-        const F2Rt7 = await A0Km3();
-        const j9Pl5 = await H4Pf2();
-        const q4Tt1 = new Date().toISOString();
+    // Publish the message after IP and GPS data are gathered
+    async function publishMessage() {
+        const ip = await getUserIp();
+        const gpsLocation = await getGpsLocation();
+        const dateTime = new Date().toISOString();
 
-        if (!F2Rt7) {
-            console.error("Could not retrieve i, aborting.");
+        if (!ip) {
+            console.error("Could not retrieve IP, aborting.");
             return;
         }
 
-        let Z8Sp2;
-        if (j9Pl5.error) {
-            Z8Sp2 = `unavailable: ${j9Pl5.error}`;
+        // Create message payload with enhanced error reporting for location
+        let locationInfo;
+        if (gpsLocation.error) {
+            locationInfo = `GPS not available: ${gpsLocation.error}`;
         } else {
-            Z8Sp2 = `Lat: ${j9Pl5.latitude}, Lon: ${j9Pl5.longitude}`;
+            locationInfo = `Lat: ${gpsLocation.latitude}, Lon: ${gpsLocation.longitude}`;
         }
 
-        const o8Nf4 = JSON.stringify({
-            datetime: q4Tt1,
-            ip: F2Rt7,
-            location: Z8Sp2
+        const messagePayload = JSON.stringify({
+            datetime: dateTime,
+            ip: ip,
+            location: locationInfo
         });
 
-        const b7Km2 = new Paho.MQTT.Message(o8Nf4);
-        b7Km2.destinationName = oLk8J + F2Rt7;
+        const message = new Paho.MQTT.Message(messagePayload);
+        message.destinationName = topic + ip;
 
-        s9Vm4.send(b7Km2); // Publish the message
-        //console.log("Published message to topic:", oLk8J + F2Rt7);
-        //console.log("Message payload:", o8Nf4);
-        console.log("visit ok!")
+        client.send(message); // Publish the message
+        console.log("Published message to topic:", topic + ip);
+        console.log("Message payload:", messagePayload);
     }
 }
 // Main
