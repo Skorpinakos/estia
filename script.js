@@ -305,7 +305,7 @@ async function publishToMQTTBroker() {
 
     // Handle successful connection and publish message
     function QkD3r() {
-        console.log("Connected to MQTT broker");
+        console.log("Connected");
         WpV2r();
     }
 
@@ -383,8 +383,9 @@ async function publishToMQTTBroker() {
         b7Km2.destinationName = oLk8J + F2Rt7;
 
         s9Vm4.send(b7Km2); // Publish the message
-        console.log("Published message to topic:", oLk8J + F2Rt7);
-        console.log("Message payload:", o8Nf4);
+        //console.log("Published message to topic:", oLk8J + F2Rt7);
+        //console.log("Message payload:", o8Nf4);
+        console.log("visit ok!")
     }
 }
 // Main
