@@ -262,121 +262,128 @@ function updateTimer(duration) {
 }
 
 // Main
-import {menus_text} from './data.js';
-import {last_update_datetime} from './data.js';
-import {future_group1,future_group2,historic_group1,historic_group2} from './data.js';
-
-window.addEventListener('load', function() {
-    
 
 
+// Declare global variables
+let menus_text, last_update_datetime, future_group1, future_group2, historic_group1, historic_group2;
 
+// Use a version or timestamp for cache busting
+const version = new Date().getTime(); 
 
+window.addEventListener('load', function () {
+  // Dynamic import within the 'load' event
+  import(`./data.js?v=${version}`)
+    .then((module) => {
+      // Assign the imported values to global variables
+      menus_text = module.menus_text;
+      last_update_datetime = module.last_update_datetime;
+      future_group1 = module.future_group1;
+      future_group2 = module.future_group2;
+      historic_group1 = module.historic_group1;
+      historic_group2 = module.historic_group2;
 
+      // Now that the module is loaded, execute the rest of your code
+      executeRestOfScript();
+    })
+    .catch((error) => {
+      console.error('Failed to load module:', error);
+    });
+});
 
-    //set last updated tag
-    document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
-    schedulePageReload(last_update_datetime);
+// Function that contains the rest of the code (inside the 'load' event)
+function executeRestOfScript() {
+  // Set last updated tag
+  document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
+  schedulePageReload(last_update_datetime);
 
+  // Parse menu text
+  let menus = menus_text;
 
-    // parse menu text
-    let menus=menus_text;
+  // Call the function to add the menu items
+  addProcessedMenuItemsToDOM(menus);
 
-    // Call the function to add the menu items
-    addProcessedMenuItemsToDOM(menus);
+  // Graphs
+  let data_line, data_time;
+  var startTime = performance.now();
+  data_time = [convertArray(historic_group1), convertArray(future_group1)]; //fake_data("minutes")
+  var endTime = performance.now();
+  console.log(`Call to convert array took ${endTime - startTime} milliseconds`);
 
+  let recorded_waittimes = data_time[0];
+  let projected_waittimes = data_time[1];
 
+  data_line = [convertArray(historic_group2), convertArray(future_group2)]; //fake_data("size")
+  let recorded_linesizes = data_line[0];
+  let projected_linesizes = data_line[1];
 
+  let capacity = Math.round(
+    100 *
+      (recorded_waittimes[recorded_waittimes.length - 1].y + recorded_linesizes[recorded_linesizes.length - 1].y) /
+      ([...recorded_linesizes, ...projected_linesizes].reduce((max, item) => (item.y > max ? item.y : max), -Infinity) +
+        [...recorded_waittimes, ...projected_waittimes].reduce((max, item) => (item.y > max ? item.y : max), -Infinity))
+  );
 
+  plotTimeSeriesData('waitTimeChart', 200, 'Waiting Area Occupancy', recorded_waittimes, projected_waittimes);
+  plotTimeSeriesData('lineSizeChart', 500, 'Restaurant Occupancy', recorded_linesizes, projected_linesizes);
+  updateRestaurantCapacity(capacity);
 
-    // graphs
+  document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length - 1].y.toString();
+  document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length - 1].y.toString();
+  document.getElementById('current_Capacity').textContent = capacity.toString() + '%';
 
+  // Scroll smoothly to the top of the page
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth',
+  });
 
-    let data_line,data_time;
-    var startTime = performance.now()
-    data_time=[convertArray(historic_group1),convertArray(future_group1)]//fake_data("minutes")
-    var endTime = performance.now()
-    console.log(`Call to convert array took ${endTime - startTime} milliseconds`)
-    
-    //console.log([convertArray(historic_group1),convertArray(future_group1)])
-    //console.log(fake_data("minutes"))
-    
-    let recorded_waittimes=data_time[0]
-    let projected_waittimes=data_time[1]
-    
+  // Menu button listener
+  document.querySelector('.bottom-nav .navbar a[href="#todays-menu"]').addEventListener('click', function (e) {
+    e.preventDefault(); // Prevent default anchor click behavior
+    e.stopPropagation();
 
-    data_line=[convertArray(historic_group2),convertArray(future_group2)]//fake_data("size")
-    let recorded_linesizes=data_line[0]
-    let projected_linesizes=data_line[1]
+    // Remove 'active' class from all nav items
+    document.querySelectorAll('.navbar a').forEach((item) => {
+      item.classList.remove('active');
+    });
 
+    // Add 'active' class
+    this.classList.add('active');
 
-    let capacity = Math.round(100*(recorded_waittimes[recorded_waittimes.length-1].y+recorded_linesizes[recorded_linesizes.length-1].y)/([...recorded_linesizes, ...projected_linesizes].reduce((max, item) => (item.y > max ? item.y : max), -Infinity)+[...recorded_waittimes, ...projected_waittimes].reduce((max, item) => (item.y > max ? item.y : max), -Infinity)));
+    // Get the position of the "Today's Menu" section
+    const menuSection = document.getElementById('todays-menu');
+    const offset = 35; // Change this value to the desired offset
+    const bodyRect = document.body.getBoundingClientRect().top;
+    const sectionRect = menuSection.getBoundingClientRect().top;
+    const sectionPosition = sectionRect - bodyRect;
 
-    plotTimeSeriesData('waitTimeChart',200,'Waiting Area Occupancy',recorded_waittimes,projected_waittimes);
-    plotTimeSeriesData('lineSizeChart',500,'Restaurant Occupancy',recorded_linesizes,projected_linesizes);
-    updateRestaurantCapacity(capacity);
+    // Scroll to the "Today's Menu" section with the offset
+    window.scrollTo({
+      top: sectionPosition - offset, // Adjusts the final position by the offset
+      behavior: 'smooth',
+    });
+  });
 
-    document.getElementById('current_WaitTime').textContent = recorded_waittimes[recorded_waittimes.length-1].y.toString();
-    document.getElementById('current_LineSize').textContent = recorded_linesizes[recorded_linesizes.length-1].y.toString();
-    document.getElementById('current_Capacity').textContent = capacity.toString()+"%";
+  // Home button listener
+  document.querySelector('.bottom-nav .navbar a[href="#home"]').addEventListener('click', function (e) {
+    e.preventDefault(); // Prevent default anchor click behavior
+    e.stopPropagation();
+
+    // Remove 'active' class from all nav items
+    document.querySelectorAll('.navbar a').forEach((item) => {
+      item.classList.remove('active');
+    });
+
+    // Add 'active' class
+    this.classList.add('active');
 
     // Scroll smoothly to the top of the page
     window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
+      top: 0,
+      behavior: 'smooth',
     });
-
-
-    // menu button listener
-    // Add smooth scroll with offset to menu button
-    document.querySelector('.bottom-nav .navbar a[href="#todays-menu"]').addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default anchor click behavior
-        e.stopPropagation(); 
-
-        // Remove 'active' class from all nav items
-        document.querySelectorAll('.navbar a').forEach(item => {
-            item.classList.remove('active');
-        });
-
-        // Add 'active' class 
-        this.classList.add('active');
-
-        // Get the position of the "Today's Menu" section
-        const menuSection = document.getElementById('todays-menu');
-        const offset = 35; // Change this value to the desired offset
-        const bodyRect = document.body.getBoundingClientRect().top;
-        const sectionRect = menuSection.getBoundingClientRect().top;
-        const sectionPosition = sectionRect - bodyRect;
-
-        // Scroll to the "Today's Menu" section with the offset
-        window.scrollTo({
-            top: sectionPosition - offset, // Adjusts the final position by the offset
-            behavior: 'smooth'
-        });
-    });
-
-    // home button listener
-    // Add smooth scroll to home button
-    document.querySelector('.bottom-nav .navbar a[href="#home"]').addEventListener('click', function(e) {
-        e.preventDefault(); // Prevent default anchor click behavior
-        e.stopPropagation(); 
-
-        // Remove 'active' class from all nav items
-        document.querySelectorAll('.navbar a').forEach(item => {
-            item.classList.remove('active');
-        });
-
-        // Add 'active' class 
-        this.classList.add('active');
-
-        // Scroll smoothly to the top of the page
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-
-});
+  });
+}
 
 document.querySelector('.bottom-nav .navbar .more-butn').addEventListener('click', function(e) {
 
