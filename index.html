@@ -98,17 +98,19 @@
         <div class="modal-content">
             <div style="display: flex; justify-content: space-between; position: sticky; top: 0; left: 0; z-index: 10; width: 100%;">
                 <span class="close" style="text-align: left;">&times;</span>
-                <a id="pdf-download-link" href="" download style="text-align: right;padding-top: 10px;" class="no-link-style">Download PDF</a>
+                <a id="pdf-download-link" href="" download style="text-align: right;padding-top: 0px;" class="no-link-style">Download PDF</a>
             </div>
             <div>
                 <br>
             </div>
             <canvas id="pdf-canvas" style="padding-left: 350px;"></canvas>
             <div id="pdf-info">
-                <button id="week-number" class="no-link-style" style="background:none;border:none;color:#6d6564 ;cursor:pointer;padding-top: 30px;">Next Week</button>
-                <button id="prev-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; margin-left: 15px; padding-top: 30px;">Previous Week</button>
+                <br>
+                <button id="week-number" class="no-link-style" style="background:none;border:none;color:#6d6564 ;cursor:pointer;padding-top: 3px;">Next Week</button>
+                <button id="prev-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; margin-left: 15px; padding-top: 3px;">Previous Week</button>
                 <br>
                 <button id="breakfast-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; ">Breakfast Schedule</button>
+                <span class="close_bottom" style="text-align: right;">&times;</span>
                 
                 
             </div>
@@ -148,6 +150,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const modal = document.getElementById('pdfModal');
     const closeModal = document.getElementsByClassName('close')[0];
+    const closeModalBottom = document.getElementsByClassName('close_bottom')[0];
     const moreButton = document.getElementById('moreButton');
     const downloadLink = document.getElementById('pdf-download-link');
     const nextPageButton = document.getElementById('week-number'); // Use the button instead of the text span
@@ -277,6 +280,10 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     closeModal.onclick = function () {
+        modal.style.display = "none";
+        document.body.classList.remove('modal-open');
+    };
+    closeModalBottom.onclick = function () {
         modal.style.display = "none";
         document.body.classList.remove('modal-open');
     };
