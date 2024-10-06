@@ -105,8 +105,8 @@
             </div>
             <canvas id="pdf-canvas" style="padding-left: 350px;"></canvas>
             <div id="pdf-info">
-                <button id="week-number" class="no-link-style" style="background:none;border:none;color:#6d6564 ;cursor:pointer;">Next Week</button>
-                <button id="prev-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; margin-left: 15px;">Previous Week</button>
+                <button id="week-number" class="no-link-style" style="background:none;border:none;color:#6d6564 ;cursor:pointer;padding-top: 30px;">Next Week</button>
+                <button id="prev-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; margin-left: 15px; padding-top: 30px;">Previous Week</button>
                 <br>
                 <button id="breakfast-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; ">Breakfast Schedule</button>
                 
@@ -154,6 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const prevPageButton = document.getElementById('prev-page'); // Previous Page button
     const breakfastPageButton = document.getElementById('breakfast-page'); // Previous Page button
     let breakfast_mode=0;
+    let today_const;
 
     const pdfUrl = 'programma.pdf';
     downloadLink.href = pdfUrl;
@@ -168,6 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
         //document.getElementById('total-pages').textContent = totalPages;
 
         currentPage = getWeekOfMonth(); // Initialize with the current week number
+        today_const=getWeekOfMonth();
         await renderPage(currentPage);
 
         scrollToCurrentDay(); // Optional: Scroll to the correct part of the canvas
@@ -205,6 +207,16 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     };
 
+    const scrollToStart = () => {
+
+        const scrollX = 25
+
+        pdfContainer.scrollTo({
+            left: scrollX,
+            behavior: 'smooth'
+        });
+    };
+
     // Change to the next page when the "Next Page" button is clicked
     nextPageButton.onclick = async function () {
         currentPage += 1;
@@ -212,6 +224,12 @@ document.addEventListener("DOMContentLoaded", function () {
             currentPage = currentPage-1; 
         }
         await renderPage(currentPage); // Render the new page
+        if (currentPage==today_const){
+            scrollToCurrentDay();
+        }
+        else {
+            scrollToStart();
+        }
     };
 
     // Change to the previous page when the "Previous Page" button is clicked
@@ -221,6 +239,12 @@ document.addEventListener("DOMContentLoaded", function () {
             currentPage = currentPage+1; 
         }
         await renderPage(currentPage); // Render the previous page
+        if (currentPage==today_const){
+            scrollToCurrentDay();
+        }
+        else {
+            scrollToStart();
+        }
     };
 
     // Change to the previous page when the "Previous Page" button is clicked
@@ -235,11 +259,18 @@ document.addEventListener("DOMContentLoaded", function () {
         else{
             //console.log(breakfast_mode)
             await renderPage(currentPage);
+            if (currentPage==today_const){
+            scrollToCurrentDay();
+        }        else {
+            scrollToStart();
+        }
             breakfastPageButton.textContent = "Breakfast Schedule";
         }
     };
 
     moreButton.onclick = function () {
+        breakfast_mode=0;
+        breakfastPageButton.textContent = "Breakfast Schedule";
         modal.style.display = "block";
         document.body.classList.add('modal-open');
         loadPDF(pdfUrl);
