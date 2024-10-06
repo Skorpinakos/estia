@@ -106,8 +106,8 @@
             <canvas id="pdf-canvas" style="padding-left: 350px;"></canvas>
             <div id="pdf-info">
                 <br>
-                <button id="week-number" class="no-link-style" style="background:none;border:none;color:#6d6564 ;cursor:pointer;padding-top: 3px;">Next Week</button>
-                <button id="prev-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; margin-left: 15px; padding-top: 3px;">Previous Week</button>
+                <button id="prev-page" class="no-link-style" style="background:none;border:none;color:#6d6564 ;cursor:pointer;padding-top: 3px;">Previous Week</button>
+                <button id="week-number" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; margin-left: 15px; padding-top: 3px;">Next Week</button>
                 <br>
                 <button id="breakfast-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; ">Breakfast Schedule</button>
                 <span class="close_bottom" style="text-align: right;">&times;</span>
@@ -222,6 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Change to the next page when the "Next Page" button is clicked
     nextPageButton.onclick = async function () {
+        breakfastPageButton.textContent = "Breakfast Schedule";
         currentPage += 1;
         if (currentPage > totalPages-1) { //-1 for the breakfast tab
             currentPage = currentPage-1; 
@@ -237,6 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Change to the previous page when the "Previous Page" button is clicked
     prevPageButton.onclick = async function () {
+        breakfastPageButton.textContent = "Breakfast Schedule";
         currentPage -= 1;
         if (currentPage < 1) {
             currentPage = currentPage+1; 
