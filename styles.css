@@ -35,7 +35,7 @@
 }
 
 .no-link-style:hover {
-    text-decoration: underline; /* Optional: underline on hover */
+    color:#9d9796;
 }
 
 /* Basic modal styling */

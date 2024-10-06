@@ -105,8 +105,14 @@
             </div>
             <canvas id="pdf-canvas" style="padding-left: 350px;"></canvas>
             <div id="pdf-info">
-                <span>Week: <span id="week-number"></span></span> / <span id="total-pages"></span> pages.
+                <button id="week-number" class="no-link-style" style="background:none;border:none;color:#6d6564 ;cursor:pointer;">Next Week</button>
+                <button id="prev-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; margin-left: 15px;">Previous Week</button>
+                <br>
+                <button id="breakfast-page" class="no-link-style" style="background:none;border:none;color:#6d6564;cursor:pointer; ">Breakfast Schedule</button>
+                
+                
             </div>
+            
         </div>
     </div>
 
@@ -134,61 +140,45 @@
     <script>
 document.addEventListener("DOMContentLoaded", function () {
     let pdfDoc = null,
+        currentPage = 1, // Track the current page
         canvas = document.getElementById('pdf-canvas'),
         ctx = canvas.getContext('2d'),
-        pdfContainer = document.querySelector('.modal-content'); // The scrollable container
+        pdfContainer = document.querySelector('.modal-content'),
+        totalPages = 0;  // Track the total number of pages
 
     const modal = document.getElementById('pdfModal');
     const closeModal = document.getElementsByClassName('close')[0];
     const moreButton = document.getElementById('moreButton');
     const downloadLink = document.getElementById('pdf-download-link');
+    const nextPageButton = document.getElementById('week-number'); // Use the button instead of the text span
+    const prevPageButton = document.getElementById('prev-page'); // Previous Page button
+    const breakfastPageButton = document.getElementById('breakfast-page'); // Previous Page button
+    let breakfast_mode=0;
 
     const pdfUrl = 'programma.pdf';
     downloadLink.href = pdfUrl;
 
     modal.style.display = "none";
-    document.body.classList.remove('modal-open'); // Re-enable background scrolling
-
-    const getWeekOfMonth = () => {
-        const now = new Date();
-        const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-        const firstDayOfWeek = firstDayOfMonth.getDay();
-
-        //console.log(firstDayOfWeek);
-        //console.log("hi");
-        const currentDay = now.getDate();
-        console.log(currentDay)
-
-        
-        const firstMonday = firstDayOfWeek === 1 ? 1 : (8 - (firstDayOfWeek === 0 ? 7 : firstDayOfWeek));
-        console.log(firstMonday)
-        if (currentDay <= firstMonday) {
-            return 1;
-        }
-        const daysSinceFirstMonday = currentDay - firstMonday;
-        return Math.floor(daysSinceFirstMonday / 7) + 2;
-    };
+    document.body.classList.remove('modal-open');
 
     const loadPDF = async (url) => {
         const loadingTask = pdfjsLib.getDocument(url);
         pdfDoc = await loadingTask.promise;
-        document.getElementById('total-pages').textContent = pdfDoc.numPages;
+        totalPages = pdfDoc.numPages;
+        //document.getElementById('total-pages').textContent = totalPages;
 
-        const weekNumber = getWeekOfMonth();
-        //console.log(weekNumber);
-        const pageNum = Math.min(weekNumber, pdfDoc.numPages);
+        currentPage = getWeekOfMonth(); // Initialize with the current week number
+        await renderPage(currentPage);
 
-        document.getElementById('week-number').textContent = pageNum;
-        await renderPage(pageNum);
-
-        scrollToCurrentDay(); // Scroll to the correct part of the canvas after rendering
+        scrollToCurrentDay(); // Optional: Scroll to the correct part of the canvas
     };
 
-    const renderPage = async (num) => {
-        const page = await pdfDoc.getPage(num);
+    const renderPage = async (pageNum) => {
+        if (pageNum <= 0 || pageNum > totalPages) return; // Ensure valid page numbers
+
+        const page = await pdfDoc.getPage(pageNum);
         const viewport = page.getViewport({ scale: 1 });
 
-        // Set canvas size based on the PDF's dimensions
         canvas.height = viewport.height;
         canvas.width = viewport.width;
 
@@ -201,44 +191,81 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const scrollToCurrentDay = () => {
-        let today = new Date().getDay(); // Get today's day of the week (0 = Sunday, 1 = Monday, etc.)
-
-        if (today === 0) {
-            today=7;
-        }
+        let today = new Date().getDay();
+        if (today === 0) today = 7;
 
         const daysInWeek = 7;
-        const canvasWidth = canvas.width; // Full width of the canvas (entire page)
-        const dayWidth = canvasWidth / daysInWeek; // Assume the week is equally divided
+        const canvasWidth = canvas.width;
+        const dayWidth = canvasWidth / daysInWeek;
+        const scrollX = dayWidth * (today - 1);
 
-        const scrollX = dayWidth * (today - 1); // Scroll position based on today's day (Monday = 1)
-
-        // Smoothly scroll the container horizontally to the calculated position
         pdfContainer.scrollTo({
-            left: scrollX-120,
+            left: scrollX - 120,
             behavior: 'smooth'
         });
     };
 
-    // Show modal and load the PDF when the "More" button is clicked
+    // Change to the next page when the "Next Page" button is clicked
+    nextPageButton.onclick = async function () {
+        currentPage += 1;
+        if (currentPage > totalPages-1) { //-1 for the breakfast tab
+            currentPage = currentPage-1; 
+        }
+        await renderPage(currentPage); // Render the new page
+    };
+
+    // Change to the previous page when the "Previous Page" button is clicked
+    prevPageButton.onclick = async function () {
+        currentPage -= 1;
+        if (currentPage < 1) {
+            currentPage = currentPage+1; 
+        }
+        await renderPage(currentPage); // Render the previous page
+    };
+
+    // Change to the previous page when the "Previous Page" button is clicked
+    breakfastPageButton.onclick = async function () {
+        breakfast_mode=(breakfast_mode+1)%2;
+        if (breakfast_mode==1){
+        await renderPage(totalPages); // Render the breakafast tab
+
+        //console.log(breakfast_mode)
+        breakfastPageButton.textContent = "Week Schedule";
+        }
+        else{
+            //console.log(breakfast_mode)
+            await renderPage(currentPage);
+            breakfastPageButton.textContent = "Breakfast Schedule";
+        }
+    };
+
     moreButton.onclick = function () {
         modal.style.display = "block";
-        document.body.classList.add('modal-open'); // Prevent background scrolling
-        loadPDF(pdfUrl); // Load the PDF file
+        document.body.classList.add('modal-open');
+        loadPDF(pdfUrl);
     };
 
-    // Close the modal when the "X" button is clicked
     closeModal.onclick = function () {
         modal.style.display = "none";
-        document.body.classList.remove('modal-open'); // Re-enable background scrolling
+        document.body.classList.remove('modal-open');
     };
 
-    // Close the modal when clicking outside of it
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
-            document.body.classList.remove('modal-open'); // Re-enable background scrolling
+            document.body.classList.remove('modal-open');
         }
+    };
+
+    const getWeekOfMonth = () => {
+        const now = new Date();
+        const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const firstDayOfWeek = firstDayOfMonth.getDay();
+        const currentDay = now.getDate();
+        const firstMonday = firstDayOfWeek === 1 ? 1 : (8 - (firstDayOfWeek === 0 ? 7 : firstDayOfWeek));
+        if (currentDay <= firstMonday) return 1;
+        const daysSinceFirstMonday = currentDay - firstMonday;
+        return Math.floor(daysSinceFirstMonday / 7) + 2;
     };
 });
 
