@@ -153,9 +153,16 @@ document.addEventListener("DOMContentLoaded", function () {
         const now = new Date();
         const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         const firstDayOfWeek = firstDayOfMonth.getDay();
+
+        //console.log(firstDayOfWeek);
+        //console.log("hi");
         const currentDay = now.getDate();
+        console.log(currentDay)
+
+        
         const firstMonday = firstDayOfWeek === 1 ? 1 : (8 - (firstDayOfWeek === 0 ? 7 : firstDayOfWeek));
-        if (currentDay < firstMonday) {
+        console.log(firstMonday)
+        if (currentDay <= firstMonday) {
             return 1;
         }
         const daysSinceFirstMonday = currentDay - firstMonday;
@@ -168,6 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById('total-pages').textContent = pdfDoc.numPages;
 
         const weekNumber = getWeekOfMonth();
+        //console.log(weekNumber);
         const pageNum = Math.min(weekNumber, pdfDoc.numPages);
 
         document.getElementById('week-number').textContent = pageNum;
@@ -193,10 +201,10 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     const scrollToCurrentDay = () => {
-        const today = new Date().getDay(); // Get today's day of the week (0 = Sunday, 1 = Monday, etc.)
+        let today = new Date().getDay(); // Get today's day of the week (0 = Sunday, 1 = Monday, etc.)
 
         if (today === 0) {
-            return; // If today is Sunday, do nothing (optional)
+            today=7;
         }
 
         const daysInWeek = 7;
