@@ -9,9 +9,24 @@ def add_space_before_caps(strings):
     # Apply the function to each string in the list
     return [insert_space(string) for string in strings]
 
-def left_shift(lst, n=1):
-    return lst[n:].copy() + lst[:n].copy()
+def find_word_order(texts, word1, word2, word3):
+    # Find the first index of each word in the list of texts
+    index_word1 = next((i for i, text in enumerate(texts) if word1 in text), None)
+    index_word2 = next((i for i, text in enumerate(texts) if word2 in text), None)
+    index_word3 = next((i for i, text in enumerate(texts) if word3 in text), None)
 
+    # Combine indexes into a list of tuples (index, word_number)
+    indexes = [(index_word1, 0), (index_word2, 1), (index_word3, 2)]
+
+    # Sort the indexes based on their positions
+    indexes.sort()
+
+    # Create an array representing the order of appearance
+    order = [None] * 3
+    for order_position, (_, word_num) in enumerate(indexes):
+        order[word_num] = order_position
+
+    return order
 
 
 def get_current_menus():
@@ -21,6 +36,9 @@ def get_current_menus():
     url = "https://my.upatras.gr"
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
+    title_texts = add_space_before_caps([h1.text for h1 in soup.find_all('h1')]) #this check is kinda good but it could get better
+    order=find_word_order(title_texts,"Πρωινό","Γεύμα","Δείπνο")
+
 
     paragraph_texts = add_space_before_caps([p.text for p in soup.find_all('p')]) #this check is kinda good but it could get better
 
@@ -30,23 +48,14 @@ def get_current_menus():
             food_texts.append(text.replace("'",'"'))
 
     menus=food_texts[0:3].copy()  ### each menu appears 3 times so we take the first 3
-    #menus=left_shift(menus,1)
-    #print(menus)
 
-    ### check for order shifts in my.upatras.gr
-    while True:
-        lengths=[len(i) for i in menus]
-        min_length=min(lengths)
-        min_index=lengths.index(min_length)
-        if min_index==0:
-            print("Order is in order")
-            break
-        else:
-            print("Order is not in order, shifting..")
-            menus=left_shift(menus,1)
+    menus_ordered=["","",""]
+    for i in range(3):
+        menus_ordered[i]=menus[order[i]]
+
 
     
-    return process_all_menu_items(parse_menus(menus))
+    return process_all_menu_items(parse_menus(menus_ordered))
 
 
 if __name__ == "__main__":
