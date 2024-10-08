@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "gr.sense_campus.estia.twa",
+      "sha256_cert_fingerprints": [
+        "99:CB:89:0D:58:4F:A6:42:1E:B0:E1:EF:8B:19:A4:E7:9D:13:6F:BD:2E:1A:92:E5:4D:15:E4:AF:0B:66:4E:2D"
+      ]
+    }
+  }
+]
