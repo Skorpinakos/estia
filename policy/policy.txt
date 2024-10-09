@@ -16,7 +16,7 @@ We log the collected IP addresses and geolocation data (we log geolocated data o
 This data is not associated with individual users or linked to any personal identifiers. Data can be used by academic members (students & researchers) for research and other academic purposes.
 
 3. Public Information Sharing
-The collected IP addresses and geolocation data (when applicable) are sent to a public information broker (MQTT). This broker allows the data to be available publicly, but the data is anonymized and not mapped to specific users.
+The collected IP addresses and geolocation data (when applicable) are sent to a public information broker. This broker allows the data to be available publicly, but the data is anonymized and not mapped to specific users.
 
 4. Data Sharing with Third Parties
 We do not sell or share your personal information with any third-party services. The only data shared is the anonymized IP addresses, visit timestamps and geolocation data, which are publicly accessible.
