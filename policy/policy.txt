@@ -1,0 +1,34 @@
+Privacy Policy
+
+Last updated: 09/10/2024
+
+We respect your privacy and are committed to being transparent about how we handle your data. This privacy policy explains how our app collects and uses information.
+
+1. Data We Collect
+When you use our app, we collect the following information:
+
+IP Address: Logged automatically when you visit our app.
+Geolocation: Collected only if you grant permission for location access.
+Datetime of visit: Logged automatically when you visit our app.
+
+2. How We Use Your Data
+We log the collected IP addresses and geolocation data (we log geolocated data only if user permission is granted) for the purpose of general analytics and to help improve our app’s services. 
+This data is not associated with individual users or linked to any personal identifiers. Data can be used by academic members (students & researchers) for research and other academic purposes.
+
+3. Public Information Sharing
+The collected IP addresses and geolocation data (when applicable) are sent to a public information broker (MQTT). This broker allows the data to be available publicly, but the data is anonymized and not mapped to specific users.
+
+4. Data Sharing with Third Parties
+We do not sell or share your personal information with any third-party services. The only data shared is the anonymized IP addresses, visit timestamps and geolocation data, which are publicly accessible.
+
+5. User Control
+You have full control over whether or not to share your geolocation data. The app will only access this information if you grant permission. You can revoke this permission at any time through your device settings.
+
+6. Security
+We take reasonable measures to protect the data collected by our app, but keep in mind that the data sent to the public information broker can be accessed by anyone due to its public nature.
+
+7. Changes to This Policy
+We may update this privacy policy from time to time. Any changes will be reflected on this page.
+
+8. Contact Us
+If you have any questions or concerns about how your data is being handled, please contact us at sensecampus@gmail.com.
