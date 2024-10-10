@@ -271,7 +271,9 @@ async function publishToMQTTBroker() {
 
 
 
-    const client = new Paho.MQTT.Client(host, port, "mqtt-publisher-test");
+   const clientId = "client" + Math.random().toString(16).substr(2, 8); // Random client ID
+   const client = new Paho.MQTT.Client(host, port, clientId);
+
 
     client.onConnectionLost = function (responseObject) {
         if (responseObject.errorCode !== 0) {
