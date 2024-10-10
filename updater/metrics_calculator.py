@@ -230,6 +230,16 @@ def get_data(hours=6):
             aps_datetimes = []
             aps_names = set()
 
+
+
+            #CLEANING
+            measurements_clean=[]
+            for measurement in measurements:
+                if "2" in list(measurement.json_data.keys()) and "4" in list(measurement.json_data.keys()):
+                    measurements_clean.append(measurement)
+            measurements=measurements_clean
+            #
+
             for measurement in measurements:
                 for key in perform_analysis(measurement):
                     aps_names.add(key)
