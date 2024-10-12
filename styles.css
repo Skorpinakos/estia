@@ -145,19 +145,30 @@ body.modal-open {
     top: 4%; /* Vertically align to the middle of the section */
     transform: translateY(-50%); /* Adjust for perfect vertical centering */
     cursor: pointer;
-    background-color: #debca44b; /* Light gray background */
-    border: 2px solid #a26f4b4b; /* Light grey border */
+    background-color: #ca7f54c3; /* Light brown background */
+    border: 1px solid #ca7f54e0; /* Light brown border */
     color: white;
-    border: none;
     padding: 7px 14px;
     font-size: 18px;
     font-weight: bold;
     border-radius: 5px;
+    
+    /* Box shadow for a button-like depth effect */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2), 
+                -2px -2px 5px rgba(255, 255, 255, 0.3); /* Light from top-left */
+    
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Smooth transitions on hover */
 }
 
 .more-btn:hover {
     background-color: #ca7f54;
+    
+    /* Keep size, but reduce shadow for a pressed effect */
+    box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3),
+                -1px -1px 2px rgba(255, 255, 255, 0.2); /* Smaller shadow for a pressed effect */
 }
+
+
 
 .modal-content {
     position: relative;
