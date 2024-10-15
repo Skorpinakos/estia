@@ -284,16 +284,46 @@ document.addEventListener("DOMContentLoaded", function () {
     closeModal.onclick = function () {
         modal.style.display = "none";
         document.body.classList.remove('modal-open');
+        // Force reflow by toggling display
+        const mainContent = document.querySelector('.main-content');
+        mainContent.style.display = 'none';
+        mainContent.offsetHeight; // Trigger a reflow
+        mainContent.style.display = ''; // Restore the display property
+        // Programmatically click the "Menu" button after the reflow
+        const menuButton = document.querySelector('a[href="#todays-menu"]');
+        if (menuButton) {
+            menuButton.click();  // Simulate a click on the "Menu" button
+        }
     };
     closeModalBottom.onclick = function () {
         modal.style.display = "none";
         document.body.classList.remove('modal-open');
+        // Force reflow by toggling display
+        const mainContent = document.querySelector('.main-content');
+        mainContent.style.display = 'none';
+        mainContent.offsetHeight; // Trigger a reflow
+        mainContent.style.display = ''; // Restore the display property
+        // Programmatically click the "Menu" button after the reflow
+        const menuButton = document.querySelector('a[href="#todays-menu"]');
+        if (menuButton) {
+            menuButton.click();  // Simulate a click on the "Menu" button
+        }
     };
 
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = "none";
             document.body.classList.remove('modal-open');
+        }
+        // Force reflow by toggling display
+        const mainContent = document.querySelector('.main-content');
+        mainContent.style.display = 'none';
+        mainContent.offsetHeight; // Trigger a reflow
+        mainContent.style.display = ''; // Restore the display property
+        // Programmatically click the "Menu" button after the reflow
+        const menuButton = document.querySelector('a[href="#todays-menu"]');
+        if (menuButton) {
+            menuButton.click();  // Simulate a click on the "Menu" button
         }
     };
 
