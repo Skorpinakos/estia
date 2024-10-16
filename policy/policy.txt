@@ -1,6 +1,6 @@
 Privacy Policy
 
-Last updated: 09/10/2024
+Last updated: 16/10/2024
 
 We respect your privacy and are committed to being transparent about how we handle your data. This privacy policy explains how our app collects and uses information.
 
@@ -12,7 +12,7 @@ Geolocation: Collected only if you grant permission for location access.
 Datetime of visit: Logged automatically when you visit our app.
 
 2. How We Use Your Data
-We log the collected IP addresses and geolocation data (we log geolocated data only if user permission is granted) for the purpose of general analytics and to help improve our app’s services. 
+We log the collected IP addresses and geolocation data (we log geolocated data only if user permission is granted) mainly for the purpose of general analytics but also to help improve our app’s services in the future. 
 This data is not associated with individual users or linked to any personal identifiers. Data can be used by academic members (students & researchers) for research and other academic purposes.
 
 3. Public Information Sharing
