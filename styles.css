@@ -5,6 +5,55 @@
     scroll-behavior: smooth;
 }
 
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Centers the title */
+    width: 100%;
+    position: relative; /* Enables absolute positioning for the icon */
+}
+
+.logo {
+    font-size: 34px;
+    font-weight: bold;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.playstore-icon {
+    position: absolute;
+    right: 5px; /* Add space from the right edge */
+    top: 50%;
+    transform: translateY(-45%);
+    
+    display: inline-flex;
+    align-items: center;
+    background-color: #ca7f54; /* Match header background color */
+    border-radius: 5px;
+    padding: 5px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.playstore-icon img {
+    margin-left: 0px;
+    width: 36px;
+    height: 36px;
+    opacity: 0.8; /* Adjust the opacity to make it semi-transparent */
+    filter: invert(62%) sepia(34%) saturate(437%) hue-rotate(332deg) brightness(100%) contrast(94%);
+    transition: opacity 0.3s ease; /* Smooth transition on hover */
+}
+
+.playstore-icon:hover {
+    background-color: #e6a07c;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.playstore-icon:hover img {
+    opacity: 1; /* Makes it fully opaque when hovered */
+}
+
+
+
 
 /* Center modal content */
 .modal-content {
@@ -703,6 +752,9 @@ hr {
 .menu-blob:hover {
     transform: translateY(-5px); /* Move up slightly on hover */
 }
+
+
+
 
 @media (max-width: 1080px) { /* Adjust this value based on your needs */
     .menu-section {
