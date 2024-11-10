@@ -5,6 +5,59 @@
     scroll-behavior: smooth;
 }
 
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    background-color: #ca7f54;
+    padding: 5px 10px;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.3);
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-spacer-left {
+    flex: 1;
+}
+
+.logo-title {
+    font-size: 34px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+}
+
+.playstore-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.playstore-link:hover {
+    background-color: rgba(255, 255, 255, 0.5); /* Less transparent on hover */
+    transform: scale(1.1); /* Enlarges on hover */
+}
+
+.playstore-icon {
+    width: 40px;
+    height: 40px;
+    opacity: 0.8; /* Adjust the opacity to make it semi-transparent */
+    filter: invert(62%) sepia(34%) saturate(437%) hue-rotate(332deg) brightness(100%) contrast(94%);
+    transition: opacity 0.3s ease; /* Smooth transition on hover */
+    /* This filter adapts the icon color to match the header background */
+}
+
+
+
 
 /* Center modal content */
 .modal-content {
