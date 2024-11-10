@@ -8,7 +8,7 @@ from menu_processor_online import get_current_menus
 from datetime import datetime
 from metrics_calculator import main2
 from heatmap_generator import generate_heatmap_html  # Import heatmap generation function
-import traceback
+
 from datetime import datetime, timedelta
 
 class Var:
@@ -66,36 +66,22 @@ def update_file(repo, file_path, heatmap_path):
     global start
     current_date = datetime.now()
     formatted_date = current_date.strftime("%Y-%m-%d %H:%M:%S")
-
-    contents = repo.get_contents(file_path)
-    file_content = contents.decoded_content.decode('utf-8')
-    #print(file_content)
-
-    #get timeseries and predictions
     main2()
     output_vars = read_output_data()
-
     vars = []
-    try:
-        menus = get_current_menus()
-    except:
-
-        menus=next((line for line in file_content.splitlines() if line.startswith("var menus_text")), None).replace("var menus_text =","").replace(";","")
-
-
+    menus = get_current_menus()
     menus_var = Var("menus_text", "var", str(menus) + ";")
     time_var = Var("last_update_datetime", "var", '"' + formatted_date + '";')
     vars.append(menus_var)
     vars.append(time_var)
     vars.extend(output_vars)
 
-
+    contents = repo.get_contents(file_path)
+    file_content = contents.decoded_content.decode('utf-8')
     new_content = edit_variables(file_content, vars)
     new_content = new_content.replace(" = = ", " = ")
     repo.update_file(contents.path, f"Updated Webpage at {formatted_date}", new_content, contents.sha)
     print(f"data.js file updated at {time.ctime()}")
-
-    return
 
 
     if time.time()-start<=60*60*24:
@@ -137,5 +123,4 @@ while True:
         main(freq=600)
     except Exception as e:
         print(f"Error occurred: {str(e)}")
-        traceback.print_exc()  # This will print the full traceback
         time.sleep(360)

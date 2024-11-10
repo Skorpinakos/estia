@@ -10,13 +10,19 @@ def add_space_before_caps(strings):
     return [insert_space(string) for string in strings]
 
 def find_word_order(texts, word1, word2, word3):
+    #print(texts)
+    #print(texts)
     # Find the first index of each word in the list of texts
     index_word1 = next((i for i, text in enumerate(texts) if word1 in text), None)
     index_word2 = next((i for i, text in enumerate(texts) if word2 in text), None)
     index_word3 = next((i for i, text in enumerate(texts) if word3 in text), None)
-
+    print(index_word3)
+    print(word3)
+    #print(text)
     # Combine indexes into a list of tuples (index, word_number)
     indexes = [(index_word1, 0), (index_word2, 1), (index_word3, 2)]
+    print(indexes)
+
 
     # Sort the indexes based on their positions
     indexes.sort()
@@ -37,10 +43,17 @@ def get_current_menus():
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
     title_texts = add_space_before_caps([h1.text for h1 in soup.find_all('h1')]) #this check is kinda good but it could get better
+    title_texts_filtered=[]
+    for i in title_texts:
+        if any(substring in i for substring in ["Πρωινό","Γεύμα","Δείπνο"]): 
+            title_texts_filtered.append(i)
+    title_texts=title_texts_filtered
+    
     order=find_word_order(title_texts,"Πρωινό","Γεύμα","Δείπνο")
 
 
     paragraph_texts = add_space_before_caps([p.text for p in soup.find_all('p')]) #this check is kinda good but it could get better
+    print(paragraph_texts)
 
     food_texts=[]
     for text in paragraph_texts:
