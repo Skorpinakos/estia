@@ -363,18 +363,27 @@ function detectBrowser() {
         return false;
     }
 
-    // Detect network type (WiFi or cellular)
     function getNetworkType() {
         const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        let networkType = "unknown";
+    
         if (connection) {
-            // Prefer `connection.type` if available, as it might give "wifi" or "cellular" directly
+            // Use connection.type if available
             if (connection.type) {
-                return connection.type;
+                networkType = connection.type;
+            } else {
+                // Fallback to effectiveType
+                networkType = connection.effectiveType;
             }
-            // Fallback to `effectiveType` for an approximation of the network quality
-            return connection.effectiveType;
         }
-        return "unknown";
+    
+        // Further refine based on platform detection
+        const platform = detectPlatform();
+        if (networkType === "4g" && (platform === "Windows" || platform === "macOS" || platform === "Linux")) {
+            networkType = "Wi-Fi or Ethernet"; // Assuming desktops/laptops aren't using cellular
+        }
+    
+        return networkType;
     }
     
 
