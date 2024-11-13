@@ -79,6 +79,7 @@ def generate_heatmap_html(table_name, start_date, exclude_topic="testing", noise
 
     # Create a list of GPS points with noise
     gps_points = data[['latitude', 'longitude']].values.tolist()
+    print(len(gps_points))
 
     # Create a map centered around the average latitude and longitude
     center_lat = sum([point[0] for point in gps_points]) / len(gps_points)
