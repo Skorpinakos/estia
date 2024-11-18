@@ -183,7 +183,7 @@ def get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additio
     # Normalize and combine crowd sizes for predictions based on previous day's data
     for i in previous_day_indices:
         # Apply combination logic from main2 for both groups
-        if special_ap in aps_history_48h and i < len(aps_history_48h[special_ap]) and aps_history_48h[special_ap][i] > 50:
+        if special_ap in aps_history_48h and i < len(aps_history_48h[special_ap]) and aps_history_48h[special_ap][i] > 5:
             crowd_size_group_1 = sum((aps_history_48h[ap][i] for ap in additional_aps if ap in aps_history_48h), aps_history_48h[special_ap][i])
         else:
             crowd_size_group_1 = aps_history_48h[special_ap][i] if special_ap in aps_history_48h else 0

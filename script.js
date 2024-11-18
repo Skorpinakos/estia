@@ -72,7 +72,7 @@ function plotTimeSeriesData(chart_name,animation_duration,y_title,recorded,proje
     // Finding the maximum value among all 'y' values
     const max = Math.max(...yValues);
     //console.log(max);
-    let y_lim = parameter_max_height_percentage*max;
+    let y_lim = Math.max(parameter_max_height_percentage * max, 40);
 
 
 
