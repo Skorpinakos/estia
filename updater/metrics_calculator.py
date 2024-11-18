@@ -250,7 +250,7 @@ def main2():
 
     # Combine crowd sizes for each group based on current data
     for i, datetime_value in enumerate(aps_datetimes):
-        if special_ap in aps_history and i < len(aps_history[special_ap]) and aps_history[special_ap][i] > 50:
+        if special_ap in aps_history and i < len(aps_history[special_ap]) and aps_history[special_ap][i] > 5:
             crowd_size_group_1 = sum((aps_history[ap][i] for ap in additional_aps if ap in aps_history), aps_history[special_ap][i])
         else:
             crowd_size_group_1 = aps_history[special_ap][i] if special_ap in aps_history else 0
