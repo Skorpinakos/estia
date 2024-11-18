@@ -260,8 +260,6 @@ function updateTimer(duration) {
         }
     }, 1000);
 }
-
-//func for visitor logs
 async function publishToMQTTBroker() {
     // MQTT Configuration
     const host = "labserver.sense-campus.gr"; // Broker hostname
@@ -269,15 +267,11 @@ async function publishToMQTTBroker() {
     const topic = "wlc_estia_rio/visitors/"; // Topic to publish to
     const reconnectTimeout = 2000;
 
-
-
-   const clientId = "client" + Math.random().toString(16).substr(2, 8); // Random client ID
-   const client = new Paho.MQTT.Client(host, port, clientId);
-
+    const clientId = "client" + Math.random().toString(16).substr(2, 8); // Random client ID
+    const client = new Paho.MQTT.Client(host, port, clientId);
 
     client.onConnectionLost = function (responseObject) {
         if (responseObject.errorCode !== 0) {
-            //console.error("Connection lost:", responseObject.errorMessage);
             setTimeout(() => client.connect(options), reconnectTimeout); // Reconnect on failure
         }
     };
@@ -288,7 +282,6 @@ async function publishToMQTTBroker() {
         useSSL: true, // Use SSL/TLS connection for WSS
         onSuccess: onConnect,
         onFailure: function (message) {
-            //console.error("Connection failed:", message.errorMessage);
             setTimeout(() => client.connect(options), reconnectTimeout);
         }
     };
@@ -296,9 +289,7 @@ async function publishToMQTTBroker() {
     // Connect
     client.connect(options);
 
-    
     function onConnect() {
-        //console.log("Connected");
         publishMessage();
     }
 
@@ -309,12 +300,102 @@ async function publishToMQTTBroker() {
             const data = await response.json();
             return data.ip;
         } catch (error) {
-            //console.error("Failed to fetch :", error);
             return null;
         }
     }
 
-    // Fetch the user's GPS coordinates with detailed error handling
+// Detect the user's browser
+function detectBrowser() {
+    const userAgent = navigator.userAgent;
+
+    if (userAgent.includes("Firefox")) return "Firefox";
+    if (userAgent.includes("Edg")) return "Microsoft Edge";
+    if (userAgent.includes("OPR") || userAgent.includes("Opera")) return "Opera";
+    if (userAgent.includes("Chrome") && !userAgent.includes("Edg") && !userAgent.includes("OPR")) return "Chrome";
+    if (userAgent.includes("Safari") && !userAgent.includes("Chrome")) return "Safari";
+
+    return "unknown"; // Default if the browser is unrecognized
+}
+
+
+    // Detect platform (Android, iOS, Windows, macOS, Linux)
+    function detectPlatform() {
+        const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+        if (/android/i.test(userAgent)) return "Android";
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) return "iOS";
+        if (/Win/i.test(userAgent)) return "Windows";
+        if (/Mac/i.test(userAgent) && !/iPhone|iPad|iPod/.test(userAgent)) return "macOS";
+        if (/Linux/i.test(userAgent)) return "Linux";
+
+        return "unknown";
+    }
+
+    // Detect device model (best effort based on user agent)
+    function getDeviceModel() {
+        const userAgent = navigator.userAgent;
+
+        const modelMatch = userAgent.match(/\(([^)]+)\)/);
+        return modelMatch ? modelMatch[1] : "unknown";
+    }
+
+    // Detect if running as a PWA
+    function isRunningAsPWA() {
+        return (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true);
+    }
+
+    // Detect if running in a native app webview
+    function detectNativeApp() {
+        const userAgent = navigator.userAgent;
+
+        if (userAgent.includes("MyAppWebView")) { // Adjust this if your app has a custom identifier
+            return true;
+        }
+
+        if (window.AndroidInterface) {
+            return true;
+        }
+
+        if (userAgent.includes("iPhone") && !userAgent.includes("Safari")) {
+            return true;
+        }
+
+        return false;
+    }
+
+    function getNetworkType() {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        let networkType = "unknown";
+    
+        if (connection) {
+            // Use connection.type if available
+            if (connection.type) {
+                networkType = connection.type;
+            } else {
+                // Fallback to effectiveType
+                networkType = connection.effectiveType;
+            }
+        }
+    
+        // Further refine based on platform detection
+        const platform = detectPlatform();
+        if (networkType === "4g" && (platform === "Windows" || platform === "macOS" || platform === "Linux")) {
+            networkType = "Wi-Fi or Ethernet"; // Assuming desktops/laptops aren't using cellular
+        }
+    
+        return networkType;
+    }
+    
+
+    // Detect screen size
+    function getScreenSize() {
+        return {
+            width: window.screen.width,
+            height: window.screen.height
+        };
+    }
+
+    // Fetch the user's GPS coordinates and speed with detailed error handling
     function getGpsLocation() {
         return new Promise((resolve) => {
             if ("geolocation" in navigator) {
@@ -322,30 +403,30 @@ async function publishToMQTTBroker() {
                     position => resolve({
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
+                        speed: position.coords.speed !== null ? position.coords.speed : "unavailable"
                     }),
                     error => {
                         let errorMessage = '';
                         switch (error.code) {
                             case error.PERMISSION_DENIED:
-                                errorMessage = "User denied ";
+                                errorMessage = "User denied";
                                 break;
                             case error.POSITION_UNAVAILABLE:
-                                errorMessage = "unavailable.";
+                                errorMessage = "Location unavailable";
                                 break;
                             case error.TIMEOUT:
-                                errorMessage = " timed out.";
+                                errorMessage = "Request timed out";
                                 break;
                             case error.UNKNOWN_ERROR:
-                                errorMessage = "An unknown error occurred.";
+                                errorMessage = "An unknown error occurred";
                                 break;
                         }
-                        //console.error("Error:", errorMessage);
-                        resolve({ error: errorMessage });
+                        resolve({ error: errorMessage, speed: "unavailable" });
                     },
                     { timeout: 10000 }
                 );
             } else {
-                resolve({ error: "not supported" });
+                resolve({ error: "Geolocation not supported", speed: "unavailable" });
             }
         });
     }
@@ -354,32 +435,52 @@ async function publishToMQTTBroker() {
         const ip = await getUserIp();
         const gpsLocation = await getGpsLocation();
         const dateTime = new Date().toISOString();
-
+    
         if (!ip) {
-            console.error("Could not retrieve I, aborting.");
+            console.error("Could not retrieve IP, aborting.");
             return;
         }
-
+    
         let locationInfo;
         if (gpsLocation.error) {
             locationInfo = `not available: ${gpsLocation.error}`;
         } else {
             locationInfo = `Lat: ${gpsLocation.latitude}, Lon: ${gpsLocation.longitude}`;
         }
-
+    
+        // Detect environment details
+        const platform = detectPlatform();
+        const deviceModel = getDeviceModel();
+        const isPWA = isRunningAsPWA();
+        const isNativeApp = detectNativeApp();
+        const networkType = getNetworkType();
+        const screenSize = getScreenSize();
+        const browser = detectBrowser(); // Add browser detection
+    
         const messagePayload = JSON.stringify({
             datetime: dateTime,
             ip: ip,
-            location: locationInfo
+            location: locationInfo,
+            speed: gpsLocation.speed,
+            environment: {
+                platform: platform,
+                deviceModel: deviceModel,
+                isPWA: isPWA,
+                isNativeApp: isNativeApp,
+                networkType: networkType,
+                screenSize: screenSize,
+                browser: browser // Include browser in payload
+            }
         });
-
+    
         const message = new Paho.MQTT.Message(messagePayload);
         message.destinationName = topic + ip;
-
+    
         client.send(message); 
     }
 }
-// Main
+
+
 
 
 // Declare global variables
