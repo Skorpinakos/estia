@@ -585,7 +585,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Show the popup when the App Store button is clicked
     appStoreButton.addEventListener('click', function () {
-        popup.style.display = "flex";
+        popup.style.display = "block";
     });
 
     // Close the popup when the close button is clicked
