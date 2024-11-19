@@ -132,12 +132,35 @@
         <div class="navbar">
             <a href="#home" class="active">Queue</a>
             <a href="#todays-menu">Menu</a>
-            <a class="more-butn" role="button" tabindex="0">
-                <img src="media/refresh.svg" alt="Refresh Icon" style="width:30px; height:30px;">
-                <span id="timer" style="width:35px;">01:00</span>
+            <a class="app-store-button" role="button" tabindex="0">
+                <img src="media/share.svg" alt="App Store Icon" style="width:30px; height:30px;">
             </a>
+            <!-- Popup Modal -->
+            <!-- Popup Modal -->
+            <div id="app-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close">&times;</span>
+                    <div class="qr-container">
+                        <!-- Play Store QR Code -->
+                        <div class="qr-item">
+                            <a href="https://play.google.com/store/apps/details?id=gr.sense_campus.estia.twa&hl=en"  class="qr-code-immidiate-container">
+                                <img src="media/qrs/playstore.svg" alt="Play Store QR Code" class="qr-code">
+                            </a>
+                            <button href="https://play.google.com/store/apps/details?id=gr.sense_campus.estia.twa&hl=en" id="open-playstore" class="popup-button">Open Play Store</button>
+                        </div>
+                        <!-- Website QR Code -->
+                        <div class="qr-item">
+                            <a href="https://estia.sense-campus.gr"  class="qr-code-immidiate-container">
+                                <img src="media/qrs/website.svg" alt="Website QR Code" class="qr-code">
+                            </a>
+                            <button href="https://estia.sense-campus.gr" id="open-website" class="popup-button">Open Website</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
+
 
     <script>
 document.addEventListener("DOMContentLoaded", function () {

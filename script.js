@@ -228,38 +228,7 @@ const getRootUrl = () => {
   
 let update_period_minutes = 10;
 
-function schedulePageReload(lastUpdateStr) {
-    const lastUpdate = new Date(lastUpdateStr);
-    const now = new Date();
-    const update_period = parseInt(update_period_minutes * 60 * 1000); // Update period in milliseconds
-    const standardDelay = 60 * 1000; // 60 seconds in milliseconds
 
-    let delay = (now - lastUpdate) < update_period ? update_period - (now - lastUpdate) : standardDelay;
-
-    // Start the countdown timer
-    updateTimer(delay);
-
-    setTimeout(function() {
-        window.location.reload(true);  // Force a reload from the server
-    }, delay);
-}
-
-// Function to update the timer on the page
-function updateTimer(duration) {
-    let secondsLeft = duration / 1000; // Convert milliseconds to seconds
-    const timerElement = document.getElementById('timer');
-    const interval = setInterval(function () {
-        const minutes = parseInt(secondsLeft / 60, 10);
-        const seconds = parseInt(secondsLeft % 60, 10);
-
-        timerElement.textContent = `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}`;
-
-        if (--secondsLeft < 0) {
-            clearInterval(interval); // Stop the interval when time runs out
-            timerElement.textContent = "00:00"; // Reset timer display
-        }
-    }, 1000);
-}
 async function publishToMQTTBroker() {
     // MQTT Configuration
     const host = "labserver.sense-campus.gr"; // Broker hostname
@@ -517,7 +486,6 @@ function executeRestOfScript() {
 
   // Set last updated tag
   document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
-  schedulePageReload(last_update_datetime);
 
   // Parse menu text
   let menus = menus_text;
@@ -608,20 +576,49 @@ function executeRestOfScript() {
   });
 }
 
-document.querySelector('.bottom-nav .navbar .more-butn').addEventListener('click', function(e) {
+document.addEventListener("DOMContentLoaded", function () {
+    const appStoreButton = document.querySelector('.app-store-button');
+    const popup = document.getElementById('app-popup');
+    const closePopup = popup.querySelector('.close');
+    const playStoreLink = "https://play.google.com/store/apps/details?id=gr.sense_campus.estia.twa&hl=en";
+    const websiteLink = "https://estia.sense-campus.gr";
 
-    // Remove 'active' class from all nav items
-    document.querySelectorAll('.navbar a').forEach(item => {
-        item.classList.remove('active');
+    // Show the popup when the App Store button is clicked
+    appStoreButton.addEventListener('click', function () {
+        popup.style.display = "flex";
     });
 
-    // Add 'active' class 
-    this.classList.add('active');
+    // Close the popup when the close button is clicked
+    closePopup.addEventListener('click', function () {
+        popup.style.display = "none";
+    });
 
-    setTimeout(function() {
-        location.reload(); // Reloads the page after a delay
-    }, 150);
+    // Close the popup when clicking outside the content
+    window.addEventListener('click', function (event) {
+        if (event.target === popup) {
+            popup.style.display = "none";
+        }
+    });
+
+    // Make QR codes clickable
+    document.querySelector('.qr-item a[href="' + playStoreLink + '"]').addEventListener('click', function (event) {
+        window.open(playStoreLink, '_blank');
+    });
+
+    document.querySelector('.qr-item a[href="' + websiteLink + '"]').addEventListener('click', function (event) {
+        window.open(websiteLink, '_blank');
+    });
+
+    // Add click listeners to the buttons
+    document.getElementById('open-playstore').addEventListener('click', function () {
+        window.open(playStoreLink, '_blank');
+    });
+
+    document.getElementById('open-website').addEventListener('click', function () {
+        window.open(websiteLink, '_blank');
+    });
 });
+
 
 
 // add service worker
