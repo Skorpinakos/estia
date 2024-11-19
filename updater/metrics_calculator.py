@@ -10,7 +10,7 @@ import numpy as np
 from datetime import timedelta
 
 
-
+combine_threshold=1000
 
 class Measurement:
     def __init__(self, datetime, json_data):
@@ -183,7 +183,7 @@ def get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additio
     # Normalize and combine crowd sizes for predictions based on previous day's data
     for i in previous_day_indices:
         # Apply combination logic from main2 for both groups
-        if special_ap in aps_history_48h and i < len(aps_history_48h[special_ap]) and aps_history_48h[special_ap][i] > 5:
+        if special_ap in aps_history_48h and i < len(aps_history_48h[special_ap]) and aps_history_48h[special_ap][i] > combine_threshold:
             crowd_size_group_1 = sum((aps_history_48h[ap][i] for ap in additional_aps if ap in aps_history_48h), aps_history_48h[special_ap][i])
         else:
             crowd_size_group_1 = aps_history_48h[special_ap][i] if special_ap in aps_history_48h else 0
@@ -255,7 +255,7 @@ def get_previous_weekday_predictions(aps_history, aps_datetimes, special_ap, add
     # Normalize and combine crowd sizes for predictions based on previous week's data
     for i in previous_week_indices:
         # Apply combination logic for both groups
-        if special_ap in aps_history_48h and i < len(aps_history_48h[special_ap]) and aps_history_48h[special_ap][i] > 5:
+        if special_ap in aps_history_48h and i < len(aps_history_48h[special_ap]) and aps_history_48h[special_ap][i] > combine_threshold:
             crowd_size_group_1 = sum((aps_history_48h[ap][i] for ap in additional_aps if ap in aps_history_48h), aps_history_48h[special_ap][i])
         else:
             crowd_size_group_1 = aps_history_48h[special_ap][i] if special_ap in aps_history_48h else 0
@@ -310,7 +310,7 @@ def main2():
     load_dotenv()
 
     # Fetch data for the last 6 hours
-    aps_history, aps_datetimes = get_data(hours=6)
+    aps_history, aps_datetimes = get_data(hours=4)
 
     # Define the groups of APs to combine
     special_ap = "R0_EST-AP_0.3"
@@ -323,7 +323,7 @@ def main2():
 
     # Combine crowd sizes for each group based on current data
     for i, datetime_value in enumerate(aps_datetimes):
-        if special_ap in aps_history and i < len(aps_history[special_ap]) and aps_history[special_ap][i] > 5:
+        if special_ap in aps_history and i < len(aps_history[special_ap]) and aps_history[special_ap][i] > combine_threshold:
             crowd_size_group_1 = sum((aps_history[ap][i] for ap in additional_aps if ap in aps_history), aps_history[special_ap][i])
         else:
             crowd_size_group_1 = aps_history[special_ap][i] if special_ap in aps_history else 0
