@@ -585,7 +585,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Show the popup when the App Store button is clicked
     appStoreButton.addEventListener('click', function () {
-        popup.style.display = "block";
+        popup.style.display = "flex";
     });
 
     // Close the popup when the close button is clicked
@@ -618,6 +618,8 @@ document.addEventListener("DOMContentLoaded", function () {
         window.open(websiteLink, '_blank');
     });
 });
+
+document.getElementById('app-popup').style.display = "none";
 
 
 
