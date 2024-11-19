@@ -60,5 +60,11 @@ def serve_icons(filename):
     media_folder = os.path.join(os.getcwd(), 'media/icons')
     return send_from_directory(media_folder, filename)
 
+#Serve qrs
+@app.route('/media/qrs/<filename>')
+def serve_qrs(filename):
+    media_folder = os.path.join(os.getcwd(), 'media/qrs')
+    return send_from_directory(media_folder, filename)
+
 if __name__ == '__main__':
     app.run(debug=True, port=1100, host='0.0.0.0')

@@ -5,6 +5,155 @@
     scroll-behavior: smooth;
 }
 
+/* Styling for App Store Button */
+.app-store-button img {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    color: white;
+}
+
+.app-store-button img:hover {
+    transform: scale(1.1);
+}
+
+/* Popup Modal Styling */
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Popup Content Box */
+.popup-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 80%;
+    max-width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Close Button Styling */
+.popup .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Popup Buttons */
+.popup-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #ca7f54;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.popup-button:hover {
+    background-color: #b36f47;
+}
+
+/* Styling for the QR container and items */
+.qr-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap; /* Ensures responsiveness */
+}
+
+.qr-item {
+    text-align: center;
+    cursor: pointer; /* Pointer cursor for clickable QR codes */
+    
+
+}
+
+.qr-code-immidiate-container{
+    border-radius: 10px;
+}
+
+.qr-code {
+    width: 170px;
+    height: 150px;
+    margin-bottom: 0px;
+}
+
+.qr-code:hover {
+    transform: scale(1.02);
+}
+
+/* Popup Modal Styling */
+.popup {
+    display: none; /* Hidden by default */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: #ca9d84;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 95%;
+    max-width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Close Button Styling */
+.popup .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    cursor: pointer;
+}
+
+/* Popup Buttons */
+.popup-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    background-color: #ca7f54;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.popup-button:hover {
+    background-color: #b36f47;
+}
+
 
 /* Center modal content */
 .modal-content {
