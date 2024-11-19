@@ -232,6 +232,79 @@ def get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additio
 
     return smoothed_group_1, smoothed_group_2
 
+
+def get_previous_weekday_predictions(aps_history, aps_datetimes, special_ap, additional_aps, group_2, combined_group_1, combined_group_2, smoothing_window=10):
+    # Fetch data for the last 48 hours
+    aps_history_48h, aps_datetimes_48h = get_data(hours=169)
+
+    # Define the time range for prediction: same 2-hour period from the same weekday last week
+    last_timestamp = aps_datetimes[-1]
+    start_prediction_time = last_timestamp - timedelta(weeks=1)  # Go back 7 days
+    end_prediction_time = start_prediction_time + timedelta(hours=2)
+
+    # Find the indices for the previous week's relevant time frame
+    previous_week_indices = [i for i, dt in enumerate(aps_datetimes_48h) if start_prediction_time <= dt <= end_prediction_time]
+
+    # Initialize lists for previous week's prediction data
+    predicted_group_1 = []
+    predicted_group_2 = []
+
+    # Get today's date
+    today_date = last_timestamp.date()
+
+    # Normalize and combine crowd sizes for predictions based on previous week's data
+    for i in previous_week_indices:
+        # Apply combination logic for both groups
+        if special_ap in aps_history_48h and i < len(aps_history_48h[special_ap]) and aps_history_48h[special_ap][i] > 5:
+            crowd_size_group_1 = sum((aps_history_48h[ap][i] for ap in additional_aps if ap in aps_history_48h), aps_history_48h[special_ap][i])
+        else:
+            crowd_size_group_1 = aps_history_48h[special_ap][i] if special_ap in aps_history_48h else 0
+
+        crowd_size_group_2 = sum(aps_history_48h[ap][i] for ap in group_2 if ap in aps_history_48h)
+
+        # Normalize these values to ensure smooth continuation from today's last point
+        last_group_1_value = combined_group_1[-1]['y'] if combined_group_1 else 0
+        last_group_2_value = combined_group_2[-1]['y'] if combined_group_2 else 0
+
+        if predicted_group_1:
+            previous_group_1_value = predicted_group_1[-1]['y']
+        else:
+            previous_group_1_value = crowd_size_group_1
+
+        if predicted_group_2:
+            previous_group_2_value = predicted_group_2[-1]['y']
+        else:
+            previous_group_2_value = crowd_size_group_2
+
+        # Normalize the crowd size
+        normalized_group_1_value = last_group_1_value + (crowd_size_group_1 - previous_group_1_value)
+        normalized_group_2_value = last_group_2_value + (crowd_size_group_2 - previous_group_2_value)
+
+        # Correct the date while keeping the time
+        previous_datetime = aps_datetimes_48h[i]
+        correct_datetime = datetime.combine(today_date, previous_datetime.time())  # Replace date with today's date, keep the time
+
+        # Store the predicted values
+        predicted_group_1.append({"x": correct_datetime.isoformat(), "y": int(normalized_group_1_value)})
+        predicted_group_2.append({"x": correct_datetime.isoformat(), "y": int(normalized_group_2_value)})
+
+    # Extract the 'y' values from the predictions to apply smoothing
+    group_1_y_values = [point['y'] for point in predicted_group_1]
+    group_2_y_values = [point['y'] for point in predicted_group_2]
+
+    # Apply moving average smoothing
+    smoothed_group_1_y = moving_average(group_1_y_values, smoothing_window)
+    smoothed_group_2_y = moving_average(group_2_y_values, smoothing_window)
+
+    # Trim the datetime values to match the smoothed arrays
+    smoothed_group_1 = [{"x": predicted_group_1[i + smoothing_window // 2]['x'], "y": int(smoothed_group_1_y[i])}
+                        for i in range(len(smoothed_group_1_y))]
+    smoothed_group_2 = [{"x": predicted_group_2[i + smoothing_window // 2]['x'], "y": int(smoothed_group_2_y[i])}
+                        for i in range(len(smoothed_group_2_y))]
+
+    return smoothed_group_1, smoothed_group_2
+
+
 def main2():
     # Load environment variables from .env file
     load_dotenv()
@@ -261,11 +334,11 @@ def main2():
         combined_group_2.append({"x": datetime_value.isoformat(), "y": crowd_size_group_2})
 
     # Get future predictions using the previous day's data
-    future_combined_group_1, future_combined_group_2 = get_previous_day_predictions(aps_history, aps_datetimes, special_ap, additional_aps, group_2, combined_group_1, combined_group_2)
+    future_combined_group_1, future_combined_group_2 = get_previous_weekday_predictions(aps_history, aps_datetimes, special_ap, additional_aps, group_2, combined_group_1, combined_group_2)
 
     # Plot historical and predicted data for both groups
-    #plot_historical_and_predicted(future_combined_group_1, combined_group_1, "Group 1")
-    #plot_historical_and_predicted(future_combined_group_2, combined_group_2, "Group 2")
+    plot_historical_and_predicted(future_combined_group_1, combined_group_1, "Group 1")
+    plot_historical_and_predicted(future_combined_group_2, combined_group_2, "Group 2")
 
     # Write the historical and future data separately
     write_to_js_file(combined_group_1, combined_group_2, future_combined_group_1[1:], future_combined_group_2[1:])
