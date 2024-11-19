@@ -593,6 +593,12 @@ document.addEventListener("DOMContentLoaded", function () {
         popup.style.display = "none";
     });
 
+    popup.addEventListener('touchstart', function (event) { //for iOS?
+        if (event.target === popup) {
+            popup.style.display = "none";
+        }
+    });
+
     // Close the popup when clicking outside the content
     window.addEventListener('click', function (event) {
         if (event.target === popup) {
