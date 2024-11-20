@@ -631,32 +631,10 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById('app-popup').style.display = "none";
 
 let update_period_minutes = 11 ;
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        const lastUpdatedElement = document.getElementById('last-updated');
-        if (lastUpdatedElement) {
-            const lastUpdatedText = lastUpdatedElement.textContent;
-            const regex = /Last Updated: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/;
-            const match = lastUpdatedText.match(regex);
+setTimeout(function() {
+    location.reload();
+}, 6000*update_period_minutes); 
 
-            if (match && match[1]) {
-                const lastUpdateDateTime = new Date(match[1]);
-                const currentTime = new Date();
-
-                // Calculate the difference in milliseconds and convert to minutes
-                const diffInMinutes = (currentTime - lastUpdateDateTime) / (1000 * 60);
-
-                if (diffInMinutes > update_period_minutes) {
-                    location.reload();
-                }
-            } else {
-                console.warn("Could not parse the date-time from the last-updated text.");
-            }
-        } else {
-            console.warn("Element with id 'last-updated' not found.");
-        }
-    }, 30000); // Wait for 30 seconds
-});
 
 // add service worker
 
