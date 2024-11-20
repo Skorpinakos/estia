@@ -147,6 +147,7 @@
                                 <img src="media/qrs/playstore.svg" alt="Play Store QR Code" class="qr-code">
                             </a>
                             <button href="https://play.google.com/store/apps/details?id=gr.sense_campus.estia.twa&hl=en" id="open-playstore" class="popup-button">Open Play Store</button>
+                            <button id="share-playstore" class="popup-button">Share App  ➤</button>
                         </div>
                         <!-- Website QR Code -->
                         <div class="qr-item">
@@ -154,6 +155,7 @@
                                 <img src="media/qrs/website.svg" alt="Website QR Code" class="qr-code">
                             </a>
                             <button href="https://estia.sense-campus.gr" id="open-website" class="popup-button">Open Website</button>
+                            <button id="share-website" class="popup-button">Share Site  ➤ </button>
                         </div>
                     </div>
                 </div>
@@ -161,6 +163,59 @@
         </div>
     </nav>
 
+    <script>
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                alert(`Link copied to clipboard: ${text}`);
+            } catch (error) {
+                console.error('Error copying to clipboard:', error);
+                alert('Failed to copy link to clipboard.');
+            }
+        }
+    
+        // Share App Button
+        document.getElementById('share-playstore').addEventListener('click', async () => {
+            const shareData = {
+                title: 'Check out this app!',
+                text: 'Discover the amazing ESTIA app:',
+                url: 'https://play.google.com/store/apps/details?id=gr.sense_campus.estia.twa&hl=en'
+            };
+    
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    console.log('App shared successfully!');
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                }
+            } else {
+                // Fallback: Copy the URL to clipboard
+                copyToClipboard(shareData.url);
+            }
+        });
+    
+        // Share Website Button
+        document.getElementById('share-website').addEventListener('click', async () => {
+            const shareData = {
+                title: 'Check out this website!',
+                text: 'Visit the ESTIA website for more information:',
+                url: 'https://estia.sense-campus.gr'
+            };
+    
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    console.log('Website shared successfully!');
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                }
+            } else {
+                // Fallback: Copy the URL to clipboard
+                copyToClipboard(shareData.url);
+            }
+        });
+    </script>
 
     <script>
 document.addEventListener("DOMContentLoaded", function () {
