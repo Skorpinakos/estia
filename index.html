@@ -355,6 +355,30 @@ document.addEventListener("DOMContentLoaded", function () {
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-moment"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.5.141/pdf.min.js"></script>
+    <script src="https://unpkg.com/pulltorefreshjs/dist/pulltorefresh.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            PullToRefresh.init({
+                mainElement: 'body', // Attach pull-to-refresh to the entire body
+                onRefresh() {
+                    return new Promise((resolve) => {
+                        console.log('Pull-to-refresh triggered!');
+                        // Simulate an asynchronous operation (e.g., fetch data)
+                        setTimeout(() => {
+                            console.log('Refresh completed!');
+                            resolve(); // End the refresh
+                        }, 1000);
+                    });
+                },
+                instructionsPullToRefresh: "Pull down to refresh", // Custom message
+                instructionsReleaseToRefresh: "Release to refresh",
+                instructionsRefreshing: "Refreshing...",
+                iconArrow: "⇩", // Custom arrow icon
+                iconRefreshing: "⏳" // Custom refreshing icon
+            });
+        });
+    </script>
+
     <script type="module" defer src="script.js"></script>
     
 
