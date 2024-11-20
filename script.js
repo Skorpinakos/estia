@@ -487,8 +487,31 @@ function executeRestOfScript() {
   //log visitor
   publishToMQTTBroker();
 
-  // Set last updated tag
-  document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
+
+    // Assuming `last_update_datetime` is a valid Date string or Date object
+    let lastUpdateTime = new Date(last_update_datetime);
+
+    // Add 11 minutes to the last update time
+    let nextUpdateTime = new Date(lastUpdateTime.getTime() + 12 * 60 * 1000);//12 minutes after last update
+
+    // Calculate the remaining time until the next update
+    let currentTime = new Date();
+    let remainingTime = nextUpdateTime - currentTime;
+
+    // If the remaining time is negative (e.g., page loaded late), reload in 60 secs
+    if (remainingTime < 0) {
+        remainingTime = 60*1000;
+    }
+
+    // Display the last update time
+    // Set last updated tag
+    document.getElementById('last-updated').textContent = `Last Updated: ${lastUpdateTime.toLocaleString()}`;
+
+    // Schedule the reload
+    console.log("Reloading in "+remainingTime/1000+" seconds.")
+    setTimeout(function() {
+        location.reload();
+    }, remainingTime);
 
   // Parse menu text
   let menus = menus_text;
@@ -630,10 +653,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById('app-popup').style.display = "none";
 
-let update_period_minutes = 11 ;
-setTimeout(function() {
-    location.reload();
-}, 6000*update_period_minutes); 
+
 
 
 // add service worker
