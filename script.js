@@ -226,7 +226,7 @@ const getRootUrl = () => {
     return url.toString();
   };
   
-let update_period_minutes = 10;
+
 
 
 async function publishToMQTTBroker() {
@@ -455,6 +455,7 @@ function detectBrowser() {
 // Declare global variables
 let menus_text, last_update_datetime, future_group1, future_group2, historic_group1, historic_group2;
 
+
 // Use a version or timestamp for cache busting
 const version = new Date().getTime(); 
 
@@ -469,6 +470,8 @@ window.addEventListener('load', function () {
       future_group2 = module.future_group2;
       historic_group1 = module.historic_group1;
       historic_group2 = module.historic_group2;
+
+      console.log(last_update_datetime);
 
       // Now that the module is loaded, execute the rest of your code
       executeRestOfScript();
@@ -627,7 +630,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
 document.getElementById('app-popup').style.display = "none";
 
+let update_period_minutes = 11 ;
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const lastUpdatedElement = document.getElementById('last-updated');
+        if (lastUpdatedElement) {
+            const lastUpdatedText = lastUpdatedElement.textContent;
+            const regex = /Last Updated: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})/;
+            const match = lastUpdatedText.match(regex);
 
+            if (match && match[1]) {
+                const lastUpdateDateTime = new Date(match[1]);
+                const currentTime = new Date();
+
+                // Calculate the difference in milliseconds and convert to minutes
+                const diffInMinutes = (currentTime - lastUpdateDateTime) / (1000 * 60);
+
+                if (diffInMinutes > update_period_minutes) {
+                    location.reload();
+                }
+            } else {
+                console.warn("Could not parse the date-time from the last-updated text.");
+            }
+        } else {
+            console.warn("Element with id 'last-updated' not found.");
+        }
+    }, 30000); // Wait for 30 seconds
+});
 
 // add service worker
 
