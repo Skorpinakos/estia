@@ -226,7 +226,7 @@ const getRootUrl = () => {
     return url.toString();
   };
   
-let update_period_minutes = 10;
+
 
 
 async function publishToMQTTBroker() {
@@ -455,6 +455,7 @@ function detectBrowser() {
 // Declare global variables
 let menus_text, last_update_datetime, future_group1, future_group2, historic_group1, historic_group2;
 
+
 // Use a version or timestamp for cache busting
 const version = new Date().getTime(); 
 
@@ -470,6 +471,8 @@ window.addEventListener('load', function () {
       historic_group1 = module.historic_group1;
       historic_group2 = module.historic_group2;
 
+      console.log(last_update_datetime);
+
       // Now that the module is loaded, execute the rest of your code
       executeRestOfScript();
     })
@@ -484,8 +487,31 @@ function executeRestOfScript() {
   //log visitor
   publishToMQTTBroker();
 
-  // Set last updated tag
-  document.getElementById('last-updated').textContent = `Last Updated: ${last_update_datetime}`;
+
+    // Assuming `last_update_datetime` is a valid Date string or Date object
+    let lastUpdateTime = new Date(last_update_datetime);
+
+    // Add 11 minutes to the last update time
+    let nextUpdateTime = new Date(lastUpdateTime.getTime() + 12 * 60 * 1000);//12 minutes after last update
+
+    // Calculate the remaining time until the next update
+    let currentTime = new Date();
+    let remainingTime = nextUpdateTime - currentTime;
+
+    // If the remaining time is negative (e.g., page loaded late), reload in 60 secs
+    if (remainingTime < 0) {
+        remainingTime = 60*1000;
+    }
+
+    // Display the last update time
+    // Set last updated tag
+    document.getElementById('last-updated').textContent = `Last Updated: ${lastUpdateTime.toLocaleString()}`;
+
+    // Schedule the reload
+    console.log("Reloading in "+remainingTime/1000+" seconds.")
+    setTimeout(function() {
+        location.reload();
+    }, remainingTime);
 
   // Parse menu text
   let menus = menus_text;
@@ -625,7 +651,10 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+
+
 document.getElementById('app-popup').style.display = "none";
+
 
 
 
