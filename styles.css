@@ -292,7 +292,7 @@ body.modal-open {
     position: absolute; /* Allow the button to be positioned freely within the section */
     right: 15px; /* Align to the right side of the section */
     top: 4%; /* Vertically align to the middle of the section */
-    transform: translateY(-50%); /* Adjust for perfect vertical centering */
+   
     cursor: pointer;
     background-color: #ca7f54c3; /* Light brown background */
     border: 1px solid #ca7f54e0; /* Light brown border */
