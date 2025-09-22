@@ -3,7 +3,7 @@
 > Skip the line at the University of Patras dining hall.  
 > See the live queue & occupancy, check the menu, and plan your visit with a 2-hour forecast.
 
-[Website](https://estia.sense-campus.gr/) • [Android (Google Play)](https://play.google.com/](https://play.google.com/store/apps/details?id=gr.sense_campus.estia.twa&hl=en) • Press: [PatrasEvents article](https://www.patrasevents.gr/article/696886-to-app-pou-se-sozei-apo-tin-oura-sto-estiatorio-tis-estias-tou-panepistimiou-patron)• Official University Plug-in: [My Upatras](https://my.upatras.gr/sence-campus-patras/)
+[Website](https://estia.sense-campus.gr/) • [Android (Google Play)](https://play.google.com/store/apps/details?id=gr.sense_campus.estia.twa&hl=en) • Press: [PatrasEvents article](https://www.patrasevents.gr/article/696886-to-app-pou-se-sozei-apo-tin-oura-sto-estiatorio-tis-estias-tou-panepistimiou-patron)• Official University Plug-in: [My Upatras](https://my.upatras.gr/sence-campus-patras/)
 
 
 ---
